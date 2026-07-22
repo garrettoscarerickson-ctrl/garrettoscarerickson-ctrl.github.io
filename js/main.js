@@ -110,7 +110,8 @@
     lb.querySelector(".lightbox__stage img").alt = photo.title;
     lb.querySelector("#lb-title").textContent = photo.title;
     lb.querySelector("#lb-meta").textContent =
-      photo.location + " · " + photo.year + " · " + tagLine(photo);
+      photo.location + " · " + photo.year + " · " + tagLine(photo) +
+      " · © Garrett Erickson";
     lb.querySelector("#lb-count").textContent =
       pad2(lightboxIdx + 1) + " / " + pad2(lightboxSet.length);
   }

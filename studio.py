@@ -341,6 +341,10 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim)}
   <span class="mono">Drop photos here — or click to choose (JPG / PNG)</span>
   <input type="file" id="file-input" multiple accept="image/jpeg,image/png">
 </div>
+<label class="mono" style="display:flex;gap:.5rem;align-items:center;margin-top:.75rem;cursor:pointer">
+  <input type="checkbox" id="wm" checked>
+  stamp "© GARRETT ERICKSON" onto uploads
+</label>
 
 <div id="pending" class="cards" style="margin-top:1.25rem"></div>
 
@@ -462,7 +466,21 @@ function prepareFile(file) {
     var canvas = document.createElement("canvas");
     canvas.width = Math.round(img.width * scale);
     canvas.height = Math.round(img.height * scale);
-    canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    if (document.getElementById("wm").checked) {
+      var size = Math.max(13, Math.round(canvas.width * 0.016));
+      var pad = Math.round(canvas.width * 0.018);
+      ctx.font = size + "px 'Helvetica Neue', Helvetica, Arial, sans-serif";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "bottom";
+      ctx.shadowColor = "rgba(0,0,0,0.45)";
+      ctx.shadowBlur = 3;
+      ctx.shadowOffsetX = 1;
+      ctx.shadowOffsetY = 1;
+      ctx.fillStyle = "rgba(255,255,255,0.6)";
+      ctx.fillText("© GARRETT ERICKSON", canvas.width - pad, canvas.height - pad);
+    }
     var dataUrl = canvas.toDataURL("image/jpeg", 0.88);
     URL.revokeObjectURL(img.src);
     addPendingCard(file, dataUrl,
