@@ -61,8 +61,8 @@ def build():
   <a class="nav__name" href="#" data-goto="home">Garrett Erickson</a>
   <div class="nav__links">
     <a href="#" data-goto="home">Index</a>
-    <a href="#" data-goto="archive">Archive</a>
     <a href="#" data-goto="sports">Sports</a>
+    <a href="#" data-goto="archive">Archive</a>
   </div>
 </nav>
 

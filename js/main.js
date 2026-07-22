@@ -293,10 +293,16 @@
     countEl.textContent =
       nPhotos(PHOTOS.length) + " · New York City · " + yearRange();
 
-    /* union of all tags, alphabetical, with counts */
+    /* union of all tags, alphabetical, with counts.
+       PINNED tags always get a filter button, even at zero photos,
+       so upcoming series (sports) are visible in the archive now. */
+    var PINNED = ["sports"];
     var tagCounts = {};
     PHOTOS.forEach(function (p) {
       p.tags.forEach(function (t) { tagCounts[t] = (tagCounts[t] || 0) + 1; });
+    });
+    PINNED.forEach(function (t) {
+      if (!(t in tagCounts)) tagCounts[t] = 0;
     });
     var tags = Object.keys(tagCounts).sort();
 
@@ -329,7 +335,11 @@
 
       if (!visible.length) {
         gridEl.innerHTML =
-          '<div class="archive-empty mono">Nothing here yet.</div>';
+          '<div class="archive-empty mono">' +
+          (activeTag === "sports"
+            ? "Sports — coming soon. First frames in progress."
+            : "Nothing here yet.") +
+          "</div>";
         return;
       }
 
