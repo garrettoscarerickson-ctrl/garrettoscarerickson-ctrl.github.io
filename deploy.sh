@@ -19,8 +19,10 @@ if ! gh auth status >/dev/null 2>&1; then
   exit 1
 fi
 
-REPO="photography-portfolio"
+# Repo named <username>.github.io = the site lives at the clean root URL
+# (https://<username>.github.io/) with nothing after the slash.
 USER="$(gh api user -q .login)"
+REPO="$USER.github.io"
 
 if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   git init -b main
@@ -41,4 +43,4 @@ gh api "repos/$USER/$REPO/pages" --method POST \
 
 echo
 echo "Done. Your site will be live in ~1 minute at:"
-echo "  https://$USER.github.io/$REPO/"
+echo "  https://$USER.github.io/"
