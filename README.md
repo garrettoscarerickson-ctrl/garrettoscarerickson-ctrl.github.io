@@ -1,6 +1,6 @@
 # Garrett Erickson — Photographs
 
-Black, architectural portfolio. Two pages:
+Black, architectural portfolio. Three pages:
 
 - **index.html** — parallax feature panels alternating with gallery strips
 - **archive.html** — every photo, filterable, with a lightbox
@@ -9,46 +9,56 @@ Black, architectural portfolio. Two pages:
 
 No build step, no dependencies. Plain HTML/CSS/JS.
 
-## Adding photos (the only workflow you need)
+## Adding photos — use Studio
 
-1. Export the JPG (~2000px on the long edge is plenty) into `images/`
-2. Open `js/photos.js` and add an entry near the top:
-
-```js
-{
-  src: "images/my-new-photo.jpg",
-  title: "My New Photo",
-  location: "Brooklyn, NYC",
-  year: 2026,
-  orientation: "landscape",   // or "portrait"
-  tags: ["architecture", "night"],
-  // feature: "panel"         // optional: promote to a home-page parallax panel
-}
+```sh
+cd ~/photography-portfolio
+python3 studio.py
 ```
 
-That's it. Everything downstream is generated:
+- Site: http://localhost:4173
+- **Studio: http://localhost:4173/studio**
 
-- **New tags automatically become filter buttons** on the Archive page,
-  with live counts. Use lowercase tags and reuse existing ones where they
-  fit (`architecture`, `street`, `nature`, `wildlife`, `transit`, `skyline`)
-  so filters stay meaningful.
-- The archive count, year range, home-page gallery strips and lightbox
-  ordering all update themselves.
-- One photo has `feature: "hero"` (the big opening image). Move that flag
-  to change the hero. Any photo with `feature: "panel"` becomes a
-  full-screen parallax section on the home page — 2–4 panels feels right.
+Drag photos into Studio (any size — it resizes them), give each a title
+and tags, hit **Add to site**. Studio files the image into `images/`,
+updates `data/photos.json`, regenerates `js/photos.js`, and every page
+sorts itself:
 
-## Running locally
+- new tags become filter buttons on the Archive page, with live counts
+- a photo tagged `sports` makes the Sports page a real gallery
+- "Feature: hero" swaps the big home-page opener (the old hero returns
+  to the gallery); "panel" adds a full-screen parallax section
+- Remove keeps the image file in `images/_removed/` just in case
+
+Studio is local-only (binds 127.0.0.1) and is never part of the
+public site.
+
+Prefer hand-editing? The source of truth is `data/photos.json` — edit
+it, then run `python3 studio.py --regen`. Don't edit `js/photos.js`;
+it's generated.
+
+## Putting it on the internet
+
+**Permanent home (GitHub Pages, free):** one-time setup —
+
+```sh
+brew install gh
+gh auth login
+./deploy.sh
+```
+
+That creates a public repo and turns on GitHub Pages; the script prints
+your URL (https://YOURNAME.github.io/photography-portfolio/). After
+that, the **Publish to the web** button in Studio pushes updates live.
+
+**Single-file share build:** `python3 build_artifact.py` bundles the
+whole site (images inlined) into `dist/artifact.html` — one file you
+can share as a Claude Artifact or send to anyone.
+
+## Running just the site
 
 Any static server works:
 
 ```sh
-cd ~/photography-portfolio
 python3 -m http.server 4173
-# open http://localhost:4173
 ```
-
-## Deploying
-
-The folder is 100% static — drag it into Netlify/Vercel, or push to
-GitHub and enable Pages.
