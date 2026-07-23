@@ -175,11 +175,27 @@
      and gallery strips, all chosen from the manifest.
      ============================================================ */
 
+  /* The index (home page) shows at most this many photographs. Archive-only
+     photos (everything added through Studio) never appear here — the index
+     stays a curated showcase while the archive holds the full body of work. */
+  var HOME_MAX = 10;
+
   function buildHome() {
     var root = document.getElementById("home-root");
-    var hero = PHOTOS.filter(function (p) { return p.feature === "hero"; })[0] || PHOTOS[0];
-    var panels = PHOTOS.filter(function (p) { return p.feature === "panel"; });
-    var galleryPhotos = PHOTOS.filter(function (p) { return !p.feature; });
+    /* only photos allowed on the home page (not archive-only) */
+    var homePool = PHOTOS.filter(function (p) { return !p.archiveOnly; });
+    var hero = homePool.filter(function (p) { return p.feature === "hero"; })[0] ||
+               homePool[0] || PHOTOS[0];
+    var panels = homePool.filter(function (p) { return p.feature === "panel"; });
+    var galleryPhotos = homePool.filter(function (p) {
+      return !p.feature && p !== hero;
+    });
+
+    /* cap the whole index at HOME_MAX: hero + panels + as many gallery
+       frames as fit under the limit */
+    var gallerySlots = Math.max(0, HOME_MAX - 1 - panels.length);
+    galleryPhotos = galleryPhotos.slice(0, gallerySlots);
+    var homeCount = 1 + panels.length + galleryPhotos.length;
 
     /* hero */
     var heroSec = el("section", "hero");
@@ -191,7 +207,7 @@
       '<h1 class="hero__title">Garrett<br>Erickson</h1>' +
       '<div class="hero__meta">' +
       '<span class="mono">Architecture &amp; street — New York City</span>' +
-      '<span class="mono">' + nPhotos(PHOTOS.length) + " — " + hero.year + "</span>" +
+      '<span class="mono">' + nPhotos(homeCount) + " — " + hero.year + "</span>" +
       "</div></div>" +
       '<span class="hero__scroll mono">Scroll ↓</span>';
     root.appendChild(heroSec);

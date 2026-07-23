@@ -102,11 +102,22 @@ def clean_entry(body, photos, existing=None):
     orientation = body.get("orientation") or entry.get("orientation") or "landscape"
     entry["orientation"] = "portrait" if orientation == "portrait" else "landscape"
     entry["tags"] = tags
-    feature = body.get("feature") or ""
-    if feature in VALID_FEATURES:
-        entry["feature"] = feature
-    else:
+    # placement decides where a photo lives:
+    #   archive  -> archive only, never on the home page (all Studio uploads)
+    #   gallery  -> shown in the home gallery (subject to the 10-photo cap)
+    #   panel    -> full-screen parallax section on the home page
+    #   hero     -> the big opening image (only one)
+    # When placement is omitted (e.g. a metadata-only edit) the photo keeps
+    # whatever placement it already had.
+    placement = body.get("placement")
+    if placement is not None:
         entry.pop("feature", None)
+        entry.pop("archiveOnly", None)
+        if placement == "archive":
+            entry["archiveOnly"] = True
+        elif placement in VALID_FEATURES:
+            entry["feature"] = placement
+        # "gallery" -> neither flag
     # only one hero: demote any other hero when this entry claims it
     if entry.get("feature") == "hero":
         for p in photos:
@@ -188,6 +199,8 @@ class StudioHandler(SimpleHTTPRequestHandler):
         body = self.read_body()
         photos = load_photos()
         raw = decode_image(body.get("image"))
+        # Studio uploads always go to the archive only — never the home page.
+        body["placement"] = "archive"
         entry = clean_entry(body, photos)
         src = unique_src(slugify(entry["title"]), photos)
         with open(os.path.join(ROOT, src), "wb") as f:
@@ -196,8 +209,7 @@ class StudioHandler(SimpleHTTPRequestHandler):
         # field order matters to nobody but humans reading the JSON
         ordered = {k: entry[k] for k in
                    ("src", "title", "location", "year", "orientation", "tags")}
-        if "feature" in entry:
-            ordered["feature"] = entry["feature"]
+        ordered["archiveOnly"] = True
         photos.insert(0, ordered)
         save_photos(photos)
         self.send_json({"ok": True, "photo": ordered})
@@ -397,8 +409,10 @@ function tagPicker(selected) {
   return wrap;
 }
 
-/* ---------- shared card form ---------- */
-function metaForm(photo) {
+/* ---------- shared card form ----------
+   mode "add"     -> new uploads, always go to the Archive (no placement UI)
+   mode "library" -> existing photos, can be placed on the home page        */
+function metaForm(photo, mode) {
   var f = el("div");
   f.innerHTML =
     '<label><span class="mono">Title</span><input type="text" data-f="title"></label>' +
@@ -413,23 +427,37 @@ function metaForm(photo) {
   var picker = tagPicker(photo.tags || []);
   picker.style.marginTop = ".4rem";
   f.appendChild(picker);
-  var feat = el("label");
-  feat.style.marginTop = ".6rem";
-  feat.innerHTML = '<span class="mono">Feature on home page</span>' +
-    '<select data-f="feature">' +
-    '<option value="">— gallery only</option>' +
-    '<option value="panel">Parallax panel</option>' +
-    '<option value="hero">Hero (replaces current hero)</option></select>';
-  feat.querySelector("select").value = photo.feature || "";
-  f.appendChild(feat);
+
+  var place = null;
+  if (mode === "add") {
+    var note = el("div", "mono", "Adds to the Archive →");
+    note.style.marginTop = ".7rem";
+    note.style.opacity = ".7";
+    f.appendChild(note);
+  } else {
+    var current = photo.feature || (photo.archiveOnly ? "archive" : "gallery");
+    var lab = el("label");
+    lab.style.marginTop = ".6rem";
+    lab.innerHTML = '<span class="mono">Placement</span>' +
+      '<select data-f="placement">' +
+      '<option value="archive">Archive only</option>' +
+      '<option value="gallery">Home — gallery</option>' +
+      '<option value="panel">Home — parallax panel</option>' +
+      '<option value="hero">Home — hero (replaces current)</option></select>';
+    place = lab.querySelector("select");
+    place.value = current;
+    f.appendChild(lab);
+  }
+
   f.read = function () {
-    return {
+    var out = {
       title: f.querySelector('[data-f=title]').value,
       location: f.querySelector('[data-f=location]').value,
       year: f.querySelector('[data-f=year]').value,
-      feature: f.querySelector('[data-f=feature]').value,
       tags: picker.getTags()
     };
+    if (place) out.placement = place.value;
+    return out;
   };
   return f;
 }
@@ -482,7 +510,7 @@ function addPendingCard(file, dataUrl, orientation) {
     title: guessTitle,
     year: new Date(file.lastModified).getFullYear(),
     tags: []
-  });
+  }, "add");
   card.appendChild(form);
   var btnRow = el("div", "row");
   var addBtn = el("button", "primary", "Add to site");
@@ -526,11 +554,12 @@ function loadLibrary() {
       var meta = el("div", "lib-meta");
       meta.appendChild(el("span", "mono", photo.src));
       if (photo.feature) meta.appendChild(el("span", "mono", "★ " + photo.feature));
+      else if (photo.archiveOnly) meta.appendChild(el("span", "mono", "archive"));
       card.appendChild(meta);
       var thumb = el("img");
       thumb.src = "/" + photo.src; thumb.loading = "lazy";
       card.appendChild(thumb);
-      var form = metaForm(photo);
+      var form = metaForm(photo, "library");
       card.appendChild(form);
       var btnRow = el("div", "row");
       var save = el("button", "primary", "Save");

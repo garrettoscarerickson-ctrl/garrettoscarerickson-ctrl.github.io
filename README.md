@@ -20,14 +20,17 @@ python3 studio.py
 - **Studio: http://localhost:4173/studio**
 
 Drag photos into Studio (any size — it resizes them), give each a title
-and tags, hit **Add to site**. Studio files the image into `images/`,
-updates `data/photos.json`, regenerates `js/photos.js`, and every page
-sorts itself:
+and tags, hit **Add to site**. Every upload goes to the **Archive** — the
+home page (index) stays a curated showcase of 10 and never changes when
+you add photos. Studio files the image into `images/`, updates
+`data/photos.json`, regenerates `js/photos.js`, and every page sorts
+itself:
 
 - new tags become filter buttons on the Archive page, with live counts
 - a photo tagged `sports` makes the Sports page a real gallery
-- "Feature: hero" swaps the big home-page opener (the old hero returns
-  to the gallery); "panel" adds a full-screen parallax section
+- To put a photo on the home page, edit it in the **Library** section and
+  set its **Placement** — "Home — gallery / parallax panel / hero". The
+  index shows at most 10 (hero + panels + gallery); extras stay archived.
 - Remove keeps the image file in `images/_removed/` just in case
 
 Studio is local-only (binds 127.0.0.1) and is never part of the

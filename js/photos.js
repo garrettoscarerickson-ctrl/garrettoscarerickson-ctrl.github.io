@@ -13,7 +13,8 @@ window.PHOTOS = [
     "tags": [
       "nature",
       "wildlife"
-    ]
+    ],
+    "archiveOnly": true
   },
   {
     "src": "images/central-park-bridge-reflection.jpg",
@@ -23,9 +24,9 @@ window.PHOTOS = [
     "orientation": "landscape",
     "tags": [
       "architecture",
-      "nature",
-      "skyline"
-    ]
+      "nature"
+    ],
+    "archiveOnly": true
   },
   {
     "src": "images/central-park-volleyball.jpg",
@@ -35,7 +36,8 @@ window.PHOTOS = [
     "orientation": "landscape",
     "tags": [
       "sports"
-    ]
+    ],
+    "archiveOnly": true
   },
   {
     "src": "images/duck-in-central-park.jpg",
@@ -46,7 +48,8 @@ window.PHOTOS = [
     "tags": [
       "nature",
       "wildlife"
-    ]
+    ],
+    "archiveOnly": true
   },
   {
     "src": "images/central-park-bridge.jpg",
@@ -57,7 +60,8 @@ window.PHOTOS = [
     "tags": [
       "architecture",
       "nature"
-    ]
+    ],
+    "archiveOnly": true
   },
   {
     "src": "images/three-and-four.jpg",
@@ -113,7 +117,8 @@ window.PHOTOS = [
     "year": 2026,
     "orientation": "landscape",
     "tags": [
-      "architecture"
+      "architecture",
+      "skyline"
     ]
   },
   {
@@ -124,6 +129,7 @@ window.PHOTOS = [
     "orientation": "portrait",
     "tags": [
       "architecture",
+      "skyline",
       "street"
     ]
   },
@@ -135,6 +141,7 @@ window.PHOTOS = [
     "orientation": "landscape",
     "tags": [
       "architecture",
+      "skyline",
       "street"
     ]
   },
@@ -146,7 +153,8 @@ window.PHOTOS = [
     "orientation": "landscape",
     "tags": [
       "architecture",
-      "nature"
+      "nature",
+      "skyline"
     ]
   },
   {
