@@ -241,7 +241,7 @@
       '<div class="hero__content">' +
       '<h1 class="hero__title">Garrett<br>Erickson</h1>' +
       '<div class="hero__meta">' +
-      '<span class="mono">Architecture &amp; street — New York City</span>' +
+      '<span class="mono">Architecture &amp; street photography</span>' +
       '<span class="mono">' + nPhotos(homeCount) + " — " + hero.year + "</span>" +
       "</div></div>" +
       '<span class="hero__scroll mono">Scroll ↓</span>';
@@ -249,7 +249,7 @@
 
     /* kinetic marquee band */
     root.appendChild(buildMarquee(
-      ["Architecture", "Street", "New York City", "Looking Up"]));
+      ["Architecture", "Street", "Concrete", "Looking Up"]));
 
     /* statement */
     var statement = el("section", "statement reveal");
@@ -317,8 +317,8 @@
     });
     var cells = [
       ["Based", "Michigan"],
-      ["On location", "New York City"],
       ["Focus", "Architecture · Street"],
+      ["Format", "Digital"],
       ["Archive", nPhotos(PHOTOS.length)],
       ["Subjects", String(Object.keys(tags).length) + " tags"],
       ["Since", String(yearRange())]
@@ -392,7 +392,7 @@
     var activeTag = "all";
 
     countEl.textContent =
-      nPhotos(PHOTOS.length) + " · New York City · " + yearRange();
+      nPhotos(PHOTOS.length) + " · " + yearRange();
 
     /* union of all tags, alphabetical, with counts.
        PINNED tags always get a filter button, even at zero photos,

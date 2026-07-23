@@ -94,7 +94,7 @@ def build():
 <footer class="footer">
   <span class="mono">© 2026 Garrett Erickson</span>
   <a class="mono" href="mailto:garrettoscarerickson@gmail.com">garrettoscarerickson@gmail.com</a>
-  <span class="mono">Michigan-based · shooting New York</span>
+  <span class="mono">Based in Michigan</span>
 </footer>
 
 <script>
