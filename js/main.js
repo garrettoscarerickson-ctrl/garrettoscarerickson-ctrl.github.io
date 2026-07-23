@@ -33,13 +33,15 @@
 
   /* A photo card <button class="ph"> used by both pages */
   function photoCard(photo, index, onClick) {
-    var card = el("button", "ph");
+    var card = el("button", "ph" +
+      (photo.orientation === "portrait" ? " ph--portrait" : ""));
     card.type = "button";
     card.setAttribute("aria-label", "View " + photo.title);
     card.innerHTML =
       '<figure>' +
-      '<span class="ph__img wm"><img loading="lazy" src="' + photo.src +
-      '" alt="' + photo.title + " — " + photo.location + '"></span>' +
+      '<span class="ph__img wm"><span class="ph__par">' +
+      '<img loading="lazy" src="' + photo.src +
+      '" alt="' + photo.title + " — " + photo.location + '"></span></span>' +
       '<figcaption>' +
       '<span class="ph__title">' + photo.title + "</span>" +
       '<span class="mono">' + tagLine(photo) + "</span>" +
@@ -119,23 +121,51 @@
   /* ---------- parallax ---------- */
 
   function initParallax() {
-    if (reducedMotion) return;
-    var layers = Array.prototype.slice.call(
-      document.querySelectorAll("[data-parallax] img")
-    );
-    if (!layers.length) return;
+    /* the scroll-progress bar runs even with reduced motion (it's not motion,
+       it's an indicator); the depth layers are gated on the motion pref. */
+    var bar = document.querySelector(".scrollbar > i");
+
+    var layers = [];
+    if (!reducedMotion) {
+      /* full-bleed hero + panel images move deep */
+      document.querySelectorAll(".hero__img-wrap img, .panel__img-wrap img")
+        .forEach(function (img) {
+          layers.push({ node: img, box: img.parentElement, amp: 0.14 });
+        });
+      /* gallery frames: the oversized image drifts within its window */
+      document.querySelectorAll(".strip__grid .ph__par").forEach(function (par) {
+        layers.push({ node: par, box: par.closest(".ph__img"), amp: 0.08 });
+      });
+    }
+    var heroContent = reducedMotion ? null : document.querySelector(".hero__content");
 
     var ticking = false;
 
     function update() {
       ticking = false;
       var vh = window.innerHeight;
-      layers.forEach(function (img) {
-        var rect = img.parentElement.getBoundingClientRect();
-        if (rect.bottom < 0 || rect.top > vh) return;
+
+      if (bar) {
+        var doc = document.documentElement;
+        var max = doc.scrollHeight - vh;
+        var p = max > 0 ? window.scrollY / max : 0;
+        bar.style.transform = "scaleX(" + p.toFixed(4) + ")";
+      }
+
+      if (heroContent) {
+        var s = window.scrollY;
+        /* title lingers, then fades as the hero leaves */
+        heroContent.style.transform = "translateY(" + (s * 0.28).toFixed(1) + "px)";
+        heroContent.style.opacity = Math.max(0, 1 - s / (vh * 0.82)).toFixed(3);
+      }
+
+      layers.forEach(function (L) {
+        var rect = L.box.getBoundingClientRect();
+        if (rect.bottom < -80 || rect.top > vh + 80) return;
         /* progress: -1 (below viewport) → 1 (above viewport) */
         var progress = (rect.top + rect.height / 2 - vh / 2) / (vh / 2 + rect.height / 2);
-        img.style.transform = "translateY(" + (progress * rect.height * 0.12).toFixed(1) + "px)";
+        L.node.style.transform =
+          "translateY(" + (progress * rect.height * L.amp).toFixed(1) + "px)";
       });
     }
 
@@ -197,6 +227,11 @@
     galleryPhotos = galleryPhotos.slice(0, gallerySlots);
     var homeCount = 1 + panels.length + galleryPhotos.length;
 
+    /* scroll-progress bar */
+    var scrollbar = el("div", "scrollbar");
+    scrollbar.innerHTML = "<i></i>";
+    document.body.appendChild(scrollbar);
+
     /* hero */
     var heroSec = el("section", "hero");
     heroSec.innerHTML =
@@ -211,6 +246,10 @@
       "</div></div>" +
       '<span class="hero__scroll mono">Scroll ↓</span>';
     root.appendChild(heroSec);
+
+    /* kinetic marquee band */
+    root.appendChild(buildMarquee(
+      ["Architecture", "Street", "New York City", "Looking Up"]));
 
     /* statement */
     var statement = el("section", "statement reveal");
@@ -239,6 +278,9 @@
       }
     }
 
+    /* colophon / spec sheet — fills the closing space with the facts */
+    root.appendChild(buildColophon());
+
     /* CTA to archive */
     var cta = el("a", "cta reveal");
     cta.href = "archive.html";
@@ -249,6 +291,48 @@
 
     initParallax();
     initReveal();
+  }
+
+  /* full-width scrolling text band; content duplicated for a seamless loop */
+  function buildMarquee(words) {
+    var sec = el("section", "marquee");
+    sec.setAttribute("aria-hidden", "true");
+    var run = "";
+    for (var i = 0; i < words.length; i++) {
+      run += '<span' + (i % 2 ? ' class="on"' : "") + ">" + words[i] + "</span>" +
+        '<span>—</span>';
+    }
+    var track = el("div", "marquee__track");
+    track.innerHTML = run + run; /* two copies → -50% loop is seamless */
+    sec.appendChild(track);
+    return sec;
+  }
+
+  /* spec-sheet colophon built from the manifest */
+  function buildColophon() {
+    var sec = el("section", "colophon reveal");
+    var tags = {};
+    PHOTOS.forEach(function (p) {
+      p.tags.forEach(function (t) { tags[t] = true; });
+    });
+    var cells = [
+      ["Based", "New York City"],
+      ["Focus", "Architecture · Street"],
+      ["Archive", nPhotos(PHOTOS.length)],
+      ["Subjects", String(Object.keys(tags).length) + " tags"],
+      ["Since", String(yearRange())],
+      ["Position", "40.71° N · 74.01° W"]
+    ];
+    var grid = "";
+    cells.forEach(function (c) {
+      grid += '<div class="colophon__cell"><dt>' + c[0] + "</dt><dd>" +
+        c[1] + "</dd></div>";
+    });
+    sec.innerHTML =
+      '<div class="colophon__head">' +
+      '<span class="mono">02 — Colophon</span></div>' +
+      '<dl class="colophon__grid">' + grid + "</dl>";
+    return sec;
   }
 
   function buildStrip(photos, n) {

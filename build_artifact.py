@@ -50,6 +50,14 @@ def build():
     css = read("css/style.css")
     main_js = read("js/main.js")
 
+    # Inline the webfont as a data URI — the artifact CSP blocks external
+    # files, so the ../fonts path would fall back to Helvetica otherwise.
+    with open(os.path.join(ROOT, "fonts", "archivo-var.woff2"), "rb") as fh:
+        font_b64 = base64.b64encode(fh.read()).decode("ascii")
+    css = css.replace(
+        'url("../fonts/archivo-var.woff2") format("woff2")',
+        'url(data:font/woff2;base64,%s) format("woff2")' % font_b64)
+
     html = """<meta charset="utf-8">
 <title>Garrett Erickson — Photographs</title>
 <style>
