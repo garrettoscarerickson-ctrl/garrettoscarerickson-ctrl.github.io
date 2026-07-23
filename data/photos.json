@@ -1,5 +1,60 @@
 [
   {
+    "src": "images/central-park-goose.jpg",
+    "title": "Central Park Goose",
+    "location": "New York City, Central Park",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "nature",
+      "wildlife"
+    ]
+  },
+  {
+    "src": "images/central-park-bridge-reflection.jpg",
+    "title": "Central Park Bridge Reflection",
+    "location": "New York City, Central Park",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "architecture",
+      "nature",
+      "skyline"
+    ]
+  },
+  {
+    "src": "images/central-park-volleyball.jpg",
+    "title": "Central Park Volleyball",
+    "location": "New York City, Central Park",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "sports"
+    ]
+  },
+  {
+    "src": "images/duck-in-central-park.jpg",
+    "title": "Duck in Central Park",
+    "location": "New York City, Central Park",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "nature",
+      "wildlife"
+    ]
+  },
+  {
+    "src": "images/central-park-bridge.jpg",
+    "title": "Central Park Bridge",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "architecture",
+      "nature"
+    ]
+  },
+  {
     "src": "images/three-and-four.jpg",
     "title": "Three & Four",
     "location": "World Trade Center, NYC",

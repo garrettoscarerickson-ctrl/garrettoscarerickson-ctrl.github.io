@@ -38,7 +38,8 @@
     card.setAttribute("aria-label", "View " + photo.title);
     card.innerHTML =
       '<figure>' +
-      '<img loading="lazy" src="' + photo.src + '" alt="' + photo.title + " — " + photo.location + '">' +
+      '<span class="ph__img wm"><img loading="lazy" src="' + photo.src +
+      '" alt="' + photo.title + " — " + photo.location + '"></span>' +
       '<figcaption>' +
       '<span class="ph__title">' + photo.title + "</span>" +
       '<span class="mono">' + tagLine(photo) + "</span>" +
@@ -60,7 +61,7 @@
     lb.setAttribute("aria-modal", "true");
     lb.innerHTML =
       '<button class="lightbox__close">Close ✕</button>' +
-      '<div class="lightbox__stage"><img alt=""></div>' +
+      '<div class="lightbox__stage wm wm--lg"><img alt=""></div>' +
       '<div class="lightbox__bar">' +
       '<div><span class="ph__title" id="lb-title"></span>' +
       '<span class="mono" id="lb-meta" style="margin-left:1.25rem"></span></div>' +
@@ -110,8 +111,7 @@
     lb.querySelector(".lightbox__stage img").alt = photo.title;
     lb.querySelector("#lb-title").textContent = photo.title;
     lb.querySelector("#lb-meta").textContent =
-      photo.location + " · " + photo.year + " · " + tagLine(photo) +
-      " · © Garrett Erickson";
+      photo.location + " · " + photo.year + " · " + tagLine(photo);
     lb.querySelector("#lb-count").textContent =
       pad2(lightboxIdx + 1) + " / " + pad2(lightboxSet.length);
   }
@@ -260,7 +260,7 @@
     var isPortrait = photo.orientation === "portrait";
     var panel = el("section", "panel" + (isPortrait ? " panel--portrait" : ""));
     panel.innerHTML =
-      '<div class="panel__img-wrap" data-parallax>' +
+      '<div class="panel__img-wrap wm wm--lg" data-parallax>' +
       '<img loading="lazy" src="' + photo.src + '" alt="' + photo.title + '"></div>' +
       (isPortrait
         ? '<div class="panel__side reveal">' +

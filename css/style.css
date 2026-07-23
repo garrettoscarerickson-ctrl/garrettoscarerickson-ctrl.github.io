@@ -306,8 +306,40 @@ a { color: inherit; text-decoration: none; }
 }
 
 .ph figure {
-  overflow: hidden;
   background: var(--bg-raise);
+}
+
+.ph__img {
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ---------- watermark overlay ----------
+   Rendered by the site over every photo — existing and future.
+   It is NOT part of the image file (nothing is baked into the JPG),
+   so it always appears, on all photos, with no per-photo work. */
+
+.wm::after {
+  content: "© GARRETT ERICKSON";
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  z-index: 3;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.11em;
+  color: rgba(255, 255, 255, 0.62);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65);
+  pointer-events: none;
+  mix-blend-mode: normal;
+}
+
+.wm--lg::after {
+  right: clamp(0.9rem, 2vw, 1.6rem);
+  bottom: clamp(0.9rem, 2vw, 1.6rem);
+  font-size: clamp(0.55rem, 1vw, 0.72rem);
+  letter-spacing: 0.16em;
 }
 
 .ph img {
@@ -458,6 +490,7 @@ a { color: inherit; text-decoration: none; }
 .lightbox.is-open { display: flex; }
 
 .lightbox__stage {
+  position: relative;
   flex: 1;
   min-height: 0;
   display: flex;
