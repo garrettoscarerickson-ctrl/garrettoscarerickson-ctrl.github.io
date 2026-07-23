@@ -94,7 +94,7 @@ def build():
 <footer class="footer">
   <span class="mono">© 2026 Garrett Erickson</span>
   <a class="mono" href="mailto:garrettoscarerickson@gmail.com">garrettoscarerickson@gmail.com</a>
-  <span class="mono">40.7128° N, 74.0060° W</span>
+  <span class="mono">Michigan-based · shooting New York</span>
 </footer>
 
 <script>

@@ -316,12 +316,12 @@
       p.tags.forEach(function (t) { tags[t] = true; });
     });
     var cells = [
-      ["Based", "New York City"],
+      ["Based", "Michigan"],
+      ["On location", "New York City"],
       ["Focus", "Architecture · Street"],
       ["Archive", nPhotos(PHOTOS.length)],
       ["Subjects", String(Object.keys(tags).length) + " tags"],
-      ["Since", String(yearRange())],
-      ["Position", "40.71° N · 74.01° W"]
+      ["Since", String(yearRange())]
     ];
     var grid = "";
     cells.forEach(function (c) {
