@@ -1,5 +1,131 @@
 [
   {
+    "src": "images/coney-island.jpg",
+    "title": "Coney Island",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "architecture",
+      "other"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/beer-bottle.jpg",
+    "title": "Beer Bottle",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "other"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/on-the-subway.jpg",
+    "title": "On the Subway",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "transit"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/window.jpg",
+    "title": "Window",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "people",
+      "transit"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/tired-at-the-subway.jpg",
+    "title": "Tired at the Subway",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "people",
+      "transit"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/m-m.jpg",
+    "title": "M&M",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "architecture",
+      "other"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/harley.jpg",
+    "title": "Harley",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "vehicles"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/focused.jpg",
+    "title": "Focused",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/wonder-wheel.jpg",
+    "title": "Wonder Wheel",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "other"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/pier.jpg",
+    "title": "Pier",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "nature",
+      "people"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/soccer-at-coney-island.jpg",
+    "title": "Soccer at Coney Island",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "sports"
+    ],
+    "archiveOnly": true
+  },
+  {
     "src": "images/central-park-goose.jpg",
     "title": "Central Park Goose",
     "location": "New York City, Central Park",
