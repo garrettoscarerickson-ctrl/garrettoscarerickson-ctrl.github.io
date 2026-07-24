@@ -241,7 +241,7 @@
       '<div class="hero__content">' +
       '<h1 class="hero__title">Garrett<br>Erickson</h1>' +
       '<div class="hero__meta">' +
-      '<span class="mono">Architecture &amp; street photography</span>' +
+      '<span class="mono">Architecture, street &amp; sports photography</span>' +
       '<span class="mono">' + nPhotos(homeCount) + " — " + hero.year + "</span>" +
       "</div></div>" +
       '<span class="hero__scroll mono">Scroll ↓</span>';
@@ -249,7 +249,7 @@
 
     /* kinetic marquee band */
     root.appendChild(buildMarquee(
-      ["Architecture", "Street", "Concrete", "Looking Up"]));
+      ["Architecture", "Street", "Sports", "Looking Up"]));
 
     /* statement */
     var statement = el("section", "statement reveal");
@@ -317,7 +317,7 @@
     });
     var cells = [
       ["Based", "Michigan"],
-      ["Focus", "Architecture · Street"],
+      ["Focus", "Architecture · Street · Sports"],
       ["Format", "Digital"],
       ["Archive", nPhotos(PHOTOS.length)],
       ["Subjects", String(Object.keys(tags).length) + " tags"],
