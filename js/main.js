@@ -407,39 +407,103 @@
     });
     var tags = Object.keys(tagCounts).sort();
 
-    function makeBtn(label, value, count) {
-      var btn = el("button", "filter-btn");
-      btn.type = "button";
-      btn.innerHTML = label + (count != null ? "<sup>" + count + "</sup>" : "");
-      btn.dataset.tag = value;
-      btn.addEventListener("click", function () {
-        activeTag = value;
-        filtersEl.querySelectorAll(".filter-btn").forEach(function (b) {
-          b.classList.toggle("is-active", b.dataset.tag === value);
-        });
-        renderGrid();
-      });
-      return btn;
+    /* multi-select filter state — empty set means "show everything" */
+    var selected = new Set();
+
+    var funnel =
+      '<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" ' +
+      'fill="none" stroke="currentColor" stroke-width="1.5" ' +
+      'stroke-linejoin="round"><path d="M1.8 3h12.4l-4.7 5.4V13l-3 1.4V8.4z"/></svg>';
+
+    /* build the summary + the filter button that opens the checkbox menu */
+    var opts = "";
+    tags.forEach(function (t) {
+      opts +=
+        '<label class="filter-opt"><input type="checkbox" value="' + t + '">' +
+        '<span class="filter-opt__box"></span>' +
+        '<span class="filter-opt__name">' + t + "</span>" +
+        '<span class="filter-opt__n">' + tagCounts[t] + "</span></label>";
+    });
+
+    filtersEl.innerHTML =
+      '<span class="filters__summary mono">All photographs</span>' +
+      '<div class="filters__control">' +
+      '<button class="filter-toggle" type="button" aria-expanded="false" ' +
+      'aria-haspopup="true">' + funnel +
+      "<span>Filter</span>" +
+      '<span class="filter-toggle__count" hidden></span></button>' +
+      '<div class="filter-menu" hidden role="menu">' +
+      '<div class="filter-menu__head"><span class="mono">Filter by subject</span>' +
+      '<button class="filter-menu__clear" type="button" hidden>Clear</button></div>' +
+      opts +
+      "</div></div>";
+
+    var toggle = filtersEl.querySelector(".filter-toggle");
+    var menu = filtersEl.querySelector(".filter-menu");
+    var summary = filtersEl.querySelector(".filters__summary");
+    var countBadge = filtersEl.querySelector(".filter-toggle__count");
+    var clearBtn = filtersEl.querySelector(".filter-menu__clear");
+
+    function openMenu(open) {
+      menu.hidden = !open;
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.classList.toggle("is-open", open);
     }
 
-    filtersEl.appendChild(makeBtn("All", "all", PHOTOS.length));
-    tags.forEach(function (t) {
-      filtersEl.appendChild(makeBtn(t, t, tagCounts[t]));
+    toggle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      openMenu(menu.hidden);
     });
-    filtersEl.querySelector('[data-tag="all"]').classList.add("is-active");
+    menu.addEventListener("click", function (e) { e.stopPropagation(); });
+    document.addEventListener("click", function () { openMenu(false); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") openMenu(false);
+    });
+
+    filtersEl.querySelectorAll('.filter-opt input').forEach(function (cb) {
+      cb.addEventListener("change", function () {
+        if (cb.checked) selected.add(cb.value);
+        else selected.delete(cb.value);
+        syncUi();
+        renderGrid();
+      });
+    });
+
+    clearBtn.addEventListener("click", function () {
+      selected.clear();
+      filtersEl.querySelectorAll('.filter-opt input').forEach(function (cb) {
+        cb.checked = false;
+      });
+      syncUi();
+      renderGrid();
+    });
+
+    function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+    function syncUi() {
+      var n = selected.size;
+      countBadge.hidden = n === 0;
+      countBadge.textContent = n;
+      clearBtn.hidden = n === 0;
+      toggle.classList.toggle("is-active", n > 0);
+      summary.textContent = n === 0
+        ? "All photographs"
+        : Array.from(selected).sort().map(cap).join(", ");
+    }
 
     function renderGrid() {
       gridEl.innerHTML = "";
       var visible = PHOTOS.filter(function (p) {
-        return activeTag === "all" || p.tags.indexOf(activeTag) !== -1;
+        if (selected.size === 0) return true;
+        return p.tags.some(function (t) { return selected.has(t); });
       });
 
       if (!visible.length) {
         gridEl.innerHTML =
           '<div class="archive-empty mono">' +
-          (activeTag === "sports"
+          (selected.has("sports")
             ? "Sports — coming soon. First frames in progress."
-            : "Nothing here yet.") +
+            : "Nothing matches those filters.") +
           "</div>";
         return;
       }
