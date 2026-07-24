@@ -48,7 +48,7 @@ window.PHOTOS = [
       "people",
       "transit"
     ],
-    "archiveOnly": true
+    "feature": "panel"
   },
   {
     "src": "images/tired-at-the-subway.jpg",
@@ -116,8 +116,7 @@ window.PHOTOS = [
     "tags": [
       "nature",
       "people"
-    ],
-    "archiveOnly": true
+    ]
   },
   {
     "src": "images/soccer-at-coney-island.jpg",
@@ -127,8 +126,7 @@ window.PHOTOS = [
     "orientation": "portrait",
     "tags": [
       "sports"
-    ],
-    "archiveOnly": true
+    ]
   },
   {
     "src": "images/central-park-goose.jpg",

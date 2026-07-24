@@ -43,7 +43,7 @@
       "people",
       "transit"
     ],
-    "archiveOnly": true
+    "feature": "panel"
   },
   {
     "src": "images/tired-at-the-subway.jpg",
@@ -111,8 +111,7 @@
     "tags": [
       "nature",
       "people"
-    ],
-    "archiveOnly": true
+    ]
   },
   {
     "src": "images/soccer-at-coney-island.jpg",
@@ -122,8 +121,7 @@
     "orientation": "portrait",
     "tags": [
       "sports"
-    ],
-    "archiveOnly": true
+    ]
   },
   {
     "src": "images/central-park-goose.jpg",
