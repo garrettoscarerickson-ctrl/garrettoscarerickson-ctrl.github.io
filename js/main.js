@@ -414,28 +414,36 @@
       '<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" ' +
       'fill="none" stroke="currentColor" stroke-width="1.5" ' +
       'stroke-linejoin="round"><path d="M1.8 3h12.4l-4.7 5.4V13l-3 1.4V8.4z"/></svg>';
+    var caret =
+      '<svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true" ' +
+      'fill="none" stroke="currentColor" stroke-width="1.4" ' +
+      'stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l4 4 4-4"/></svg>';
 
-    /* build the summary + the filter button that opens the checkbox menu */
+    /* one checkbox row per subject — checkbox · name · count, like a spec sheet */
     var opts = "";
-    tags.forEach(function (t) {
+    tags.forEach(function (t, i) {
       opts +=
-        '<label class="filter-opt"><input type="checkbox" value="' + t + '">' +
+        '<label class="filter-opt" style="--i:' + i + '">' +
+        '<input type="checkbox" value="' + t + '">' +
         '<span class="filter-opt__box"></span>' +
         '<span class="filter-opt__name">' + t + "</span>" +
         '<span class="filter-opt__n">' + tagCounts[t] + "</span></label>";
     });
 
+    /* an animated filter panel: header · checkbox rows · action button */
     filtersEl.innerHTML =
       '<span class="filters__summary mono">All photographs</span>' +
       '<div class="filters__control">' +
       '<button class="filter-toggle" type="button" aria-expanded="false" ' +
       'aria-haspopup="true">' + funnel +
       "<span>Filter</span>" +
-      '<span class="filter-toggle__count" hidden></span></button>' +
-      '<div class="filter-menu" hidden role="menu">' +
+      '<span class="filter-toggle__count" hidden></span>' +
+      '<span class="filter-toggle__caret">' + caret + "</span></button>" +
+      '<div class="filter-menu" role="dialog" aria-label="Filter by subject">' +
       '<div class="filter-menu__head"><span class="mono">Filter by subject</span>' +
       '<button class="filter-menu__clear" type="button" hidden>Clear</button></div>' +
-      opts +
+      '<div class="filter-menu__list">' + opts + "</div>" +
+      '<button class="filter-menu__apply" type="button"></button>' +
       "</div></div>";
 
     var toggle = filtersEl.querySelector(".filter-toggle");
@@ -443,17 +451,19 @@
     var summary = filtersEl.querySelector(".filters__summary");
     var countBadge = filtersEl.querySelector(".filter-toggle__count");
     var clearBtn = filtersEl.querySelector(".filter-menu__clear");
+    var applyBtn = filtersEl.querySelector(".filter-menu__apply");
 
     function openMenu(open) {
-      menu.hidden = !open;
-      toggle.setAttribute("aria-expanded", String(open));
+      menu.classList.toggle("is-open", open);
       toggle.classList.toggle("is-open", open);
+      toggle.setAttribute("aria-expanded", String(open));
     }
 
     toggle.addEventListener("click", function (e) {
       e.stopPropagation();
-      openMenu(menu.hidden);
+      openMenu(!menu.classList.contains("is-open"));
     });
+    applyBtn.addEventListener("click", function () { openMenu(false); });
     menu.addEventListener("click", function (e) { e.stopPropagation(); });
     document.addEventListener("click", function () { openMenu(false); });
     document.addEventListener("keydown", function (e) {
@@ -497,6 +507,10 @@
         if (selected.size === 0) return true;
         return p.tags.some(function (t) { return selected.has(t); });
       });
+
+      applyBtn.textContent = visible.length
+        ? "View " + nPhotos(visible.length)
+        : "No matches";
 
       if (!visible.length) {
         gridEl.innerHTML =
