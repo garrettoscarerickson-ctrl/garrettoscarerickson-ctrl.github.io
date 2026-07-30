@@ -5,6 +5,127 @@
 
 window.PHOTOS = [
   {
+    "src": "images/biker-in-coney-islands.jpg",
+    "title": "Biker in Coney Islands",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "street",
+      "vehicles"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/creative-studio-headshot.jpg",
+    "title": "Creative Studio Headshot",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "portraits"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/father-and-son.jpg",
+    "title": "Father and Son",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "portraits"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/portrait-1.jpg",
+    "title": "Portrait 1",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "portraits"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/blue-bmw.jpg",
+    "title": "Blue BMW",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "street",
+      "vehicles"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/brooklyn-bridge-2.jpg",
+    "title": "Brooklyn Bridge 2",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "architecture",
+      "street"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/brooklyn-bridge-1.jpg",
+    "title": "Brooklyn Bridge 1",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "architecture",
+      "street"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/brooklyn-bridge-building.jpg",
+    "title": "Brooklyn Bridge + Building",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "architecture",
+      "skyline"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/cool-lights-in-new-york.jpg",
+    "title": "Cool Lights In New York",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "architecture",
+      "skyline"
+    ],
+    "archiveOnly": true
+  },
+  {
+    "src": "images/new-york-skyline.jpg",
+    "title": "New York Skyline",
+    "location": "New York City",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "architecture",
+      "skyline"
+    ],
+    "archiveOnly": true
+  },
+  {
     "src": "images/coney-island.jpg",
     "title": "Coney Island",
     "location": "New York City",
