@@ -13,20 +13,33 @@
 }
 
 :root {
-  --bg: #0a0a0a;
-  --bg-raise: #111111;
-  --ink: #e8e8e6;
-  --ink-dim: #8f8f8c;
-  --hairline: rgba(255, 255, 255, 0.14);
-  --hairline-soft: rgba(255, 255, 255, 0.07);
+  /* neutrals carry a slight cool bias — reads considered, not default black */
+  --bg: #0b0b0e;
+  --bg-raise: #15151a;
+  --bg-sunk: #101014;
+  --ink: #f2f2f0;
+  --ink-dim: #9b9ba4;
+  --hairline: rgba(255, 255, 255, 0.10);
+  --hairline-soft: rgba(255, 255, 255, 0.055);
   --accent: #ffffff;
 
   --font-sans: "Helvetica Neue", Helvetica, "Neue Haas Grotesk", Arial, sans-serif;
   /* technical UI labels — a real grotesque, not monospace */
   --font-ui: "Archivo", "Helvetica Neue", Arial, sans-serif;
 
+  /* radius scale — the soft, modern edge */
+  --r-sm: 10px;
+  --r-md: 18px;
+  --r-lg: 26px;
+  --r-full: 999px;
+
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-lift: 0 22px 60px rgba(0, 0, 0, 0.55);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
   --pad: clamp(1.25rem, 4vw, 3.5rem);
-  --nav-h: 3.75rem;
+  --nav-h: 3.4rem;
+  --nav-top: 0.85rem;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -43,7 +56,14 @@ body {
   overflow-x: hidden;
 }
 
-img { display: block; max-width: 100%; }
+img {
+  display: block;
+  max-width: 100%;
+  /* discourage drag-to-save; the watermark is the real claim of ownership */
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
 
 a { color: inherit; text-decoration: none; }
 
@@ -65,19 +85,25 @@ a { color: inherit; text-decoration: none; }
 
 /* ---------- nav ---------- */
 
+/* floating glass pill */
 .nav {
   position: fixed;
-  inset: 0 0 auto 0;
+  top: var(--nav-top);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1440px, calc(100% - var(--nav-top) * 2));
   height: var(--nav-h);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--pad);
+  padding: 0 0.6rem 0 1.35rem;
   z-index: 100;
-  border-bottom: 1px solid var(--hairline-soft);
-  background: color-mix(in srgb, var(--bg) 72%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-full);
+  background: color-mix(in srgb, var(--bg-raise) 72%, transparent);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
 }
 
 .nav__name {
@@ -89,7 +115,8 @@ a { color: inherit; text-decoration: none; }
 
 .nav__links {
   display: flex;
-  gap: 2rem;
+  align-items: center;
+  gap: 0.15rem;
 }
 
 .nav__links a {
@@ -99,17 +126,19 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-dim);
-  transition: color 0.25s ease;
+  padding: 0.5rem 0.95rem;
+  border-radius: var(--r-full);
+  transition: color 0.25s ease, background 0.25s ease;
 }
 
-.nav__links a:hover,
-.nav__links a[aria-current="page"] { color: var(--ink); }
+.nav__links a:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.06);
+}
 
-.nav__links a[aria-current="page"]::after {
-  content: "";
-  display: block;
-  border-top: 1px solid var(--ink);
-  margin-top: 3px;
+.nav__links a[aria-current="page"] {
+  color: var(--bg);
+  background: var(--ink);
 }
 
 /* ---------- hero ---------- */
@@ -221,12 +250,16 @@ a { color: inherit; text-decoration: none; }
 
 /* ---------- parallax feature panels ---------- */
 
+/* inset rounded slabs that float against the page */
 .panel {
   position: relative;
-  height: 92svh;
+  height: 88svh;
+  margin: clamp(1rem, 3vh, 2.5rem) var(--pad);
+  border-radius: var(--r-lg);
   overflow: hidden;
   display: flex;
   align-items: flex-end;
+  box-shadow: var(--shadow-lift);
 }
 
 .panel--portrait .panel__img-wrap {
@@ -343,7 +376,17 @@ a { color: inherit; text-decoration: none; }
   display: block;
   position: relative;
   overflow: hidden;
+  border-radius: var(--r-md);
+  background: var(--bg-sunk);
 }
+
+/* lift the inner figure, not .ph — the archive's entrance animation
+   owns .ph's transform and would otherwise win the cascade */
+.ph figure {
+  transition: transform 0.45s var(--ease);
+}
+
+.ph:hover figure { transform: translateY(-5px); }
 
 /* ---------- watermark overlay ----------
    Rendered by the site over every photo — existing and future.
@@ -387,13 +430,14 @@ a { color: inherit; text-decoration: none; }
 
 /* ---------- scroll progress bar ---------- */
 
+/* thin progress line pinned to the very top edge, above the floating nav */
 .scrollbar {
   position: fixed;
-  top: var(--nav-h);
+  top: 0;
   left: 0;
   right: 0;
   height: 2px;
-  z-index: 99;
+  z-index: 101;
   pointer-events: none;
 }
 
@@ -467,9 +511,17 @@ a { color: inherit; text-decoration: none; }
 .colophon__cell {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--hairline);
+  gap: 0.6rem;
+  padding: 1.15rem 1.25rem 1.35rem;
+  border: 1px solid var(--hairline-soft);
+  border-radius: var(--r-md);
+  background: var(--bg-raise);
+  transition: border-color 0.3s ease, transform 0.45s var(--ease);
+}
+
+.colophon__cell:hover {
+  border-color: var(--hairline);
+  transform: translateY(-3px);
 }
 
 .colophon__cell dt {
@@ -529,7 +581,8 @@ a { color: inherit; text-decoration: none; }
 /* ---------- archive page ---------- */
 
 .archive-head {
-  padding: calc(var(--nav-h) + clamp(3rem, 9vh, 6rem)) var(--pad) 0;
+  padding: calc(var(--nav-top) + var(--nav-h) + clamp(3rem, 9vh, 6rem))
+           var(--pad) 0;
 }
 
 .archive-head h1 {
@@ -544,19 +597,20 @@ a { color: inherit; text-decoration: none; }
 
 .filters {
   position: sticky;
-  top: var(--nav-h);
+  top: calc(var(--nav-top) + var(--nav-h) + 0.6rem);
   z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.9rem var(--pad);
-  margin-top: clamp(2rem, 5vh, 3.5rem);
-  border-top: 1px solid var(--hairline);
-  border-bottom: 1px solid var(--hairline-soft);
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  padding: 0.7rem 0.7rem 0.7rem 1.35rem;
+  margin: clamp(2rem, 5vh, 3.5rem) var(--pad) 0;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-full);
+  background: color-mix(in srgb, var(--bg-raise) 76%, transparent);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
 }
 
 .filters__summary {
@@ -578,10 +632,10 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink);
-  background: none;
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--hairline);
-  border-radius: 2px;
-  padding: 0.5rem 0.85rem;
+  border-radius: var(--r-full);
+  padding: 0.55rem 1rem;
   cursor: pointer;
   transition: border-color 0.2s ease, background 0.2s ease;
 }
@@ -624,11 +678,13 @@ a { color: inherit; text-decoration: none; }
   right: 0;
   width: 270px;
   max-height: 68vh;
-  overflow-y: auto;
+  /* clip horizontally so the rounded corners cut the rows and the
+     apply button cleanly; keep vertical scrolling for long tag lists */
+  overflow: hidden auto;
   background: var(--bg-raise);
   border: 1px solid var(--hairline);
-  border-radius: 4px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-lift);
   z-index: 60;
 
   opacity: 0;
@@ -791,18 +847,35 @@ a { color: inherit; text-decoration: none; }
   .filter-opt { opacity: 1; transform: none; }
 }
 
+/* Row-filling masonry: a grid on a fine row unit, each card spanning the
+   rows its own height needs. Unlike CSS columns this fills left-to-right,
+   so the running order actually reads top-to-bottom down the page. */
 .archive-grid {
-  columns: 3;
-  column-gap: clamp(1rem, 2vw, 1.75rem);
+  --gutter: clamp(1rem, 2vw, 1.75rem);
+  --row-unit: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: var(--gutter);
+  row-gap: 0;
+  grid-auto-rows: var(--row-unit);
+  align-items: start;
   padding: clamp(2rem, 5vh, 3.5rem) var(--pad) clamp(4rem, 10vh, 6rem);
 }
 
 .archive-grid .ph {
   display: block;
   width: 100%;
-  break-inside: avoid;
-  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  margin-bottom: var(--gutter);
   animation: rise 0.5s ease both;
+}
+
+/* exact space reserved before the image loads — no reflow */
+.archive-grid .ph__img { aspect-ratio: var(--ar, 3 / 2); }
+
+.archive-grid .ph__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 @keyframes rise {
@@ -811,7 +884,8 @@ a { color: inherit; text-decoration: none; }
 }
 
 .archive-empty {
-  column-span: all;
+  grid-column: 1 / -1;
+  grid-row: span 40;
   padding: 4rem var(--pad) 8rem;
   text-align: center;
 }
@@ -839,10 +913,23 @@ a { color: inherit; text-decoration: none; }
   justify-content: center;
 }
 
-.lightbox__stage img {
+/* The frame shrink-wraps the photo exactly, so the watermark sits on the
+   image itself rather than out at the edge of the viewport. The image is
+   sized in viewport units so its box is definite and the frame can hug it. */
+.lightbox__frame {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
   max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+}
+
+.lightbox__frame img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100svh - var(--pad) * 2 - 5.5rem);
+  width: auto;
+  height: auto;
+  border-radius: var(--r-md);
 }
 
 .lightbox__bar {
@@ -862,19 +949,24 @@ a { color: inherit; text-decoration: none; }
 }
 
 .lightbox button {
-  background: none;
-  border: 0;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-full);
   color: var(--ink-dim);
   font-family: var(--font-ui);
-  font-size: 0.6875rem;
-  letter-spacing: 0.14em;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
-  padding: 0.25rem 0;
-  transition: color 0.2s ease;
+  padding: 0.45rem 0.95rem;
+  transition: color 0.2s ease, background 0.2s ease;
 }
 
-.lightbox button:hover { color: var(--ink); }
+.lightbox button:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.12);
+}
 
 .lightbox__close {
   position: absolute;
@@ -894,6 +986,9 @@ a { color: inherit; text-decoration: none; }
 
 .soon__frame {
   border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  background: var(--bg-raise);
+  box-shadow: var(--shadow-soft);
   padding: clamp(3rem, 8vw, 6.5rem) clamp(2rem, 10vw, 9rem);
   text-align: center;
   display: flex;
@@ -902,27 +997,7 @@ a { color: inherit; text-decoration: none; }
   position: relative;
 }
 
-.soon__frame::before,
-.soon__frame::after {
-  content: "";
-  position: absolute;
-  width: 14px;
-  height: 14px;
-}
-
-.soon__frame::before {
-  top: -1px;
-  left: -1px;
-  border-top: 1px solid var(--ink);
-  border-left: 1px solid var(--ink);
-}
-
-.soon__frame::after {
-  bottom: -1px;
-  right: -1px;
-  border-bottom: 1px solid var(--ink);
-  border-right: 1px solid var(--ink);
-}
+/* corner ticks removed — the rounded edge carries the detail now */
 
 .soon__title {
   font-size: clamp(3rem, 12vw, 9rem);
@@ -973,7 +1048,7 @@ a { color: inherit; text-decoration: none; }
     margin-top: 0;
   }
 
-  .archive-grid { columns: 2; }
+  .archive-grid { grid-template-columns: repeat(2, 1fr); }
 
   .panel--portrait .panel__img-wrap { left: 0; }
   .panel--portrait::before { display: none; }
@@ -982,8 +1057,9 @@ a { color: inherit; text-decoration: none; }
 }
 
 @media (max-width: 560px) {
-  .archive-grid { columns: 1; }
-  .nav__links { gap: 1.1rem; }
+  .archive-grid { grid-template-columns: 1fr; }
+  .nav__links { gap: 0; }
+  .nav__links a { padding: 0.5rem 0.7rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

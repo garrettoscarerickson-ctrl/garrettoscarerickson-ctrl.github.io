@@ -206,9 +206,20 @@ class StudioHandler(SimpleHTTPRequestHandler):
         with open(os.path.join(ROOT, src), "wb") as f:
             f.write(raw)
         entry["src"] = src
+        # record pixel dimensions so the archive can reserve exact space
+        # for each frame before the image loads (no layout shift)
+        try:
+            body_w = int(body.get("w") or 0)
+            body_h = int(body.get("h") or 0)
+        except (TypeError, ValueError):
+            body_w = body_h = 0
+        if body_w > 0 and body_h > 0:
+            entry["w"], entry["h"] = body_w, body_h
         # field order matters to nobody but humans reading the JSON
         ordered = {k: entry[k] for k in
                    ("src", "title", "location", "year", "orientation", "tags")}
+        if "w" in entry:
+            ordered["w"], ordered["h"] = entry["w"], entry["h"]
         ordered["archiveOnly"] = True
         photos.insert(0, ordered)
         save_photos(photos)
@@ -494,12 +505,13 @@ function prepareFile(file) {
     var dataUrl = canvas.toDataURL("image/jpeg", 0.88);
     URL.revokeObjectURL(img.src);
     addPendingCard(file, dataUrl,
-      canvas.width >= canvas.height ? "landscape" : "portrait");
+      canvas.width >= canvas.height ? "landscape" : "portrait",
+      canvas.width, canvas.height);
   };
   img.src = URL.createObjectURL(file);
 }
 
-function addPendingCard(file, dataUrl, orientation) {
+function addPendingCard(file, dataUrl, orientation, pxW, pxH) {
   var card = el("div", "card");
   var thumb = el("img");
   thumb.src = dataUrl;
@@ -523,6 +535,7 @@ function addPendingCard(file, dataUrl, orientation) {
   addBtn.onclick = function () {
     var meta = form.read();
     meta.orientation = orientation;
+    meta.w = pxW; meta.h = pxH;
     meta.image = dataUrl;
     addBtn.disabled = true;
     status.textContent = "Uploading…"; status.className = "status";

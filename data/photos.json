@@ -10,7 +10,9 @@
       "street",
       "vehicles"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 1600,
+    "h": 2400
   },
   {
     "src": "images/creative-studio-headshot.jpg",
@@ -21,7 +23,9 @@
     "tags": [
       "people",
       "portraits"
-    ]
+    ],
+    "w": 1600,
+    "h": 2400
   },
   {
     "src": "images/father-and-son.jpg",
@@ -33,7 +37,9 @@
       "people",
       "portraits"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 1600,
+    "h": 2400
   },
   {
     "src": "images/portrait-1.jpg",
@@ -45,7 +51,9 @@
       "people",
       "portraits"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 1600,
+    "h": 2400
   },
   {
     "src": "images/blue-bmw.jpg",
@@ -57,7 +65,9 @@
       "street",
       "vehicles"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/brooklyn-bridge-2.jpg",
@@ -69,7 +79,9 @@
       "architecture",
       "street"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 1600,
+    "h": 2400
   },
   {
     "src": "images/brooklyn-bridge-1.jpg",
@@ -81,7 +93,9 @@
       "architecture",
       "street"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/brooklyn-bridge-building.jpg",
@@ -93,7 +107,9 @@
       "architecture",
       "skyline"
     ],
-    "feature": "panel"
+    "feature": "panel",
+    "w": 1600,
+    "h": 2400
   },
   {
     "src": "images/cool-lights-in-new-york.jpg",
@@ -105,7 +121,9 @@
       "architecture",
       "skyline"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/new-york-skyline.jpg",
@@ -117,7 +135,9 @@
       "architecture",
       "skyline"
     ],
-    "feature": "hero"
+    "feature": "hero",
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/coney-island.jpg",
@@ -129,7 +149,9 @@
       "architecture",
       "street"
     ],
-    "feature": "panel"
+    "feature": "panel",
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/beer-bottle.jpg",
@@ -140,7 +162,9 @@
     "tags": [
       "still life"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/on-the-subway.jpg",
@@ -151,7 +175,9 @@
     "tags": [
       "transit"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/window.jpg",
@@ -163,7 +189,9 @@
       "people",
       "transit"
     ],
-    "feature": "panel"
+    "feature": "panel",
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/tired-at-the-subway.jpg",
@@ -175,7 +203,9 @@
       "people",
       "transit"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/m-m.jpg",
@@ -187,7 +217,9 @@
       "architecture",
       "street"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 1600,
+    "h": 2400
   },
   {
     "src": "images/harley.jpg",
@@ -197,7 +229,9 @@
     "orientation": "landscape",
     "tags": [
       "vehicles"
-    ]
+    ],
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/focused.jpg",
@@ -208,7 +242,9 @@
     "tags": [
       "people"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 1600,
+    "h": 2400
   },
   {
     "src": "images/wonder-wheel.jpg",
@@ -219,7 +255,9 @@
     "tags": [
       "architecture",
       "street"
-    ]
+    ],
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/pier.jpg",
@@ -230,7 +268,9 @@
     "tags": [
       "nature",
       "people"
-    ]
+    ],
+    "w": 1600,
+    "h": 2400
   },
   {
     "src": "images/soccer-at-coney-island.jpg",
@@ -240,7 +280,9 @@
     "orientation": "portrait",
     "tags": [
       "sports"
-    ]
+    ],
+    "w": 1600,
+    "h": 2400
   },
   {
     "src": "images/central-park-goose.jpg",
@@ -252,7 +294,9 @@
       "nature",
       "wildlife"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/central-park-bridge-reflection.jpg",
@@ -264,7 +308,9 @@
       "architecture",
       "nature"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/central-park-volleyball.jpg",
@@ -275,7 +321,9 @@
     "tags": [
       "sports"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/duck-in-central-park.jpg",
@@ -287,7 +335,9 @@
       "nature",
       "wildlife"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/central-park-bridge.jpg",
@@ -298,7 +348,9 @@
     "tags": [
       "architecture",
       "nature"
-    ]
+    ],
+    "w": 2400,
+    "h": 1600
   },
   {
     "src": "images/three-and-four.jpg",
@@ -309,7 +361,9 @@
     "tags": [
       "architecture"
     ],
-    "feature": "panel"
+    "feature": "panel",
+    "w": 2000,
+    "h": 1333
   },
   {
     "src": "images/billionaires-row.jpg",
@@ -321,7 +375,9 @@
       "architecture",
       "skyline"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 2000,
+    "h": 1333
   },
   {
     "src": "images/monolith.jpg",
@@ -333,7 +389,9 @@
       "architecture",
       "nature"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 1333,
+    "h": 2000
   },
   {
     "src": "images/r-train.jpg",
@@ -345,7 +403,9 @@
       "street",
       "transit"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 2000,
+    "h": 1333
   },
   {
     "src": "images/under-the-oculus.jpg",
@@ -356,7 +416,9 @@
     "tags": [
       "architecture",
       "skyline"
-    ]
+    ],
+    "w": 2000,
+    "h": 1333
   },
   {
     "src": "images/one-wtc-street.jpg",
@@ -369,7 +431,9 @@
       "skyline",
       "street"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 1333,
+    "h": 2000
   },
   {
     "src": "images/fidi-corner.jpg",
@@ -382,7 +446,9 @@
       "skyline",
       "street"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 2000,
+    "h": 1333
   },
   {
     "src": "images/brick-and-canopy.jpg",
@@ -395,7 +461,9 @@
       "nature",
       "skyline"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 1500,
+    "h": 1000
   },
   {
     "src": "images/workhorse.jpg",
@@ -406,7 +474,9 @@
     "tags": [
       "street",
       "wildlife"
-    ]
+    ],
+    "w": 2000,
+    "h": 1333
   },
   {
     "src": "images/local.jpg",
@@ -418,6 +488,8 @@
       "street",
       "wildlife"
     ],
-    "archiveOnly": true
+    "archiveOnly": true,
+    "w": 2000,
+    "h": 1333
   }
 ]

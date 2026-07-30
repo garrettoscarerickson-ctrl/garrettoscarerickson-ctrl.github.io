@@ -31,15 +31,92 @@
     return photo.tags.join(" / ");
   }
 
+  /* Photographs of people sort to the end of any run, so the work leads
+     with places and closes with faces. Sort is stable, so the curated
+     order is otherwise preserved. */
+  var PEOPLE_TAGS = ["people", "portraits"];
+
+  function isPeople(photo) {
+    return photo.tags.some(function (t) {
+      return PEOPLE_TAGS.indexOf(t) !== -1;
+    });
+  }
+
+  function peopleLast(list) {
+    return list.slice().sort(function (a, b) {
+      return (isPeople(a) ? 1 : 0) - (isPeople(b) ? 1 : 0);
+    });
+  }
+
+  /* ---------- casual save protection ----------
+     Blocks right-click-save and drag-to-desktop on photographs. This
+     deters casual copying only — anyone determined can still screenshot
+     or pull the file directly. The visible watermark is the real claim. */
+
+  function protectImages(scope) {
+    (scope || document).addEventListener("contextmenu", function (e) {
+      if (e.target.closest("img, .ph__img, .lightbox__frame, " +
+                           ".panel__img-wrap, .hero__img-wrap")) {
+        e.preventDefault();
+      }
+    });
+    (scope || document).addEventListener("dragstart", function (e) {
+      if (e.target.tagName === "IMG") e.preventDefault();
+    });
+  }
+
+  /* ---------- archive masonry ----------
+     Each card spans however many grid row-units its own height needs, so
+     the grid fills row-wise (left to right) while keeping natural heights. */
+
+  function layoutMasonry(grid) {
+    if (!grid) return;
+    var cs = getComputedStyle(grid);
+    var unit = parseFloat(cs.getPropertyValue("--row-unit")) || 8;
+    var gutter = parseFloat(cs.getPropertyValue("--gutter")) || 0;
+    Array.prototype.forEach.call(grid.children, function (card) {
+      if (card.classList.contains("archive-empty")) return;
+      var h = card.getBoundingClientRect().height;
+      if (!h) return;
+      card.style.gridRowEnd = "span " + Math.ceil((h + gutter) / unit);
+    });
+  }
+
+  function watchMasonry(grid) {
+    var pending = false;
+    function relayout() {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () {
+        pending = false;
+        layoutMasonry(grid);
+      });
+    }
+    relayout();
+    window.addEventListener("resize", relayout);
+    /* images and webfonts change card heights after first paint */
+    if ("ResizeObserver" in window) {
+      var ro = new ResizeObserver(relayout);
+      Array.prototype.forEach.call(grid.children, function (c) { ro.observe(c); });
+    }
+    Array.prototype.forEach.call(grid.querySelectorAll("img"), function (img) {
+      if (!img.complete) img.addEventListener("load", relayout, { once: true });
+    });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
+    return relayout;
+  }
+
   /* A photo card <button class="ph"> used by both pages */
   function photoCard(photo, index, onClick) {
     var card = el("button", "ph" +
       (photo.orientation === "portrait" ? " ph--portrait" : ""));
     card.type = "button";
     card.setAttribute("aria-label", "View " + photo.title);
+    /* real pixel ratio, so the grid can reserve exact space up front */
+    var ar = photo.w && photo.h ? ' style="--ar:' + photo.w + "/" + photo.h + '"' : "";
     card.innerHTML =
       '<figure>' +
-      '<span class="ph__img wm"><span class="ph__par">' +
+      '<span class="ph__img wm"' + ar + '><span class="ph__par">' +
       '<img loading="lazy" src="' + photo.src +
       '" alt="' + photo.title + " — " + photo.location + '"></span></span>' +
       '<figcaption>' +
@@ -63,7 +140,8 @@
     lb.setAttribute("aria-modal", "true");
     lb.innerHTML =
       '<button class="lightbox__close">Close ✕</button>' +
-      '<div class="lightbox__stage wm wm--lg"><img alt=""></div>' +
+      '<div class="lightbox__stage">' +
+      '<span class="lightbox__frame wm wm--lg"><img alt=""></span></div>' +
       '<div class="lightbox__bar">' +
       '<div><span class="ph__title" id="lb-title"></span>' +
       '<span class="mono" id="lb-meta" style="margin-left:1.25rem"></span></div>' +
@@ -80,6 +158,7 @@
     lb.addEventListener("click", function (e) {
       if (e.target === lb || e.target.classList.contains("lightbox__stage")) closeLightbox();
     });
+    protectImages(lb);
     document.addEventListener("keydown", function (e) {
       if (!lb.classList.contains("is-open")) return;
       if (e.key === "Escape") closeLightbox();
@@ -111,6 +190,7 @@
     var photo = lightboxSet[lightboxIdx];
     lb.querySelector(".lightbox__stage img").src = photo.src;
     lb.querySelector(".lightbox__stage img").alt = photo.title;
+    lb.querySelector(".lightbox__stage img").draggable = false;
     lb.querySelector("#lb-title").textContent = photo.title;
     lb.querySelector("#lb-meta").textContent =
       photo.location + " · " + photo.year + " · " + tagLine(photo);
@@ -224,7 +304,9 @@
     /* cap the whole index at HOME_MAX: hero + panels + as many gallery
        frames as fit under the limit */
     var gallerySlots = Math.max(0, HOME_MAX - 1 - panels.length);
-    galleryPhotos = galleryPhotos.slice(0, gallerySlots);
+    /* cap first (keeps the curation), then push people to the end */
+    galleryPhotos = peopleLast(galleryPhotos.slice(0, gallerySlots));
+    panels = peopleLast(panels);
     var homeCount = 1 + panels.length + galleryPhotos.length;
 
     /* scroll-progress bar */
@@ -504,10 +586,10 @@
 
     function renderGrid() {
       gridEl.innerHTML = "";
-      var visible = PHOTOS.filter(function (p) {
+      var visible = peopleLast(PHOTOS.filter(function (p) {
         if (selected.size === 0) return true;
         return p.tags.some(function (t) { return selected.has(t); });
-      });
+      }));
 
       applyBtn.textContent = visible.length
         ? "View " + nPhotos(visible.length)
@@ -530,6 +612,8 @@
         card.style.animationDelay = (i * 0.04) + "s";
         gridEl.appendChild(card);
       });
+
+      watchMasonry(gridEl);
     }
 
     renderGrid();
@@ -621,6 +705,8 @@
   }
 
   /* ---------- boot ---------- */
+
+  protectImages(document);
 
   if (page === "home") buildHome();
   if (page === "archive") buildArchive();
