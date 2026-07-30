@@ -6,8 +6,8 @@
 window.PHOTOS = [
   {
     "src": "images/biker-in-coney-islands.jpg",
-    "title": "Biker in Coney Islands",
-    "location": "New York City",
+    "title": "The Rider",
+    "location": "Coney Island, Brooklyn",
     "year": 2026,
     "orientation": "portrait",
     "tags": [
@@ -19,20 +19,19 @@ window.PHOTOS = [
   },
   {
     "src": "images/creative-studio-headshot.jpg",
-    "title": "Creative Studio Headshot",
-    "location": "New York City",
+    "title": "Green Light",
+    "location": "Studio",
     "year": 2026,
     "orientation": "portrait",
     "tags": [
       "people",
       "portraits"
-    ],
-    "archiveOnly": true
+    ]
   },
   {
     "src": "images/father-and-son.jpg",
-    "title": "Father and Son",
-    "location": "New York City",
+    "title": "Father & Son",
+    "location": "Studio",
     "year": 2026,
     "orientation": "portrait",
     "tags": [
@@ -43,8 +42,8 @@ window.PHOTOS = [
   },
   {
     "src": "images/portrait-1.jpg",
-    "title": "Portrait 1",
-    "location": "New York City",
+    "title": "Aviators",
+    "location": "Brooklyn, New York",
     "year": 2026,
     "orientation": "portrait",
     "tags": [
@@ -55,8 +54,8 @@ window.PHOTOS = [
   },
   {
     "src": "images/blue-bmw.jpg",
-    "title": "Blue BMW",
-    "location": "New York City",
+    "title": "Bavarian Blue",
+    "location": "Manhattan, New York",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
@@ -67,8 +66,8 @@ window.PHOTOS = [
   },
   {
     "src": "images/brooklyn-bridge-2.jpg",
-    "title": "Brooklyn Bridge 2",
-    "location": "New York City",
+    "title": "Manhattan Bridge",
+    "location": "DUMBO, Brooklyn",
     "year": 2026,
     "orientation": "portrait",
     "tags": [
@@ -79,8 +78,8 @@ window.PHOTOS = [
   },
   {
     "src": "images/brooklyn-bridge-1.jpg",
-    "title": "Brooklyn Bridge 1",
-    "location": "New York City",
+    "title": "East River Span",
+    "location": "Brooklyn Bridge Park",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
@@ -91,20 +90,20 @@ window.PHOTOS = [
   },
   {
     "src": "images/brooklyn-bridge-building.jpg",
-    "title": "Brooklyn Bridge + Building",
-    "location": "New York City",
+    "title": "Bridge & Tower",
+    "location": "DUMBO, Brooklyn",
     "year": 2026,
     "orientation": "portrait",
     "tags": [
       "architecture",
       "skyline"
     ],
-    "archiveOnly": true
+    "feature": "panel"
   },
   {
     "src": "images/cool-lights-in-new-york.jpg",
-    "title": "Cool Lights In New York",
-    "location": "New York City",
+    "title": "Light Trails",
+    "location": "East River, Brooklyn",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
@@ -115,43 +114,43 @@ window.PHOTOS = [
   },
   {
     "src": "images/new-york-skyline.jpg",
-    "title": "New York Skyline",
-    "location": "New York City",
+    "title": "Blue Hour",
+    "location": "Brooklyn Bridge Park",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
       "architecture",
       "skyline"
     ],
-    "archiveOnly": true
+    "feature": "hero"
   },
   {
     "src": "images/coney-island.jpg",
-    "title": "Coney Island",
-    "location": "New York City",
+    "title": "Nathan's Famous",
+    "location": "Coney Island, Brooklyn",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
       "architecture",
-      "other"
+      "street"
     ],
-    "archiveOnly": true
+    "feature": "panel"
   },
   {
     "src": "images/beer-bottle.jpg",
-    "title": "Beer Bottle",
-    "location": "New York City",
+    "title": "Last Call",
+    "location": "Coney Island Beach, Brooklyn",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
-      "other"
+      "still life"
     ],
     "archiveOnly": true
   },
   {
     "src": "images/on-the-subway.jpg",
-    "title": "On the Subway",
-    "location": "New York City",
+    "title": "Passenger",
+    "location": "New York City Subway",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
@@ -161,8 +160,8 @@ window.PHOTOS = [
   },
   {
     "src": "images/window.jpg",
-    "title": "Window",
-    "location": "New York City",
+    "title": "Express Passing",
+    "location": "New York City Subway",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
@@ -173,8 +172,8 @@ window.PHOTOS = [
   },
   {
     "src": "images/tired-at-the-subway.jpg",
-    "title": "Tired at the Subway",
-    "location": "New York City",
+    "title": "Waiting",
+    "location": "New York City Subway",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
@@ -185,31 +184,30 @@ window.PHOTOS = [
   },
   {
     "src": "images/m-m.jpg",
-    "title": "M&M",
-    "location": "New York City",
+    "title": "Sugar Rush",
+    "location": "Times Square, Manhattan",
     "year": 2026,
     "orientation": "portrait",
     "tags": [
       "architecture",
-      "other"
+      "street"
     ],
     "archiveOnly": true
   },
   {
     "src": "images/harley.jpg",
-    "title": "Harley",
-    "location": "New York City",
+    "title": "Kickstand",
+    "location": "Brooklyn, New York",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
       "vehicles"
-    ],
-    "archiveOnly": true
+    ]
   },
   {
     "src": "images/focused.jpg",
     "title": "Focused",
-    "location": "New York City",
+    "location": "Coney Island, Brooklyn",
     "year": 2026,
     "orientation": "portrait",
     "tags": [
@@ -220,18 +218,18 @@ window.PHOTOS = [
   {
     "src": "images/wonder-wheel.jpg",
     "title": "Wonder Wheel",
-    "location": "New York City",
+    "location": "Coney Island, Brooklyn",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
-      "other"
-    ],
-    "archiveOnly": true
+      "architecture",
+      "street"
+    ]
   },
   {
     "src": "images/pier.jpg",
-    "title": "Pier",
-    "location": "New York City",
+    "title": "Under the Pier",
+    "location": "Coney Island Beach, Brooklyn",
     "year": 2026,
     "orientation": "portrait",
     "tags": [
@@ -241,8 +239,8 @@ window.PHOTOS = [
   },
   {
     "src": "images/soccer-at-coney-island.jpg",
-    "title": "Soccer at Coney Island",
-    "location": "New York City",
+    "title": "Beach Football",
+    "location": "Coney Island Beach, Brooklyn",
     "year": 2026,
     "orientation": "portrait",
     "tags": [
@@ -251,8 +249,8 @@ window.PHOTOS = [
   },
   {
     "src": "images/central-park-goose.jpg",
-    "title": "Central Park Goose",
-    "location": "New York City, Central Park",
+    "title": "Resident",
+    "location": "Central Park, Manhattan",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
@@ -263,8 +261,8 @@ window.PHOTOS = [
   },
   {
     "src": "images/central-park-bridge-reflection.jpg",
-    "title": "Central Park Bridge Reflection",
-    "location": "New York City, Central Park",
+    "title": "Stone Arch",
+    "location": "Central Park, Manhattan",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
@@ -275,8 +273,8 @@ window.PHOTOS = [
   },
   {
     "src": "images/central-park-volleyball.jpg",
-    "title": "Central Park Volleyball",
-    "location": "New York City, Central Park",
+    "title": "Match Point",
+    "location": "Central Park, Manhattan",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
@@ -286,8 +284,8 @@ window.PHOTOS = [
   },
   {
     "src": "images/duck-in-central-park.jpg",
-    "title": "Duck in Central Park",
-    "location": "New York City, Central Park",
+    "title": "Mallard",
+    "location": "The Pond, Central Park",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
@@ -298,50 +296,49 @@ window.PHOTOS = [
   },
   {
     "src": "images/central-park-bridge.jpg",
-    "title": "Central Park Bridge",
-    "location": "New York City",
+    "title": "Gapstow Bridge",
+    "location": "The Pond, Central Park",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
       "architecture",
       "nature"
-    ],
-    "archiveOnly": true
+    ]
   },
   {
     "src": "images/three-and-four.jpg",
     "title": "Three & Four",
-    "location": "World Trade Center, NYC",
+    "location": "World Trade Center, Manhattan",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
       "architecture"
     ],
-    "feature": "hero"
+    "feature": "panel"
   },
   {
     "src": "images/billionaires-row.jpg",
     "title": "Billionaires' Row",
-    "location": "Central Park, NYC",
+    "location": "Central Park South, Manhattan",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
       "architecture",
       "skyline"
     ],
-    "feature": "panel"
+    "archiveOnly": true
   },
   {
     "src": "images/monolith.jpg",
     "title": "One World Trade",
-    "location": "World Trade Center, NYC",
+    "location": "World Trade Center, Manhattan",
     "year": 2026,
     "orientation": "portrait",
     "tags": [
       "architecture",
       "nature"
     ],
-    "feature": "panel"
+    "archiveOnly": true
   },
   {
     "src": "images/r-train.jpg",
@@ -353,12 +350,12 @@ window.PHOTOS = [
       "street",
       "transit"
     ],
-    "feature": "panel"
+    "archiveOnly": true
   },
   {
     "src": "images/under-the-oculus.jpg",
     "title": "Under the Oculus",
-    "location": "World Trade Center, NYC",
+    "location": "World Trade Center, Manhattan",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
@@ -369,43 +366,46 @@ window.PHOTOS = [
   {
     "src": "images/one-wtc-street.jpg",
     "title": "One, Framed",
-    "location": "Tribeca, NYC",
+    "location": "Tribeca, Manhattan",
     "year": 2026,
     "orientation": "portrait",
     "tags": [
       "architecture",
       "skyline",
       "street"
-    ]
+    ],
+    "archiveOnly": true
   },
   {
     "src": "images/fidi-corner.jpg",
     "title": "FiDi Corner",
-    "location": "Financial District, NYC",
+    "location": "Financial District, Manhattan",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
       "architecture",
       "skyline",
       "street"
-    ]
+    ],
+    "archiveOnly": true
   },
   {
     "src": "images/brick-and-canopy.jpg",
     "title": "Brick & Canopy",
-    "location": "New York City",
+    "location": "Manhattan, New York",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
       "architecture",
       "nature",
       "skyline"
-    ]
+    ],
+    "archiveOnly": true
   },
   {
     "src": "images/workhorse.jpg",
     "title": "Workhorse",
-    "location": "Central Park, NYC",
+    "location": "Central Park, Manhattan",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
@@ -416,12 +416,13 @@ window.PHOTOS = [
   {
     "src": "images/local.jpg",
     "title": "Local",
-    "location": "New York City",
+    "location": "Coney Island, Brooklyn",
     "year": 2026,
     "orientation": "landscape",
     "tags": [
       "street",
       "wildlife"
-    ]
+    ],
+    "archiveOnly": true
   }
 ];

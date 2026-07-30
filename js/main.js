@@ -208,7 +208,7 @@
   /* The index (home page) shows at most this many photographs. Archive-only
      photos (everything added through Studio) never appear here — the index
      stays a curated showcase while the archive holds the full body of work. */
-  var HOME_MAX = 10;
+  var HOME_MAX = 13;
 
   function buildHome() {
     var root = document.getElementById("home-root");
@@ -249,14 +249,15 @@
 
     /* kinetic marquee band */
     root.appendChild(buildMarquee(
-      ["Architecture", "Street", "Sports", "Looking Up"]));
+      ["Architecture", "Street", "Portraits", "Sports"]));
 
     /* statement */
     var statement = el("section", "statement reveal");
     statement.innerHTML =
       '<span class="mono">01 — About the work</span>' +
-      "<p>Concrete, glass and steel — and the small living things moving between them. " +
-      "<em>Shot on the street, looking up.</em></p>";
+      "<p>Concrete, salt air, and the people in between. " +
+      "<em>Bridges at blue hour, the boardwalk at Coney Island, and whatever " +
+      "the train car gives up on the way home.</em></p>";
     root.appendChild(statement);
 
     /* interleave: strip, panel, strip, panel ... */
