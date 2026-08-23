@@ -1298,6 +1298,7 @@ window.PHOTOS = [
     "year": 2026,
     "orientation": "portrait",
     "tags": [
+      "soccer",
       "sports"
     ],
     "w": 1600,
@@ -1338,7 +1339,8 @@ window.PHOTOS = [
     "year": 2026,
     "orientation": "landscape",
     "tags": [
-      "sports"
+      "sports",
+      "volleyball"
     ],
     "archiveOnly": true,
     "w": 2400,

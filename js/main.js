@@ -468,29 +468,31 @@
      Add a new tag in photos.js and a button appears here.
      ============================================================ */
 
-  function buildArchive() {
-    var countEl = document.getElementById("archive-count");
-    var filtersEl = document.getElementById("filters");
-    var gridEl = document.getElementById("archive-grid");
-    var activeTag = "all";
+  /* ---------- shared filter panel ----------
+     Drives both the archive and the sports page: builds the animated
+     checkbox panel, owns the multi-select state, and re-renders the grid
+     it was handed. `source` is the pool of photographs it filters. */
 
-    countEl.textContent =
-      nPhotos(PHOTOS.length) + " · " + yearRange();
+  function mountFilterPanel(filtersEl, gridEl, source, opts) {
+    opts = opts || {};
+    var label    = opts.label    || "Filter by subject";
+    var allLabel = opts.allLabel || "All photographs";
+    var pinned   = opts.pinned   || [];
+    var exclude  = opts.exclude  || [];
 
-    /* union of all tags, alphabetical, with counts.
-       PINNED tags always get a filter button, even at zero photos,
-       so upcoming series (sports) are visible in the archive now. */
-    var PINNED = ["sports"];
+    /* tag universe for this pool, alphabetical, with counts. Pinned tags
+       always get a row even at zero, so a planned series stays visible. */
     var tagCounts = {};
-    PHOTOS.forEach(function (p) {
-      p.tags.forEach(function (t) { tagCounts[t] = (tagCounts[t] || 0) + 1; });
+    source.forEach(function (p) {
+      p.tags.forEach(function (t) {
+        if (exclude.indexOf(t) !== -1) return;
+        tagCounts[t] = (tagCounts[t] || 0) + 1;
+      });
     });
-    PINNED.forEach(function (t) {
-      if (!(t in tagCounts)) tagCounts[t] = 0;
-    });
+    pinned.forEach(function (t) { if (!(t in tagCounts)) tagCounts[t] = 0; });
     var tags = Object.keys(tagCounts).sort();
 
-    /* multi-select filter state — empty set means "show everything" */
+    /* multi-select state — empty set means "show everything" */
     var selected = new Set();
 
     var funnel =
@@ -502,10 +504,9 @@
       'fill="none" stroke="currentColor" stroke-width="1.4" ' +
       'stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l4 4 4-4"/></svg>';
 
-    /* one checkbox row per subject — checkbox · name · count, like a spec sheet */
-    var opts = "";
+    var opts_html = "";
     tags.forEach(function (t, i) {
-      opts +=
+      opts_html +=
         '<label class="filter-opt" style="--i:' + i + '">' +
         '<input type="checkbox" value="' + t + '">' +
         '<span class="filter-opt__box"></span>' +
@@ -513,28 +514,27 @@
         '<span class="filter-opt__n">' + tagCounts[t] + "</span></label>";
     });
 
-    /* an animated filter panel: header · checkbox rows · action button */
     filtersEl.innerHTML =
-      '<span class="filters__summary mono">All photographs</span>' +
+      '<span class="filters__summary mono">' + allLabel + "</span>" +
       '<div class="filters__control">' +
       '<button class="filter-toggle" type="button" aria-expanded="false" ' +
       'aria-haspopup="true">' + funnel +
       "<span>Filter</span>" +
       '<span class="filter-toggle__count" hidden></span>' +
       '<span class="filter-toggle__caret">' + caret + "</span></button>" +
-      '<div class="filter-menu" role="dialog" aria-label="Filter by subject">' +
-      '<div class="filter-menu__head"><span class="mono">Filter by subject</span>' +
+      '<div class="filter-menu" role="dialog" aria-label="' + label + '">' +
+      '<div class="filter-menu__head"><span class="mono">' + label + "</span>" +
       '<button class="filter-menu__clear" type="button" hidden>Clear</button></div>' +
-      '<div class="filter-menu__list">' + opts + "</div>" +
+      '<div class="filter-menu__list">' + opts_html + "</div>" +
       '<button class="filter-menu__apply" type="button"></button>' +
       "</div></div>";
 
-    var toggle = filtersEl.querySelector(".filter-toggle");
-    var menu = filtersEl.querySelector(".filter-menu");
-    var summary = filtersEl.querySelector(".filters__summary");
+    var toggle     = filtersEl.querySelector(".filter-toggle");
+    var menu       = filtersEl.querySelector(".filter-menu");
+    var summary    = filtersEl.querySelector(".filters__summary");
     var countBadge = filtersEl.querySelector(".filter-toggle__count");
-    var clearBtn = filtersEl.querySelector(".filter-menu__clear");
-    var applyBtn = filtersEl.querySelector(".filter-menu__apply");
+    var clearBtn   = filtersEl.querySelector(".filter-menu__clear");
+    var applyBtn   = filtersEl.querySelector(".filter-menu__apply");
 
     function openMenu(open) {
       menu.classList.toggle("is-open", open);
@@ -553,7 +553,7 @@
       if (e.key === "Escape") openMenu(false);
     });
 
-    filtersEl.querySelectorAll('.filter-opt input').forEach(function (cb) {
+    filtersEl.querySelectorAll(".filter-opt input").forEach(function (cb) {
       cb.addEventListener("change", function () {
         if (cb.checked) selected.add(cb.value);
         else selected.delete(cb.value);
@@ -564,7 +564,7 @@
 
     clearBtn.addEventListener("click", function () {
       selected.clear();
-      filtersEl.querySelectorAll('.filter-opt input').forEach(function (cb) {
+      filtersEl.querySelectorAll(".filter-opt input").forEach(function (cb) {
         cb.checked = false;
       });
       syncUi();
@@ -580,13 +580,13 @@
       clearBtn.hidden = n === 0;
       toggle.classList.toggle("is-active", n > 0);
       summary.textContent = n === 0
-        ? "All photographs"
+        ? allLabel
         : Array.from(selected).sort().map(cap).join(", ");
     }
 
     function renderGrid() {
       gridEl.innerHTML = "";
-      var visible = peopleLast(PHOTOS.filter(function (p) {
+      var visible = peopleLast(source.filter(function (p) {
         if (selected.size === 0) return true;
         return p.tags.some(function (t) { return selected.has(t); });
       }));
@@ -597,11 +597,7 @@
 
       if (!visible.length) {
         gridEl.innerHTML =
-          '<div class="archive-empty mono">' +
-          (selected.has("sports")
-            ? "Sports — coming soon. First frames in progress."
-            : "Nothing matches those filters.") +
-          "</div>";
+          '<div class="archive-empty mono">Nothing matches those filters.</div>';
         return;
       }
 
@@ -617,6 +613,18 @@
     }
 
     renderGrid();
+    return renderGrid;
+  }
+
+  function buildArchive() {
+    document.getElementById("archive-count").textContent =
+      nPhotos(PHOTOS.length) + " · " + yearRange();
+    mountFilterPanel(
+      document.getElementById("filters"),
+      document.getElementById("archive-grid"),
+      PHOTOS,
+      { pinned: ["sports"] }
+    );
   }
 
   /* ============================================================
@@ -650,16 +658,22 @@
       '<span class="mono">' + nPhotos(sportsPhotos.length) + "</span>";
     root.appendChild(head);
 
+    /* same animated panel as the archive, but scoped to this pool and
+       filtering by sport — "sports" itself is every row here, so it is
+       excluded from the chips. */
+    var filtersEl = el("div", "filters");
+    filtersEl.setAttribute("role", "toolbar");
+    filtersEl.setAttribute("aria-label", "Filter by sport");
+    root.appendChild(filtersEl);
+
     var grid = el("div", "archive-grid");
-    sportsPhotos.forEach(function (photo, i) {
-      var card = photoCard(photo, i, function (idx) {
-        openLightbox(sportsPhotos, idx);
-      });
-      card.style.animationDelay = (i * 0.04) + "s";
-      grid.appendChild(card);
-    });
     root.appendChild(grid);
-    watchMasonry(grid);   /* same row-span layout the archive uses */
+
+    mountFilterPanel(filtersEl, grid, sportsPhotos, {
+      label: "Filter by sport",
+      allLabel: "All sports",
+      exclude: ["sports"]
+    });
   }
 
   function yearRange() {
