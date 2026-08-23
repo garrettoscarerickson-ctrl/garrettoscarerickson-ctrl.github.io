@@ -659,6 +659,7 @@
       grid.appendChild(card);
     });
     root.appendChild(grid);
+    watchMasonry(grid);   /* same row-span layout the archive uses */
   }
 
   function yearRange() {
