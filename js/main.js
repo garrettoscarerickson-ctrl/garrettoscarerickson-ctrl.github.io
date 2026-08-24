@@ -148,10 +148,26 @@
       '<div class="lightbox__nav">' +
       '<span class="lb-rate" id="lb-rate" role="radiogroup" ' +
       'aria-label="Rate this photograph out of 5"></span>' +
+      '<button id="lb-reviews" class="lb-reviews-btn"></button>' +
       '<span class="mono" id="lb-count"></span>' +
       '<button id="lb-prev">← Prev</button>' +
       '<button id="lb-next">Next →</button>' +
-      "</div></div>";
+      "</div></div>" +
+      '<aside class="lb-drawer" id="lb-drawer" aria-label="Reviews">' +
+      '<div class="lb-drawer__head">' +
+      '<span class="mono">Reviews</span>' +
+      '<button class="lb-drawer__close" id="lb-drawer-close" ' +
+      'aria-label="Close reviews">✕</button></div>' +
+      '<div class="lb-drawer__score" id="lb-score"></div>' +
+      '<div class="lb-drawer__list" id="lb-list"></div>' +
+      '<form class="lb-drawer__form" id="lb-form">' +
+      '<span class="mono">Your rating</span>' +
+      '<div class="lb-form__stars" id="lb-form-stars"></div>' +
+      '<input type="text" id="lb-form-name" placeholder="Your name" required>' +
+      '<textarea id="lb-form-text" rows="3" placeholder="What did you think?"></textarea>' +
+      '<button type="submit" class="lb-form__send">Post review</button>' +
+      '<p class="lb-form__note mono" id="lb-form-note"></p>' +
+      "</form></aside>";
     document.body.appendChild(lb);
 
     lb.querySelector(".lightbox__close").addEventListener("click", closeLightbox);
@@ -175,6 +191,7 @@
       if (!b) return;
       setRating(lightboxSet[lightboxIdx].src, Number(b.dataset.v));
       paintRating();
+      openReviews(Number(b.dataset.v));   /* jump straight into the form */
     });
     rate.addEventListener("mouseover", function (e) {
       var b = e.target.closest(".star-btn");
@@ -182,9 +199,31 @@
     });
     rate.addEventListener("mouseleave", function () { paintRating(); });
 
+    /* review drawer */
+    var fstars = lb.querySelector("#lb-form-stars");
+    for (var k = 1; k <= 5; k++) {
+      var sb = el("button", "star-btn", "\u2605");
+      sb.type = "button";
+      sb.dataset.v = k;
+      sb.setAttribute("aria-label", k + " star" + (k > 1 ? "s" : ""));
+      fstars.appendChild(sb);
+    }
+    fstars.addEventListener("click", function (e) {
+      var b = e.target.closest(".star-btn");
+      if (b) setFormStars(Number(b.dataset.v));
+    });
+    lb.querySelector("#lb-reviews").addEventListener("click", function () {
+      lb.classList.contains("drawer-open") ? closeReviews() : openReviews();
+    });
+    lb.querySelector("#lb-drawer-close").addEventListener("click", closeReviews);
+    lb.querySelector("#lb-form").addEventListener("submit", submitPhotoReview);
+
     document.addEventListener("keydown", function (e) {
       if (!lb.classList.contains("is-open")) return;
-      if (e.key === "Escape") closeLightbox();
+      if (e.key === "Escape") {
+        if (lb.classList.contains("drawer-open")) { closeReviews(); return; }
+        closeLightbox();
+      }
       if (e.key === "ArrowLeft") stepLightbox(-1);
       if (e.key === "ArrowRight") stepLightbox(1);
     });
@@ -220,6 +259,113 @@
       !preview && v > 0);
   }
 
+  /* ---------- per-photo reviews (shared when a backend is configured) ---------- */
+
+  var formStars = 0;
+
+  function setFormStars(v) {
+    formStars = v;
+    lb.querySelectorAll("#lb-form-stars .star-btn").forEach(function (b) {
+      b.classList.toggle("is-on", Number(b.dataset.v) <= v);
+    });
+  }
+
+  function openReviews(preset) {
+    lb.classList.add("drawer-open");
+    if (preset) setFormStars(preset);
+    renderPhotoReviews();
+  }
+
+  function closeReviews() { lb.classList.remove("drawer-open"); }
+
+  function fmtDate(iso) {
+    if (!iso) return "";
+    var d = new Date(iso);
+    return isNaN(d) ? "" : d.toLocaleDateString(undefined,
+      { year: "numeric", month: "short" });
+  }
+
+  function esc(str) {
+    return String(str == null ? "" : str)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  /* button label in the bar: count + average for the current photo */
+  function paintReviewCount() {
+    var photo = lightboxSet[lightboxIdx];
+    if (!photo) return;
+    var btn = lb.querySelector("#lb-reviews");
+    ReviewStore.forPhoto(photo.src).then(function (rows) {
+      if (lightboxSet[lightboxIdx] !== photo) return;   /* moved on already */
+      if (!rows.length) { btn.textContent = "Reviews"; return; }
+      var avg = rows.reduce(function (a, r) { return a + r.rating; }, 0) / rows.length;
+      btn.textContent = "\u2605 " + avg.toFixed(1) + " · " + rows.length +
+        (rows.length === 1 ? " review" : " reviews");
+    });
+  }
+
+  function renderPhotoReviews() {
+    var photo = lightboxSet[lightboxIdx];
+    if (!photo) return;
+    var score = lb.querySelector("#lb-score");
+    var list = lb.querySelector("#lb-list");
+    var note = lb.querySelector("#lb-form-note");
+    list.innerHTML = '<p class="mono lb-list__empty">Loading…</p>';
+    note.textContent = ReviewStore.isShared()
+      ? "Posts publicly — everyone visiting sees it."
+      : "Saved in your browser. Shared reviews switch on once a backend is connected.";
+
+    ReviewStore.forPhoto(photo.src).then(function (rows) {
+      if (lightboxSet[lightboxIdx] !== photo) return;
+      if (!rows.length) {
+        score.innerHTML = '<span class="mono">No reviews yet</span>';
+        list.innerHTML = '<p class="mono lb-list__empty">Be the first to review ' +
+          esc(photo.title) + ".</p>";
+        return;
+      }
+      var avg = rows.reduce(function (a, r) { return a + r.rating; }, 0) / rows.length;
+      score.innerHTML =
+        '<strong>' + avg.toFixed(1) + "</strong>" + stars(Math.round(avg)) +
+        '<span class="mono">' + rows.length +
+        (rows.length === 1 ? " review" : " reviews") + "</span>";
+      list.innerHTML = rows.map(function (r) {
+        return '<article class="lb-review">' + stars(r.rating) +
+          (r.text ? "<p>" + esc(r.text) + "</p>" : "") +
+          '<footer class="mono">' + esc(r.name) +
+          (r.created_at ? " · " + fmtDate(r.created_at) : "") +
+          "</footer></article>";
+      }).join("");
+    });
+  }
+
+  function submitPhotoReview(e) {
+    e.preventDefault();
+    var photo = lightboxSet[lightboxIdx];
+    var name = lb.querySelector("#lb-form-name").value.trim();
+    var text = lb.querySelector("#lb-form-text").value.trim();
+    var note = lb.querySelector("#lb-form-note");
+    if (!formStars) { note.textContent = "Pick a star rating first."; return; }
+    if (!name) { note.textContent = "Add your name."; return; }
+    var btn = lb.querySelector(".lb-form__send");
+    btn.disabled = true;
+    note.textContent = "Posting…";
+    ReviewStore.add({ photo: photo.src, name: name, rating: formStars, text: text })
+      .then(function () {
+        lb.querySelector("#lb-form-name").value = "";
+        lb.querySelector("#lb-form-text").value = "";
+        setFormStars(0);
+        note.textContent = ReviewStore.isShared()
+          ? "Posted — thank you."
+          : "Saved to this browser — thank you.";
+        renderPhotoReviews();
+        paintReviewCount();
+      })
+      .catch(function (err) {
+        note.textContent = "Could not post that review. " + err.message;
+      })
+      .finally(function () { btn.disabled = false; });
+  }
+
   function openLightbox(set, index) {
     if (!lb) buildLightbox();
     lightboxSet = set;
@@ -250,6 +396,8 @@
     lb.querySelector("#lb-count").textContent =
       pad2(lightboxIdx + 1) + " / " + pad2(lightboxSet.length);
     paintRating();
+    paintReviewCount();
+    if (lb.classList.contains("drawer-open")) renderPhotoReviews();
   }
 
   /* ---------- parallax ---------- */
@@ -450,6 +598,7 @@
       ["Architecture", "Street", "Portraits", "Sports"]));
 
     root.appendChild(buildAboutText());
+    root.appendChild(buildSelectedWork());
     root.appendChild(buildPricing());
     root.appendChild(buildReviews());
     root.appendChild(buildContact());
@@ -483,6 +632,27 @@
     return sec;
   }
 
+  /* a short taste of the work, since the index is no longer a gallery */
+  function buildSelectedWork() {
+    var sec = el("section", "selected reveal");
+    var pool = PHOTOS.filter(function (p) { return p.feature || !p.archiveOnly; });
+    if (pool.length < 6) pool = PHOTOS;
+    var picks = peopleLast(pool).slice(0, 6);
+    var grid = el("div", "selected__grid");
+    picks.forEach(function (photo) {
+      var card = photoCard(photo, picks.indexOf(photo), function (i) {
+        openLightbox(picks, i);
+      });
+      grid.appendChild(card);
+    });
+    sec.innerHTML =
+      '<div class="section__head"><span class="mono">02 — Selected work</span>' +
+      '<a class="mono selected__all" href="archive.html">All ' +
+      nPhotos(PHOTOS.length) + " →</a></div>";
+    sec.appendChild(grid);
+    return sec;
+  }
+
   function buildPricing() {
     var sec = el("section", "pricing reveal");
     var cards = "";
@@ -508,7 +678,7 @@
     }).join("");
     sec.innerHTML =
       '<div class="section__head">' +
-      '<span class="mono">02 — Rates</span>' +
+      '<span class="mono">03 — Rates</span>' +
       '<span class="mono">All prices in USD</span></div>' +
       '<div class="tiers">' + cards + "</div>" +
       '<div class="addons"><span class="mono addons__label">Add-ons</span>' +
@@ -651,7 +821,7 @@
 
     var head =
       '<div class="section__head">' +
-      '<span class="mono">03 — Reviews</span>' +
+      '<span class="mono">04 — Reviews</span>' +
       (list.length
         ? '<span class="mono">' + avg.toFixed(1) + " / 5 · " +
           list.length + (list.length === 1 ? " review" : " reviews") + "</span>"
@@ -713,6 +883,28 @@
     });
     box.addEventListener("mouseleave", function () { paint(chosen); });
 
+    /* recent per-photo reviews, pulled from whatever backend is wired up */
+    var recent = el("div", "recent-reviews");
+    sec.insertBefore(recent, sec.querySelector("#review-form"));
+    ReviewStore.all().then(function (rows) {
+      if (!rows.length) { recent.remove(); return; }
+      var avg = rows.reduce(function (a, r) { return a + r.rating; }, 0) / rows.length;
+      var byTitle = {};
+      PHOTOS.forEach(function (p) { byTitle[p.src] = p.title; });
+      recent.innerHTML =
+        '<div class="recent-reviews__head">' +
+        '<span class="mono">On individual photographs</span>' +
+        '<span class="mono">' + avg.toFixed(1) + " / 5 · " + rows.length +
+        (rows.length === 1 ? " review" : " reviews") + "</span></div>" +
+        '<div class="review-list">' + rows.slice(0, 3).map(function (r) {
+          return '<article class="review">' + stars(r.rating) +
+            (r.text ? "<p>" + esc(r.text) + "</p>" : "") +
+            '<footer class="mono">' + esc(r.name) +
+            (byTitle[r.photo] ? " · " + esc(byTitle[r.photo]) : "") +
+            "</footer></article>";
+        }).join("") + "</div>";
+    });
+
     sec.querySelector("#review-form").addEventListener("submit", function (e) {
       e.preventDefault();
       var name = sec.querySelector("#rf-name").value.trim();
@@ -735,7 +927,7 @@
   function buildContact() {
     var sec = el("section", "contact reveal");
     sec.innerHTML =
-      '<div class="section__head"><span class="mono">04 — Contact</span>' +
+      '<div class="section__head"><span class="mono">05 — Contact</span>' +
       '<span class="mono">Michigan · booking now</span></div>' +
       '<div class="contact__grid">' +
       '<a class="contact__card" href="mailto:' + CONTACT.email + '">' +

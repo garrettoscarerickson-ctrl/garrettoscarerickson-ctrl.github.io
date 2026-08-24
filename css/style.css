@@ -170,15 +170,13 @@ a { color: inherit; text-decoration: none; }
   align-items: flex-end;
 }
 
-.hero__img-wrap,
-.panel__img-wrap {
+.hero__img-wrap {
   position: absolute;
   inset: 0;
   overflow: hidden;
 }
 
-.hero__img-wrap img,
-.panel__img-wrap img {
+.hero__img-wrap img {
   position: absolute;
   left: 0;
   top: -15%;
@@ -189,8 +187,7 @@ a { color: inherit; text-decoration: none; }
   filter: brightness(0.82) contrast(1.04);
 }
 
-.hero::after,
-.panel::after {
+.hero::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -242,137 +239,6 @@ a { color: inherit; text-decoration: none; }
 @keyframes drift {
   from { transform: translateY(-50%); }
   to   { transform: translateY(calc(-50% + 12px)); }
-}
-
-/* ---------- statement ---------- */
-
-.statement {
-  padding: clamp(5rem, 14vh, 9rem) var(--pad);
-  border-bottom: 1px solid var(--hairline-soft);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  gap: 2rem;
-}
-
-.statement p {
-  font-size: clamp(1.25rem, 2.4vw, 1.85rem);
-  line-height: 1.45;
-  font-weight: 400;
-  max-width: 42ch;
-  color: var(--ink);
-}
-
-.statement p em {
-  font-style: normal;
-  color: var(--ink-dim);
-}
-
-/* ---------- parallax feature panels ---------- */
-
-/* inset rounded slabs that float against the page */
-.panel {
-  position: relative;
-  height: 88svh;
-  margin: clamp(1rem, 3vh, 2.5rem) var(--pad);
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-  box-shadow: var(--shadow-lift);
-}
-
-.panel--portrait .panel__img-wrap {
-  left: 50%;
-  right: 0;
-}
-
-.panel--portrait::before {
-  content: "";
-  position: absolute;
-  inset: 0 50% 0 0;
-  background: var(--bg);
-  z-index: 1;
-}
-
-.panel--portrait .panel__side {
-  position: absolute;
-  z-index: 3;
-  left: var(--pad);
-  bottom: clamp(2rem, 8vh, 5rem);
-  width: calc(50% - var(--pad) * 2);
-}
-
-.panel--portrait .panel__side h2 {
-  font-size: clamp(1.8rem, 4vw, 3.6rem);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  line-height: 1;
-  margin: 0.75rem 0 1rem;
-}
-
-.panel__caption {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1rem;
-  flex-wrap: wrap;
-  padding: 0 var(--pad) clamp(1.5rem, 5vh, 3rem);
-}
-
-.panel__caption h2 {
-  font-size: clamp(1.6rem, 3.6vw, 3.2rem);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.panel--portrait .panel__caption { display: none; }
-
-/* ---------- home gallery strips ---------- */
-
-.strip {
-  padding: clamp(4rem, 10vh, 7rem) var(--pad);
-  border-bottom: 1px solid var(--hairline-soft);
-}
-
-.strip__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 2.25rem;
-}
-
-.strip__grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: clamp(1rem, 2.5vw, 2rem);
-  align-items: start;
-}
-
-.strip__grid .ph:nth-child(3n + 1) { grid-column: span 7; }
-.strip__grid .ph:nth-child(3n + 2) { grid-column: span 5; margin-top: clamp(2rem, 6vw, 5rem); }
-.strip__grid .ph:nth-child(3n)     { grid-column: 4 / span 6; }
-
-/* Home gallery frames: fixed-ratio windows with the image oversized
-   inside so it can drift on scroll — the "gallery + parallax" hybrid.
-   Scoped to the strips; the archive stays natural-height masonry. */
-.strip__grid .ph__img { aspect-ratio: 3 / 2; }
-.strip__grid .ph.ph--portrait .ph__img { aspect-ratio: 4 / 5; }
-
-.strip__grid .ph__par {
-  position: absolute;
-  inset: -10% 0;
-  will-change: transform;
-}
-
-.strip__grid .ph__par img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 /* ---------- photo card (shared) ---------- */
@@ -507,58 +373,6 @@ a { color: inherit; text-decoration: none; }
 @keyframes marquee {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
-}
-
-/* ---------- colophon / spec sheet ---------- */
-
-.colophon {
-  padding: clamp(4rem, 11vh, 8rem) var(--pad);
-  border-top: 1px solid var(--hairline);
-  border-bottom: 1px solid var(--hairline-soft);
-}
-
-.colophon__head {
-  margin-bottom: clamp(2rem, 5vw, 3.5rem);
-}
-
-.colophon__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: clamp(1.5rem, 3vw, 3rem) clamp(1.5rem, 2.5vw, 2.5rem);
-}
-
-.colophon__cell {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  padding: 1.15rem 1.25rem 1.35rem;
-  border: 1px solid var(--hairline-soft);
-  border-radius: var(--r-md);
-  background: var(--bg-raise);
-  transition: border-color 0.3s ease, transform 0.45s var(--ease);
-}
-
-.colophon__cell:hover {
-  border-color: var(--hairline);
-  transform: translateY(-3px);
-}
-
-.colophon__cell dt {
-  font-family: var(--font-ui);
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-dim);
-}
-
-.colophon__cell dd {
-  font-size: clamp(1.1rem, 2vw, 1.65rem);
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  line-height: 1.08;
-  overflow-wrap: anywhere;
-  font-variant-numeric: tabular-nums;
 }
 
 .ph figcaption {
@@ -1059,21 +873,9 @@ a { color: inherit; text-decoration: none; }
 /* ---------- responsive ---------- */
 
 @media (max-width: 900px) {
-  .statement { grid-template-columns: 1fr; }
-
-  .strip__grid .ph:nth-child(3n + 1),
-  .strip__grid .ph:nth-child(3n + 2),
-  .strip__grid .ph:nth-child(3n) {
-    grid-column: 1 / -1;
-    margin-top: 0;
-  }
 
   .archive-grid { grid-template-columns: repeat(2, 1fr); }
 
-  .panel--portrait .panel__img-wrap { left: 0; }
-  .panel--portrait::before { display: none; }
-  .panel--portrait .panel__side { display: none; }
-  .panel--portrait .panel__caption { display: flex; }
 }
 
 @media (max-width: 560px) {
@@ -1086,8 +888,6 @@ a { color: inherit; text-decoration: none; }
   html { scroll-behavior: auto; }
 
   .hero__img-wrap img,
-  .panel__img-wrap img,
-  .strip__grid .ph__par,
   .hero__content {
     top: 0;
     height: 100%;
@@ -1095,7 +895,6 @@ a { color: inherit; text-decoration: none; }
     opacity: 1 !important;
   }
 
-  .strip__grid .ph__par { inset: 0; }
 
   .reveal { opacity: 1; transform: none; transition: none; }
   .hero__scroll,
@@ -1466,7 +1265,6 @@ a { color: inherit; text-decoration: none; }
 .contact__card,
 .review,
 .review-form,
-.colophon__cell,
 .lightbox button,
 .tier__cta,
 .review-form__send,
@@ -1780,3 +1578,207 @@ a { color: inherit; text-decoration: none; }
   }
   .nav__links a { padding: 0.45rem 0.5rem; }
 }
+
+/* ============================================================
+   LIGHTBOX REVIEW DRAWER
+   ============================================================ */
+
+.lb-reviews-btn { white-space: nowrap; }
+
+.lb-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(390px, 92vw);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: clamp(1.1rem, 2vw, 1.6rem);
+  background: var(--glass-solid);
+  border-left: 1px solid var(--glass-line);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-lift);
+  transform: translateX(102%);
+  transition: transform 0.4s var(--ease);
+}
+
+.lightbox.drawer-open .lb-drawer { transform: none; }
+
+.lb-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.lb-drawer__close {
+  background: none;
+  border: 0;
+  color: var(--ink-dim);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.35rem;
+}
+
+.lb-drawer__close:hover { color: var(--ink); }
+
+.lb-drawer__score {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.lb-drawer__score strong {
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.lb-drawer__list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-right: 0.2rem;
+}
+
+.lb-list__empty { line-height: 1.6; }
+
+.lb-review {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.85rem;
+  border: 1px solid var(--hairline-soft);
+  border-radius: var(--r-sm);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.lb-review p { font-size: 0.92rem; line-height: 1.55; }
+.lb-review footer { color: var(--ink-dim); }
+
+.lb-drawer__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--hairline);
+}
+
+.lb-form__stars { display: flex; gap: 0.12rem; }
+
+.lb-drawer__form input,
+.lb-drawer__form textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.92rem;
+  padding: 0.6rem 0.75rem;
+  resize: vertical;
+}
+
+.lb-drawer__form input:focus,
+.lb-drawer__form textarea:focus {
+  outline: none;
+  border-color: var(--ink-dim);
+}
+
+.lb-form__send {
+  background: var(--ink);
+  color: var(--bg);
+  border: 0;
+  border-radius: var(--r-full);
+  padding: 0.7rem 1.1rem;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.lb-form__send:disabled { opacity: 0.5; cursor: default; }
+.lb-form__note { line-height: 1.5; text-transform: none; letter-spacing: 0.02em; }
+
+/* the image gets out of the drawer's way on wide screens */
+@media (min-width: 861px) {
+  .lightbox.drawer-open .lightbox__stage,
+  .lightbox.drawer-open .lightbox__bar { padding-right: min(390px, 92vw); }
+}
+
+@media (max-width: 860px) {
+  .lb-drawer {
+    top: auto;
+    left: 0;
+    width: auto;
+    max-height: 78svh;
+    border-left: 0;
+    border-top: 1px solid var(--glass-line);
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
+    transform: translateY(102%);
+  }
+}
+
+/* the bar has to share the row with the drawer; let it wrap, and drop the
+   duplicate star control since the drawer carries its own rating UI */
+.lightbox__nav { flex-wrap: wrap; row-gap: 0.5rem; }
+.lightbox.drawer-open .lb-rate { display: none; }
+
+/* ---------- selected work ---------- */
+
+.selected {
+  padding: clamp(4.5rem, 12vh, 8rem) var(--pad);
+  border-bottom: 1px solid var(--hairline-soft);
+}
+
+.selected__all { transition: color 0.2s ease; }
+.selected__all:hover { color: var(--ink); }
+
+.selected__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2vw, 1.6rem);
+}
+
+/* one uniform crop so the teaser reads as a tidy block, unlike the
+   archive where each photograph keeps its own proportions */
+.selected__grid .ph__img { aspect-ratio: 4 / 5; }
+.selected__grid .ph__img img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- recent photo reviews on the about page ---------- */
+
+.recent-reviews { margin-bottom: clamp(2rem, 4vw, 3rem); }
+
+.recent-reviews__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.9rem;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid var(--hairline-soft);
+}
+
+@media (max-width: 900px) {
+  .selected__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 520px) {
+  .selected__grid { grid-template-columns: 1fr; }
+}
+
+/* the card nests .ph__img > .ph__par > img; the wrapper needs to fill the
+   frame or a landscape photo letterboxes inside the 4:5 crop */
+.selected__grid .ph__par { position: absolute; inset: 0; }
