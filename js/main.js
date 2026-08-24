@@ -427,7 +427,7 @@
     var introWrap = el("div", "intro-wrap");
     introWrap.innerHTML =
       '<section class="intro">' +
-      '<h1 class="intro__name">Garrett Erickson</h1>' +
+      '<h1 class="intro__name"><span>Garrett</span> <span>Erickson</span></h1>' +
       '<span class="intro__role">Photographer</span>' +
       '<span class="intro__scroll mono">Scroll</span>' +
       "</section>";

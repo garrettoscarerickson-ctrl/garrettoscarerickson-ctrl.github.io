@@ -1737,3 +1737,46 @@ a { color: inherit; text-decoration: none; }
 
 .booking__pay:hover { background: #fff; }
 .booking__note { line-height: 1.6; text-transform: none; letter-spacing: 0.02em; }
+
+/* the full name only fits on one line on wider screens; below that it
+   stacks, which also reads better on a phone */
+@media (max-width: 620px) {
+  .intro__name {
+    white-space: normal;
+    font-size: clamp(3rem, 17vw, 5rem);
+    line-height: 1.02;
+  }
+  .intro__name span { display: block; }
+  .intro__role { letter-spacing: 0.4em; text-indent: 0.4em; }
+}
+
+/* ---------- nav on small screens ----------
+   The full wordmark plus three links can't fit a phone width: the name
+   wrapped inside the pill and Archive ran off the edge. Tighten the links,
+   then fall back to initials on the narrowest screens. */
+@media (max-width: 720px) {
+  .nav {
+    padding: 0 0.4rem 0 0.9rem;
+  }
+  .nav__name {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    white-space: nowrap;
+  }
+  .nav__links a {
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+    padding: 0.45rem 0.6rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .nav__name { font-size: 0; letter-spacing: 0; }
+  .nav__name::after {
+    content: "GE";
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+  .nav__links a { padding: 0.45rem 0.5rem; }
+}
