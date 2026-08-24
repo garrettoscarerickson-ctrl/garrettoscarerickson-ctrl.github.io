@@ -45,6 +45,23 @@ def save_photos(photos):
     regenerate_photos_js(photos)
 
 
+def regenerate_reviews_js():
+    """Approved reviews -> js/reviews.js for the About page."""
+    path = os.path.join(ROOT, "data", "reviews.json")
+    if not os.path.exists(path):
+        return
+    with open(path, encoding="utf-8") as f:
+        reviews = json.load(f)
+    header = (
+        "/* GENERATED FILE - do not edit by hand.\n"
+        "   Source of truth: data/reviews.json\n"
+        "   Add an approved review, then: python3 studio.py --regen */\n\n"
+    )
+    with open(os.path.join(ROOT, "js", "reviews.js"), "w", encoding="utf-8") as f:
+        f.write(header + "window.REVIEWS = " +
+                json.dumps(reviews, indent=2, ensure_ascii=False) + ";\n")
+
+
 def regenerate_photos_js(photos):
     header = (
         "/* GENERATED FILE - do not edit by hand.\n"
@@ -633,8 +650,9 @@ loadLibrary();
 if __name__ == "__main__":
     import sys
     regenerate_photos_js(load_photos())
+    regenerate_reviews_js()
     if "--regen" in sys.argv:
-        print("js/photos.js regenerated from data/photos.json")
+        print("js/photos.js + js/reviews.js regenerated from data/")
         sys.exit(0)
     server = ThreadingHTTPServer(("127.0.0.1", PORT), StudioHandler)
     print("Site:   http://localhost:%d" % PORT)

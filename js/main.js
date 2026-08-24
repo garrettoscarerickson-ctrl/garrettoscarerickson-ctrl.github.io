@@ -146,6 +146,8 @@
       '<div><span class="ph__title" id="lb-title"></span>' +
       '<span class="mono" id="lb-meta" style="margin-left:1.25rem"></span></div>' +
       '<div class="lightbox__nav">' +
+      '<span class="lb-rate" id="lb-rate" role="radiogroup" ' +
+      'aria-label="Rate this photograph out of 5"></span>' +
       '<span class="mono" id="lb-count"></span>' +
       '<button id="lb-prev">← Prev</button>' +
       '<button id="lb-next">Next →</button>' +
@@ -159,12 +161,63 @@
       if (e.target === lb || e.target.classList.contains("lightbox__stage")) closeLightbox();
     });
     protectImages(lb);
+
+    var rate = lb.querySelector("#lb-rate");
+    for (var i = 1; i <= 5; i++) {
+      var b = el("button", "star-btn", "\u2605");
+      b.type = "button";
+      b.dataset.v = i;
+      b.setAttribute("aria-label", i + " star" + (i > 1 ? "s" : ""));
+      rate.appendChild(b);
+    }
+    rate.addEventListener("click", function (e) {
+      var b = e.target.closest(".star-btn");
+      if (!b) return;
+      setRating(lightboxSet[lightboxIdx].src, Number(b.dataset.v));
+      paintRating();
+    });
+    rate.addEventListener("mouseover", function (e) {
+      var b = e.target.closest(".star-btn");
+      if (b) paintRating(Number(b.dataset.v));
+    });
+    rate.addEventListener("mouseleave", function () { paintRating(); });
+
     document.addEventListener("keydown", function (e) {
       if (!lb.classList.contains("is-open")) return;
       if (e.key === "Escape") closeLightbox();
       if (e.key === "ArrowLeft") stepLightbox(-1);
       if (e.key === "ArrowRight") stepLightbox(1);
     });
+  }
+
+  /* ---------- photo ratings ----------
+     Stored in this browser only. A shared, public score needs a backend;
+     until then a visitor sees and keeps their own ratings. */
+
+  var RATING_KEY = "ge.ratings.v1";
+
+  function allRatings() {
+    try { return JSON.parse(localStorage.getItem(RATING_KEY)) || {}; }
+    catch (e) { return {}; }
+  }
+
+  function getRating(src) { return allRatings()[src] || 0; }
+
+  function setRating(src, v) {
+    var all = allRatings();
+    all[src] = v;
+    try { localStorage.setItem(RATING_KEY, JSON.stringify(all)); } catch (e) {}
+  }
+
+  function paintRating(preview) {
+    if (!lb) return;
+    var photo = lightboxSet[lightboxIdx];
+    var v = preview || (photo ? getRating(photo.src) : 0);
+    lb.querySelectorAll("#lb-rate .star-btn").forEach(function (b) {
+      b.classList.toggle("is-on", Number(b.dataset.v) <= v);
+    });
+    lb.querySelector("#lb-rate").classList.toggle("is-rated",
+      !preview && v > 0);
   }
 
   function openLightbox(set, index) {
@@ -196,6 +249,7 @@
       photo.location + " · " + photo.year + " · " + tagLine(photo);
     lb.querySelector("#lb-count").textContent =
       pad2(lightboxIdx + 1) + " / " + pad2(lightboxSet.length);
+    paintRating();
   }
 
   /* ---------- parallax ---------- */
@@ -218,6 +272,8 @@
       });
     }
     var heroContent = reducedMotion ? null : document.querySelector(".hero__content");
+    var introWrap = document.querySelector(".intro-wrap");
+    var intro = reducedMotion ? null : document.querySelector(".intro");
 
     var ticking = false;
 
@@ -230,6 +286,15 @@
         var max = doc.scrollHeight - vh;
         var p = max > 0 ? window.scrollY / max : 0;
         bar.style.transform = "scaleX(" + p.toFixed(4) + ")";
+      }
+
+      if (intro) {
+        /* 0 -> 1 across the pinned stretch */
+        var pinned = introWrap.offsetHeight - vh;
+        var t = pinned > 0 ? Math.min(1, Math.max(0, window.scrollY / pinned)) : 0;
+        intro.style.opacity = (1 - Math.min(1, t * 1.35)).toFixed(3);
+        intro.style.transform = "scale(" + (1 - t * 0.08).toFixed(4) + ")";
+        intro.style.filter = t > 0.02 ? "blur(" + (t * 7).toFixed(2) + "px)" : "";
       }
 
       if (heroContent) {
@@ -281,38 +346,92 @@
   }
 
   /* ============================================================
-     HOME PAGE — hero → statement → alternating parallax panels
-     and gallery strips, all chosen from the manifest.
+     ABOUT PAGE — the front door. Who I am, what it costs, what
+     people say, and how to reach me. The photographs live in the
+     Archive and Sports pages.
      ============================================================ */
 
-  /* The index (home page) shows at most this many photographs. Archive-only
-     photos (everything added through Studio) never appear here — the index
-     stays a curated showcase while the archive holds the full body of work. */
-  var HOME_MAX = 13;
+  var CONTACT = {
+    email: "garrettoscarerickson@gmail.com",
+    instagram: "shot_by_ge"
+  };
 
-  function buildHome() {
-    var root = document.getElementById("home-root");
-    /* only photos allowed on the home page (not archive-only) */
-    var homePool = PHOTOS.filter(function (p) { return !p.archiveOnly; });
-    var hero = homePool.filter(function (p) { return p.feature === "hero"; })[0] ||
-               homePool[0] || PHOTOS[0];
-    var panels = homePool.filter(function (p) { return p.feature === "panel"; });
-    var galleryPhotos = homePool.filter(function (p) {
-      return !p.feature && p !== hero;
-    });
+  var PRICING = [
+    {
+      name: "Individual",
+      price: "$20",
+      unit: "per session",
+      lead: "One athlete, one session.",
+      items: ["10+ edited photographs",
+              "Guaranteed 24-hour delivery",
+              "Full-resolution digital files",
+              "Personal and social use included"],
+      featured: true
+    },
+    {
+      name: "Team",
+      price: "$10–15",
+      unit: "per athlete",
+      lead: "Whole roster, one shoot.",
+      items: ["30+ edited photographs guaranteed",
+              "One team photograph included",
+              "Action and individual frames",
+              "Per-athlete galleries"],
+      featured: false
+    },
+    {
+      name: "Event & Meets",
+      price: "From $75",
+      unit: "up to 2 hours",
+      lead: "Car meets, games, gatherings.",
+      items: ["40+ edited photographs",
+              "48-hour delivery",
+              "Extra hours billed at $30",
+              "Commercial use on request"],
+      featured: false
+    }
+  ];
 
-    /* cap the whole index at HOME_MAX: hero + panels + as many gallery
-       frames as fit under the limit */
-    var gallerySlots = Math.max(0, HOME_MAX - 1 - panels.length);
-    /* cap first (keeps the curation), then push people to the end */
-    galleryPhotos = peopleLast(galleryPhotos.slice(0, gallerySlots));
-    panels = peopleLast(panels);
-    var homeCount = 1 + panels.length + galleryPhotos.length;
+  /* ---------- payments ----------
+     Template only. Nothing is charged and no card data is ever handled
+     here. When you're ready: create a Stripe Payment Link (or PayPal
+     link) per package, paste it below, flip enabled to true, and the
+     booking panel starts sending people to a real checkout. Until then
+     the same panel sends a booking request by email. */
+  var PAYMENT = {
+    enabled: false,
+    currency: "USD",
+    links: {
+      "Individual": "",
+      "Team": "",
+      "Event & Meets": ""
+    }
+  };
+
+  var ADD_ONS = [
+    ["Same-day rush delivery", "+$15"],
+    ["Additional edited photograph", "$2 each"],
+    ["Travel beyond 30 miles", "$0.30 / mile"]
+  ];
+
+  function buildAbout() {
+    var root = document.getElementById("about-root");
+    var hero = PHOTOS.filter(function (p) { return p.feature === "hero"; })[0] || PHOTOS[0];
 
     /* scroll-progress bar */
     var scrollbar = el("div", "scrollbar");
     scrollbar.innerHTML = "<i></i>";
     document.body.appendChild(scrollbar);
+
+    /* intro name card — pinned, fades away as you scroll past it */
+    var introWrap = el("div", "intro-wrap");
+    introWrap.innerHTML =
+      '<section class="intro">' +
+      '<h1 class="intro__name">Garrett Erickson</h1>' +
+      '<span class="intro__role">Photographer</span>' +
+      '<span class="intro__scroll mono">Scroll</span>' +
+      "</section>";
+    root.appendChild(introWrap);
 
     /* hero */
     var heroSec = el("section", "hero");
@@ -321,59 +440,315 @@
       '<img src="' + hero.src + '" alt="' + hero.title + '" fetchpriority="high">' +
       "</div>" +
       '<div class="hero__content">' +
-      '<h1 class="hero__title">Garrett<br>Erickson</h1>' +
       '<div class="hero__meta">' +
-      '<span class="mono">Architecture, street &amp; sports photography</span>' +
-      '<span class="mono">' + nPhotos(homeCount) + " — " + hero.year + "</span>" +
-      "</div></div>" +
-      '<span class="hero__scroll mono">Scroll ↓</span>';
+      '<span class="mono">Michigan — booking now</span>' +
+      '<span class="mono">Architecture · Street · Sports</span>' +
+      "</div></div>";
     root.appendChild(heroSec);
 
-    /* kinetic marquee band */
     root.appendChild(buildMarquee(
       ["Architecture", "Street", "Portraits", "Sports"]));
 
-    /* statement */
-    var statement = el("section", "statement reveal");
-    statement.innerHTML =
-      '<span class="mono">01 — About the work</span>' +
-      "<p>Concrete, salt air, and the people in between. " +
-      "<em>Bridges at blue hour, the boardwalk at Coney Island, and whatever " +
-      "the train car gives up on the way home.</em></p>";
-    root.appendChild(statement);
+    root.appendChild(buildAboutText());
+    root.appendChild(buildPricing());
+    root.appendChild(buildReviews());
+    root.appendChild(buildContact());
 
-    /* interleave: strip, panel, strip, panel ... */
-    var chunks = [];
-    var perStrip = Math.ceil(galleryPhotos.length / Math.max(panels.length, 1)) || galleryPhotos.length;
-    for (var i = 0; i < galleryPhotos.length; i += perStrip) {
-      chunks.push(galleryPhotos.slice(i, i + perStrip));
-    }
-
-    var stripNo = 0;
-    var max = Math.max(chunks.length, panels.length);
-    for (var k = 0; k < max; k++) {
-      if (chunks[k]) {
-        stripNo++;
-        root.appendChild(buildStrip(chunks[k], stripNo));
-      }
-      if (panels[k]) {
-        root.appendChild(buildPanel(panels[k]));
-      }
-    }
-
-    /* colophon / spec sheet — fills the closing space with the facts */
-    root.appendChild(buildColophon());
-
-    /* CTA to archive */
+    /* CTA into the work */
     var cta = el("a", "cta reveal");
     cta.href = "archive.html";
     cta.innerHTML =
-      '<span class="cta__big">Full Archive</span>' +
-      '<span class="mono">All ' + nPhotos(PHOTOS.length) + ", filterable →</span>";
+      '<span class="cta__big">See the Work</span>' +
+      '<span class="mono">' + nPhotos(PHOTOS.length) + ", filterable →</span>";
     root.appendChild(cta);
 
     initParallax();
     initReveal();
+  }
+
+  function buildAboutText() {
+    var sec = el("section", "about reveal");
+    sec.innerHTML =
+      '<span class="mono about__eyebrow">01 — About</span>' +
+      '<div class="about__body">' +
+      "<p class=\"about__lead\">I'm a photographer based in Michigan, shooting " +
+      "architecture, street and sports.</p>" +
+      "<p>Most of my work happens close to home — tennis courts, car meets along " +
+      "Woodward, the ordinary geometry of a city block — with a stretch of it made " +
+      "in New York. I care about light, structure, and the moment a scene resolves " +
+      "into something worth keeping.</p>" +
+      "<p>I shoot teams and individuals, and I turn work around fast: individual " +
+      "sessions are guaranteed back within 24 hours.</p>" +
+      "</div>";
+    return sec;
+  }
+
+  function buildPricing() {
+    var sec = el("section", "pricing reveal");
+    var cards = "";
+    PRICING.forEach(function (tier) {
+      var items = tier.items.map(function (i) {
+        return "<li>" + i + "</li>";
+      }).join("");
+      cards +=
+        '<article class="tier' + (tier.featured ? " tier--featured" : "") + '">' +
+        (tier.featured ? '<span class="tier__flag mono">Most booked</span>' : "") +
+        '<h3 class="tier__name">' + tier.name + "</h3>" +
+        '<p class="tier__lead mono">' + tier.lead + "</p>" +
+        '<div class="tier__price"><span>' + tier.price + "</span>" +
+        '<span class="mono">' + tier.unit + "</span></div>" +
+        "<ul class=\"tier__items\">" + items + "</ul>" +
+        '<button class="tier__cta" type="button" data-book="' + tier.name +
+        '">Book ' + tier.name + "</button>" +
+        "</article>";
+    });
+    var addons = ADD_ONS.map(function (a) {
+      return '<div class="addon"><span>' + a[0] + '</span><span class="mono">' +
+             a[1] + "</span></div>";
+    }).join("");
+    sec.innerHTML =
+      '<div class="section__head">' +
+      '<span class="mono">02 — Rates</span>' +
+      '<span class="mono">All prices in USD</span></div>' +
+      '<div class="tiers">' + cards + "</div>" +
+      '<div class="addons"><span class="mono addons__label">Add-ons</span>' +
+      addons + "</div>";
+
+    sec.querySelectorAll("[data-book]").forEach(function (b) {
+      b.addEventListener("click", function () { openBooking(b.dataset.book); });
+    });
+    return sec;
+  }
+
+  /* ---------- booking panel ---------- */
+
+  var bookingEl = null;
+
+  function money(n) { return "$" + n.toFixed(2).replace(/\.00$/, ""); }
+
+  function openBooking(tierName) {
+    var tier = PRICING.filter(function (t) { return t.name === tierName; })[0];
+    if (!tier) return;
+    if (!bookingEl) buildBooking();
+
+    var unitPrice = tier.name === "Team" ? 12 : (tier.name === "Individual" ? 20 : 75);
+    var perPerson = tier.name === "Team";
+
+    bookingEl.querySelector("#bk-name").textContent = tier.name;
+    bookingEl.querySelector("#bk-lead").textContent = tier.lead;
+    bookingEl.querySelector("#bk-qty-label").textContent =
+      perPerson ? "Athletes" : "Sessions";
+    var qty = bookingEl.querySelector("#bk-qty");
+    qty.value = perPerson ? 10 : 1;
+    qty.min = perPerson ? 8 : 1;
+
+    var addonBox = bookingEl.querySelector("#bk-addons");
+    addonBox.innerHTML = ADD_ONS.map(function (a, i) {
+      var val = [15, 2, 0][i];
+      return '<label class="bk-addon"><input type="checkbox" data-amt="' + val +
+        '"><span class="bk-addon__box"></span><span>' + a[0] +
+        '</span><span class="mono">' + a[1] + "</span></label>";
+    }).join("");
+
+    function recalc() {
+      var n = Math.max(Number(qty.min), Number(qty.value) || 1);
+      var base = unitPrice * n;
+      var extra = 0;
+      addonBox.querySelectorAll("input:checked").forEach(function (c) {
+        extra += Number(c.dataset.amt) * (c.dataset.amt === "2" ? n : 1);
+      });
+      var total = base + extra;
+      bookingEl.querySelector("#bk-base").textContent =
+        money(unitPrice) + (perPerson ? " × " + n + " athletes" : " × " + n);
+      bookingEl.querySelector("#bk-total").textContent = money(total);
+      bookingEl.dataset.total = total;
+      bookingEl.dataset.qty = n;
+      return total;
+    }
+    qty.oninput = recalc;
+    addonBox.onchange = recalc;
+    recalc();
+
+    var pay = bookingEl.querySelector("#bk-pay");
+    var link = PAYMENT.links[tier.name];
+    if (PAYMENT.enabled && link) {
+      pay.textContent = "Continue to payment";
+      pay.onclick = function () { window.open(link, "_blank", "noopener"); };
+      bookingEl.querySelector("#bk-note").textContent =
+        "Secure checkout opens in a new tab.";
+    } else {
+      pay.textContent = "Request this booking";
+      pay.onclick = function () {
+        var body =
+          "Package: " + tier.name + "\n" +
+          (perPerson ? "Athletes: " : "Sessions: ") + bookingEl.dataset.qty + "\n" +
+          "Estimated total: " + money(Number(bookingEl.dataset.total)) + "\n\n" +
+          "Preferred date:\nLocation:\n";
+        window.location.href = "mailto:" + CONTACT.email +
+          "?subject=" + encodeURIComponent("Booking — " + tier.name) +
+          "&body=" + encodeURIComponent(body);
+      };
+      bookingEl.querySelector("#bk-note").textContent =
+        "Online payment isn't switched on yet — this sends a booking request " +
+        "by email and Garrett confirms the total.";
+    }
+
+    bookingEl.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeBooking() {
+    bookingEl.classList.remove("is-open");
+    document.body.style.overflow = "";
+  }
+
+  function buildBooking() {
+    bookingEl = el("div", "booking");
+    bookingEl.setAttribute("role", "dialog");
+    bookingEl.setAttribute("aria-modal", "true");
+    bookingEl.innerHTML =
+      '<div class="booking__card glass">' +
+      '<button class="booking__close" type="button" aria-label="Close">✕</button>' +
+      '<span class="mono">Booking</span>' +
+      '<h3 class="booking__name" id="bk-name"></h3>' +
+      '<p class="booking__lead mono" id="bk-lead"></p>' +
+      '<label class="booking__qty"><span class="mono" id="bk-qty-label"></span>' +
+      '<input type="number" id="bk-qty" value="1" min="1" max="60"></label>' +
+      '<div class="booking__addons" id="bk-addons"></div>' +
+      '<div class="booking__sum"><span class="mono">Base</span>' +
+      '<span class="mono" id="bk-base"></span></div>' +
+      '<div class="booking__total"><span>Estimated total</span>' +
+      '<strong id="bk-total"></strong></div>' +
+      '<button class="booking__pay" id="bk-pay" type="button"></button>' +
+      '<p class="booking__note mono" id="bk-note"></p>' +
+      "</div>";
+    document.body.appendChild(bookingEl);
+    bookingEl.querySelector(".booking__close").addEventListener("click", closeBooking);
+    bookingEl.addEventListener("click", function (e) {
+      if (e.target === bookingEl) closeBooking();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && bookingEl.classList.contains("is-open")) closeBooking();
+    });
+  }
+
+  /* ---------- reviews ---------- */
+
+  function stars(n, cls) {
+    var out = "";
+    for (var i = 1; i <= 5; i++) {
+      out += '<span class="star' + (i <= n ? " is-on" : "") + '">★</span>';
+    }
+    return '<span class="stars ' + (cls || "") + '">' + out + "</span>";
+  }
+
+  function buildReviews() {
+    var list = (window.REVIEWS || []).slice();
+    var sec = el("section", "reviews reveal");
+    var avg = list.length
+      ? (list.reduce(function (s, r) { return s + r.rating; }, 0) / list.length)
+      : 0;
+
+    var head =
+      '<div class="section__head">' +
+      '<span class="mono">03 — Reviews</span>' +
+      (list.length
+        ? '<span class="mono">' + avg.toFixed(1) + " / 5 · " +
+          list.length + (list.length === 1 ? " review" : " reviews") + "</span>"
+        : '<span class="mono">Be the first</span>') +
+      "</div>";
+
+    var cards = list.length
+      ? '<div class="review-list">' + list.map(function (r) {
+          return '<article class="review">' + stars(r.rating) +
+            "<p>" + r.text + "</p>" +
+            '<footer class="mono">' + r.name +
+            (r.role ? " · " + r.role : "") + "</footer></article>";
+        }).join("") + "</div>"
+      : '<p class="reviews__empty mono">No reviews yet — if we\'ve worked ' +
+        "together, yours would be the first.</p>";
+
+    sec.innerHTML = head + cards +
+      '<form class="review-form" id="review-form">' +
+      '<h3 class="review-form__title">Leave a review</h3>' +
+      '<div class="review-form__stars" id="rf-stars" role="radiogroup" ' +
+      'aria-label="Rating out of 5"></div>' +
+      '<div class="review-form__row">' +
+      '<label><span class="mono">Name</span>' +
+      '<input type="text" id="rf-name" required autocomplete="name"></label>' +
+      '<label><span class="mono">What you booked (optional)</span>' +
+      '<input type="text" id="rf-role" placeholder="Team session, portraits…"></label>' +
+      "</div>" +
+      '<label class="review-form__msg"><span class="mono">Review</span>' +
+      '<textarea id="rf-text" rows="4" required></textarea></label>' +
+      '<button class="review-form__send" type="submit">Send review</button>' +
+      '<p class="review-form__note mono">Sends by email for approval before it ' +
+      "appears here.</p>" +
+      "</form>";
+
+    /* interactive star picker */
+    var chosen = 0;
+    var box = sec.querySelector("#rf-stars");
+    for (var i = 1; i <= 5; i++) {
+      var b = el("button", "star-btn", "★");
+      b.type = "button";
+      b.dataset.v = i;
+      b.setAttribute("aria-label", i + " star" + (i > 1 ? "s" : ""));
+      box.appendChild(b);
+    }
+    function paint(v) {
+      box.querySelectorAll(".star-btn").forEach(function (b) {
+        b.classList.toggle("is-on", Number(b.dataset.v) <= v);
+      });
+    }
+    box.addEventListener("click", function (e) {
+      var b = e.target.closest(".star-btn");
+      if (!b) return;
+      chosen = Number(b.dataset.v);
+      paint(chosen);
+    });
+    box.addEventListener("mouseover", function (e) {
+      var b = e.target.closest(".star-btn");
+      if (b) paint(Number(b.dataset.v));
+    });
+    box.addEventListener("mouseleave", function () { paint(chosen); });
+
+    sec.querySelector("#review-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var name = sec.querySelector("#rf-name").value.trim();
+      var role = sec.querySelector("#rf-role").value.trim();
+      var text = sec.querySelector("#rf-text").value.trim();
+      if (!chosen) { alert("Pick a star rating first."); return; }
+      var body =
+        "Rating: " + chosen + "/5\n" +
+        "Name: " + name + "\n" +
+        (role ? "Booked: " + role + "\n" : "") +
+        "\n" + text + "\n";
+      window.location.href = "mailto:" + CONTACT.email +
+        "?subject=" + encodeURIComponent("Review — " + name) +
+        "&body=" + encodeURIComponent(body);
+    });
+
+    return sec;
+  }
+
+  function buildContact() {
+    var sec = el("section", "contact reveal");
+    sec.innerHTML =
+      '<div class="section__head"><span class="mono">04 — Contact</span>' +
+      '<span class="mono">Michigan · booking now</span></div>' +
+      '<div class="contact__grid">' +
+      '<a class="contact__card" href="mailto:' + CONTACT.email + '">' +
+      '<span class="mono">Email</span>' +
+      "<strong>" + CONTACT.email + "</strong>" +
+      '<span class="contact__go">Send a message →</span></a>' +
+      '<a class="contact__card" href="https://www.instagram.com/' +
+      CONTACT.instagram + '" target="_blank" rel="noopener noreferrer">' +
+      '<span class="mono">Instagram</span>' +
+      "<strong>@" + CONTACT.instagram + "</strong>" +
+      '<span class="contact__go">See the feed →</span></a>' +
+      "</div>";
+    return sec;
   }
 
   /* full-width scrolling text band; content duplicated for a seamless loop */
@@ -389,78 +764,6 @@
     track.innerHTML = run + run; /* two copies → -50% loop is seamless */
     sec.appendChild(track);
     return sec;
-  }
-
-  /* spec-sheet colophon built from the manifest */
-  function buildColophon() {
-    var sec = el("section", "colophon reveal");
-    var tags = {};
-    PHOTOS.forEach(function (p) {
-      p.tags.forEach(function (t) { tags[t] = true; });
-    });
-    var cells = [
-      ["Based", "Michigan"],
-      ["Focus", "Architecture · Street · Sports"],
-      ["Format", "Digital"],
-      ["Archive", nPhotos(PHOTOS.length)],
-      ["Subjects", String(Object.keys(tags).length) + " tags"],
-      ["Since", String(yearRange())]
-    ];
-    var grid = "";
-    cells.forEach(function (c) {
-      grid += '<div class="colophon__cell"><dt>' + c[0] + "</dt><dd>" +
-        c[1] + "</dd></div>";
-    });
-    sec.innerHTML =
-      '<div class="colophon__head">' +
-      '<span class="mono">02 — Colophon</span></div>' +
-      '<dl class="colophon__grid">' + grid + "</dl>";
-    return sec;
-  }
-
-  function buildStrip(photos, n) {
-    var strip = el("section", "strip");
-    var head = el("div", "strip__head");
-    head.innerHTML =
-      '<span class="mono">' + pad2(n + 1) + " — Selected</span>" +
-      '<span class="mono">' + photos.length + " frames</span>";
-    strip.appendChild(head);
-
-    var grid = el("div", "strip__grid");
-    photos.forEach(function (photo) {
-      var globalSet = PHOTOS;
-      var card = photoCard(photo, globalSet.indexOf(photo), function (idx) {
-        openLightbox(globalSet, idx);
-      });
-      card.classList.add("reveal");
-      grid.appendChild(card);
-    });
-    strip.appendChild(grid);
-    return strip;
-  }
-
-  function buildPanel(photo) {
-    var isPortrait = photo.orientation === "portrait";
-    var panel = el("section", "panel" + (isPortrait ? " panel--portrait" : ""));
-    panel.innerHTML =
-      '<div class="panel__img-wrap wm wm--lg" data-parallax>' +
-      '<img loading="lazy" src="' + photo.src + '" alt="' + photo.title + '"></div>' +
-      (isPortrait
-        ? '<div class="panel__side reveal">' +
-          '<span class="mono">' + tagLine(photo) + "</span>" +
-          "<h2>" + photo.title + "</h2>" +
-          '<span class="mono">' + photo.location + " · " + photo.year + "</span>" +
-          "</div>"
-        : "") +
-      '<div class="panel__caption">' +
-      "<h2>" + photo.title + "</h2>" +
-      '<span class="mono">' + photo.location + " · " + photo.year + " · " + tagLine(photo) + "</span>" +
-      "</div>";
-    panel.addEventListener("click", function () {
-      openLightbox(PHOTOS, PHOTOS.indexOf(photo));
-    });
-    panel.style.cursor = "pointer";
-    return panel;
   }
 
   /* ============================================================
@@ -690,7 +993,7 @@
      ============================================================ */
 
   function initSpa() {
-    buildHome();
+    buildAbout();
     buildArchive();
     buildSports();
     var views = document.querySelectorAll("[data-view]");
@@ -723,7 +1026,7 @@
 
   protectImages(document);
 
-  if (page === "home") buildHome();
+  if (page === "about") buildAbout();
   if (page === "archive") buildArchive();
   if (page === "sports") buildSports();
   if (page === "spa") initSpa();
