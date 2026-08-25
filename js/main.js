@@ -1167,7 +1167,9 @@
     mountFilterPanel(filtersEl, grid, sportsPhotos, {
       label: "Filter by sport",
       allLabel: "All sports",
-      exclude: ["sports"]
+      /* "sports" is on every row here, and "detail" describes the crop
+         rather than the sport — neither works as a filter on this page */
+      exclude: ["sports", "detail"]
     });
   }
 

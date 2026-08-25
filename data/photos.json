@@ -1,5 +1,501 @@
 [
   {
+    "src": "images/practice-01.jpg",
+    "title": "Practice 01",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "detail",
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-02.jpg",
+    "title": "Practice 02",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-03.jpg",
+    "title": "Practice 03",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-04.jpg",
+    "title": "Practice 04",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-05.jpg",
+    "title": "Practice 05",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-06.jpg",
+    "title": "Practice 06",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 2400,
+    "h": 1600,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-07.jpg",
+    "title": "Practice 07",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-08.jpg",
+    "title": "Practice 08",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-09.jpg",
+    "title": "Practice 09",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-10.jpg",
+    "title": "Practice 10",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "detail",
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-11.jpg",
+    "title": "Practice 11",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "detail",
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-12.jpg",
+    "title": "Practice 12",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-13.jpg",
+    "title": "Practice 13",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "detail",
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-14.jpg",
+    "title": "Practice 14",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "detail",
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/court-56.jpg",
+    "title": "Court 56",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/court-57.jpg",
+    "title": "Court 57",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/court-58.jpg",
+    "title": "Court 58",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/court-59.jpg",
+    "title": "Court 59",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/court-60.jpg",
+    "title": "Court 60",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/court-61.jpg",
+    "title": "Court 61",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/court-62.jpg",
+    "title": "Court 62",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-15.jpg",
+    "title": "Practice 15",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-16.jpg",
+    "title": "Practice 16",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-17.jpg",
+    "title": "Practice 17",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-18.jpg",
+    "title": "Practice 18",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-19.jpg",
+    "title": "Practice 19",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-20.jpg",
+    "title": "Practice 20",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-21.jpg",
+    "title": "Practice 21",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-22.jpg",
+    "title": "Practice 22",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-23.jpg",
+    "title": "Practice 23",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-24.jpg",
+    "title": "Practice 24",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-25.jpg",
+    "title": "Practice 25",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-26.jpg",
+    "title": "Practice 26",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "detail",
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-27.jpg",
+    "title": "Practice 27",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
+    "src": "images/practice-28.jpg",
+    "title": "Practice 28",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true
+  },
+  {
     "src": "images/woodgrain.jpg",
     "title": "Woodgrain",
     "location": "Woodward Dream Cruise, Michigan",
