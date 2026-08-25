@@ -547,13 +547,25 @@
      booking panel starts sending people to a real checkout. Until then
      the same panel sends a booking request by email. */
   var PAYMENT = {
+    /* Card checkout via Stripe Payment Links. Needs an account holder who
+       is 18+, so this stays off until a parent's account is set up. */
     enabled: false,
     currency: "USD",
     links: {
       "Individual": "",
       "Team": "",
       "Event & Meets": ""
-    }
+    },
+    /* Peer-to-peer options that work today, including from a teen account.
+       Fill in whichever you actually use and leave the rest blank — each
+       one that has a value shows up as a button on the booking panel.
+       Offer more than one: the sender needs that same app, so a client
+       whose parent doesn't use Venmo can still pay without installing
+       anything new. */
+    venmo: "",        /* handle without the @, e.g. "Garrett-Erickson" */
+    cashapp: "",      /* cashtag without the $, e.g. "garrettE"        */
+    zelle: "",        /* email or phone shown as an instruction        */
+    cash: false       /* offer "pay in person" as a fallback           */
   };
 
   var ADD_ONS = [
@@ -735,8 +747,8 @@
       bookingEl.dataset.qty = n;
       return total;
     }
-    qty.oninput = recalc;
-    addonBox.onchange = recalc;
+    qty.oninput = function () { recalc(); renderPayOptions(tier, perPerson); };
+    addonBox.onchange = function () { recalc(); renderPayOptions(tier, perPerson); };
     recalc();
 
     var pay = bookingEl.querySelector("#bk-pay");
@@ -763,8 +775,44 @@
         "by email and Garrett confirms the total.";
     }
 
+    renderPayOptions(tier, perPerson);
+
     bookingEl.classList.add("is-open");
     document.body.style.overflow = "hidden";
+  }
+
+  /* peer-to-peer buttons; each opens that app with the amount prefilled */
+  function renderPayOptions(tier, perPerson) {
+    var box = bookingEl.querySelector("#bk-p2p");
+    var total = Number(bookingEl.dataset.total);
+    var note = tier.name + " session";
+    var opts = [];
+
+    if (PAYMENT.venmo) {
+      opts.push({ label: "Venmo", href: "https://venmo.com/" +
+        encodeURIComponent(PAYMENT.venmo) + "?txn=pay&amount=" + total +
+        "&note=" + encodeURIComponent(note) });
+    }
+    if (PAYMENT.cashapp) {
+      opts.push({ label: "Cash App", href: "https://cash.app/$" +
+        encodeURIComponent(PAYMENT.cashapp) + "/" + total });
+    }
+    if (PAYMENT.zelle) opts.push({ label: "Zelle", hint: PAYMENT.zelle });
+    if (PAYMENT.cash) opts.push({ label: "Cash in person", hint: "on the day" });
+
+    if (!opts.length) { box.innerHTML = ""; return; }
+
+    box.innerHTML =
+      '<span class="mono booking__p2p-label">Or pay directly</span>' +
+      '<div class="booking__p2p-row">' + opts.map(function (o) {
+        return o.href
+          ? '<a class="booking__p2p-btn" href="' + o.href +
+            '" target="_blank" rel="noopener noreferrer">' + o.label + "</a>"
+          : '<span class="booking__p2p-btn is-static">' + o.label +
+            '<em>' + o.hint + "</em></span>";
+      }).join("") + "</div>" +
+      '<p class="booking__note mono">Sending by app needs that same app on ' +
+      "their end — pick whichever they already use.</p>";
   }
 
   function closeBooking() {
@@ -790,6 +838,7 @@
       '<div class="booking__total"><span>Estimated total</span>' +
       '<strong id="bk-total"></strong></div>' +
       '<button class="booking__pay" id="bk-pay" type="button"></button>' +
+      '<div class="booking__p2p" id="bk-p2p"></div>' +
       '<p class="booking__note mono" id="bk-note"></p>' +
       "</div>";
     document.body.appendChild(bookingEl);
