@@ -26,9 +26,10 @@ window.SHOP_BACKEND = {
     endpoint: ""           /* formspree endpoint URL             */
   },
   chat: {
-    mode: "none",          /* "none" | "supabase"                */
-    url: "",
-    key: ""
+    mode: "ntfy",          /* "none" | "ntfy" | "supabase"       */
+    topicPrefix: "gep-",   /* ntfy: room topics live under this  */
+    url: "",               /* supabase only                      */
+    key: ""                /* supabase only                      */
   }
 };
 
@@ -44,6 +45,7 @@ window.Shop = (function () {
   }
 
   function chatReady() {
+    if (cfg.chat.mode === "ntfy") return true;   /* no credentials needed */
     return cfg.chat.mode === "supabase" && !!cfg.chat.url && !!cfg.chat.key;
   }
 
@@ -123,7 +125,58 @@ window.Shop = (function () {
     });
   }
 
-  /* ---------- chat ---------- */
+  /* ---------- chat ----------
+
+     ntfy.sh is the transport by default: no account, no key, no signup,
+     and it allows browser calls. Each order gets its own topic named
+     after its room id, which is 18 random hex characters — unguessable,
+     the same way the room link already was.
+
+     Two honest limits:
+       - ntfy.sh keeps messages for about 12 hours, so a conversation
+         does not survive to the next day. The order email is the
+         durable record; the chat is for finishing the sale now.
+       - A topic is readable by anyone who knows its name, so the room
+         link is the key. Never put a customer's email in the chat.
+
+     Supabase is still supported for a permanent history (SETUP.md).
+  -------------------------------------------------------------------- */
+
+  function ntfyTopic(room) {
+    return (cfg.chat.topicPrefix || "gep-") + room;
+  }
+
+  function ntfyHistory(room) {
+    return fetch("https://ntfy.sh/" + ntfyTopic(room) +
+                 "/json?poll=1&since=all")
+      .then(function (r) {
+        if (!r.ok) throw new Error("Chat service error " + r.status);
+        return r.text();
+      })
+      .then(function (txt) {
+        return txt.split("\n").filter(Boolean).map(function (line) {
+          try {
+            var env = JSON.parse(line);
+            if (env.event !== "message") return null;
+            var m = JSON.parse(env.message);
+            m.created_at = env.time;
+            return m;
+          } catch (e) { return null; }
+        }).filter(Boolean);
+      });
+  }
+
+  function ntfySend(room, who, text) {
+    return fetch("https://ntfy.sh/" + ntfyTopic(room), {
+      method: "POST",
+      body: JSON.stringify({ who: who, body: text })
+    }).then(function (r) {
+      if (!r.ok) throw new Error("Chat service error " + r.status);
+      return r.json().catch(function () { return {}; });
+    });
+  }
+
+  /* ---- supabase (optional, permanent history) ---- */
 
   function rest(path, opts) {
     opts = opts || {};
@@ -144,15 +197,41 @@ window.Shop = (function () {
 
   function chatHistory(room) {
     if (!chatReady()) return Promise.resolve([]);
-    return rest("shop_messages?select=*&room=eq." +
-                encodeURIComponent(room) + "&order=created_at.asc")
-      .catch(function () { return []; });
+    var p = cfg.chat.mode === "ntfy"
+      ? ntfyHistory(room)
+      : rest("shop_messages?select=*&room=eq." +
+             encodeURIComponent(room) + "&order=created_at.asc");
+    return p.catch(function () { return []; });
   }
 
   function chatSend(room, who, text) {
     if (!chatReady()) return Promise.reject(new Error("Chat isn't switched on yet."));
+    if (cfg.chat.mode === "ntfy") return ntfySend(room, who, text);
     return rest("shop_messages", { method: "POST",
       body: { room: room, who: who, body: text } });
+  }
+
+  /* The chat has no notifications of its own — if Garrett isn't looking
+     at the room, a message just sits there. So the first time a customer
+     writes in a room, ping the one channel he does watch: his inbox.
+     Once per room, so a chatty buyer can't burn the email quota. */
+  function chatNotify(room, name, text) {
+    var flag = "gep-pinged-" + room;
+    try { if (localStorage.getItem(flag)) return Promise.resolve(); } catch (e) {}
+    if (!ordersReady()) return Promise.resolve();
+    try { localStorage.setItem(flag, "1"); } catch (e) {}
+
+    var SIREN = "\uD83D\uDCAC";
+    return sendOrder({
+      subject: SIREN + " CHAT — " + (name || "a customer") + " is messaging you",
+      fromName: SIREN + " CHAT MESSAGE",
+      summary: "New chat message on an order",
+      lines: [["From", name || "customer"], ["Message", text]],
+      name: name || "customer",
+      email: "(reply in the chat room)",
+      total: 0,
+      chatUrl: location.origin + location.pathname + "?room=" + room + "&as=seller"
+    }).catch(function () { /* a failed ping must never break the chat */ });
   }
 
   return {
@@ -161,6 +240,7 @@ window.Shop = (function () {
     roomId: roomId,
     sendOrder: sendOrder,
     chatHistory: chatHistory,
-    chatSend: chatSend
+    chatSend: chatSend,
+    chatNotify: chatNotify
   };
 })();

@@ -1578,6 +1578,7 @@
 
     Shop.sendOrder(order).then(function () {
       checkoutEl.classList.add("is-sent");
+      chatName = name;
       if (!booking) {
         checkoutEl._selected.clear();
         checkoutEl._root.querySelectorAll(".shop-ph.is-picked")
@@ -1600,6 +1601,7 @@
   /* ---------- chat ---------- */
 
   var chatEl = null, chatRoom = null, chatWho = "customer", chatTimer = null;
+  var chatName = "";
 
   function openChat(room, who) {
     if (!room) return;
@@ -1636,7 +1638,12 @@
       if (!text) return;
       input.value = "";
       Shop.chatSend(chatRoom, chatWho, text)
-        .then(pullChat)
+        .then(function () {
+          /* nothing notifies Garrett of a chat message, so the customer's
+             first one pings the channel he actually watches */
+          if (chatWho === "customer") Shop.chatNotify(chatRoom, chatName, text);
+          return pullChat();
+        })
         .catch(function (err) {
           chatEl.querySelector("#chat-log").insertAdjacentHTML("beforeend",
             '<p class="chat__err mono">' + err.message + "</p>");

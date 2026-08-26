@@ -143,9 +143,32 @@ and lands in your inbox — no mail app opens on their end, and they never
 type your address. The same rails carry booking requests from the About
 page, so both work the moment this key is in.
 
-### 2. Chat — talking to the buyer to finish the sale
+### 2. Chat — already on, nothing to do
 
-Uses the same free Supabase project as the reviews. In the SQL editor:
+The chat runs on **ntfy.sh**, which needs no account, no key and no
+signup, so it works out of the box. Each order opens a topic named after
+its room id — 18 random hex characters, unguessable. The order email
+contains **your** link to that room; open it on any device and you are in
+the chat as Garrett.
+
+Two limits worth knowing:
+
+- **Messages last about 12 hours.** A conversation does not survive to
+  the next day. The order email is the permanent record; the chat is for
+  finishing the sale now. If you want history that keeps, switch to
+  Supabase below.
+- **Anyone with the room link can read that room**, so treat the link
+  like a key, and never type a customer's email or phone into the chat.
+
+**Notifications:** the chat itself cannot notify you — no website can
+push to your phone without an installed app. So the first time a customer
+writes in a room, the site emails you (`💬 CHAT — …`) using the same
+Web3Forms key. Once per room, so a chatty buyer can't flood you. Your
+inbox stays the thing you actually have to watch.
+
+### Optional: Supabase, if you want chat history that keeps
+
+In the Supabase SQL editor:
 
 ```sql
 create table shop_messages (
@@ -166,11 +189,6 @@ Then in `js/shop-backend.js`:
 ```js
 chat: { mode: "supabase", url: "https://xxxx.supabase.co", key: "your-anon-key" }
 ```
-
-Each order opens a room with a random, unguessable id. The order email
-contains **your** link to that room — open it and you're in the chat as
-Garrett. Anyone holding a room link can read that room, so treat the link
-like a key.
 
 ---
 
