@@ -104,15 +104,15 @@ body{{background:#6b6b70;font-family:"Archivo",Arial,sans-serif;
 /* ---------- front ---------- */
 .card--front{{background:#0d0d10;color:#f2f2f0;display:flex;flex-direction:column;
   justify-content:space-between;padding:.22in .24in}}
-.name{{font-family:"Oswald",sans-serif;font-weight:300;font-size:19pt;line-height:.97;
+.name{{font-family:"Oswald",sans-serif;font-weight:300;font-size:21pt;line-height:.97;
   letter-spacing:.055em;text-transform:uppercase}}
 .role{{margin-top:.05in;font-size:6.2pt;font-weight:500;letter-spacing:.34em;
   text-transform:uppercase;color:#9b9ba4}}
 .rule{{border-top:.4pt solid rgba(255,255,255,.26);margin:.05in 0 .06in}}
-.grid{{display:grid;grid-template-columns:1fr;gap:.055in}}
-.ln{{display:flex;align-items:center;gap:.07in;font-size:7.2pt;font-weight:500;
+.grid{{display:grid;grid-template-columns:1.45fr 1fr;gap:.045in .09in}}
+.ln{{display:flex;align-items:center;gap:.055in;font-size:7pt;font-weight:500;
   letter-spacing:.01em;color:#f4f4f6;min-width:0}}
-.ln svg{{width:9.5pt;height:9.5pt;flex:none;color:#b9b9c2}}
+.ln svg{{width:8.5pt;height:8.5pt;flex:none;color:#b9b9c2}}
 .ln b{{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
 
 /* ---------- back ---------- */
