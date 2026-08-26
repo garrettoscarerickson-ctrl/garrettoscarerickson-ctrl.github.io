@@ -104,15 +104,15 @@ body{{background:#6b6b70;font-family:"Archivo",Arial,sans-serif;
 /* ---------- front ---------- */
 .card--front{{background:#0d0d10;color:#f2f2f0;display:flex;flex-direction:column;
   justify-content:space-between;padding:.22in .24in}}
-.name{{font-family:"Oswald",sans-serif;font-weight:300;font-size:21pt;line-height:.97;
+.name{{font-family:"Oswald",sans-serif;font-weight:300;font-size:19pt;line-height:.97;
   letter-spacing:.055em;text-transform:uppercase}}
-.role{{margin-top:.045in;font-size:5.4pt;font-weight:500;letter-spacing:.4em;
+.role{{margin-top:.05in;font-size:6.2pt;font-weight:500;letter-spacing:.34em;
   text-transform:uppercase;color:#9b9ba4}}
-.rule{{border-top:.4pt solid rgba(255,255,255,.22);margin:.06in 0 .055in}}
-.grid{{display:grid;grid-template-columns:1fr 1fr;gap:.035in .1in}}
-.ln{{display:flex;align-items:center;gap:.05in;font-size:5.6pt;font-weight:500;
-  letter-spacing:.02em;color:#dcdce0;min-width:0}}
-.ln svg{{width:7.5pt;height:7.5pt;flex:none;color:#9b9ba4}}
+.rule{{border-top:.4pt solid rgba(255,255,255,.26);margin:.05in 0 .06in}}
+.grid{{display:grid;grid-template-columns:1fr;gap:.055in}}
+.ln{{display:flex;align-items:center;gap:.07in;font-size:7.2pt;font-weight:500;
+  letter-spacing:.01em;color:#f4f4f6;min-width:0}}
+.ln svg{{width:9.5pt;height:9.5pt;flex:none;color:#b9b9c2}}
 .ln b{{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
 
 /* ---------- back ---------- */
@@ -123,11 +123,11 @@ body{{background:#6b6b70;font-family:"Archivo",Arial,sans-serif;
 .qr-side{{display:flex;flex-direction:column;justify-content:center;gap:.07in;min-width:0}}
 .qr-name{{font-family:"Oswald",sans-serif;font-weight:300;font-size:15pt;line-height:.97;
   letter-spacing:.05em;text-transform:uppercase}}
-.qr-tag{{font-size:5.6pt;font-weight:500;letter-spacing:.05em;line-height:1.5;color:#5c5c63;
+.qr-tag{{font-size:6.4pt;font-weight:500;letter-spacing:.05em;line-height:1.5;color:#5c5c63;
   text-transform:uppercase}}
-.qr-site{{display:flex;align-items:center;gap:.05in;font-size:5.8pt;font-weight:600;
+.qr-site{{display:flex;align-items:center;gap:.06in;font-size:6.8pt;font-weight:600;
   letter-spacing:.04em;text-transform:uppercase}}
-.qr-site svg{{width:7.5pt;height:7.5pt;flex:none;color:#5c5c63}}
+.qr-site svg{{width:9pt;height:9pt;flex:none;color:#5c5c63}}
 
 @media print{{ body{{background:#fff}} .howto{{display:none}} .sheet{{margin:0}} }}
 </style></head><body>
