@@ -166,6 +166,21 @@ trips it (HTTP 429) — which would throttle a real buyer, not just
 testing. One long-lived connection per open chat stays well clear, and
 messages land instantly instead of up to three seconds late.
 
+**Getting into a room from your phone:** the notification service sends
+plain text, so the chat link in the email is often *not* tappable. That
+is why every order email also carries a short **chat code**. Bookmark
+**garrettphoto.store/chat** on your phone, type the code, and you are in.
+The page remembers the last room you opened, so getting back in is one
+tap.
+
+**If order emails land in spam:** they will, at first — a notification
+from an unfamiliar sender usually does. Open one, hit *Report not spam*,
+then make it permanent: Gmail → search the sender's address → Create
+filter → **Never send it to Spam**. Do this once. A missed order is a
+lost sale, and this is the only thing that reliably prevents it. It is
+also why the emails use one siren rather than a row of them: three
+emoji plus an all-caps sender got the whole message filtered.
+
 **Notifications:** the chat itself cannot notify you — no website can
 push to your phone without an installed app. So the first time a customer
 writes in a room, the site emails you (`💬 CHAT — …`) using the same

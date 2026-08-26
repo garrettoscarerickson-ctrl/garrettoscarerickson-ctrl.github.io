@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat — Garrett Erickson</title>
+  <meta name="robots" content="noindex">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="chatentry">
+
+  <nav class="nav">
+    <a class="nav__name" href="../index.html">Garrett Erickson</a>
+    <div class="nav__links">
+      <a href="../index.html">About</a>
+      <a href="../store.html">Store</a>
+      <a href="../sports.html">Sports</a>
+      <a href="../archive.html">Archive</a>
+    </div>
+  </nav>
+
+  <main class="entry">
+    <h1 class="entry__title">Open a chat</h1>
+    <p class="entry__note">Enter the code from your order email.</p>
+    <form class="entry__form" id="entry-form">
+      <input class="entry__code" id="entry-code" type="text" inputmode="latin"
+             autocapitalize="characters" autocomplete="off" spellcheck="false"
+             maxlength="8" placeholder="ABC123" aria-label="Room code">
+      <button class="entry__go" type="submit">Open chat</button>
+    </form>
+    <p class="entry__err mono" id="entry-err"></p>
+  </main>
+
+  <script src="../js/shop-backend.js"></script>
+  <script>
+    (function () {
+      var form = document.getElementById("entry-form");
+      var code = document.getElementById("entry-code");
+      var err  = document.getElementById("entry-err");
+
+      /* remember the last room so a phone can get back in with one tap */
+      try {
+        var last = localStorage.getItem("gep-last-room");
+        if (last) {
+          code.value = last;
+          err.innerHTML = 'Last room: <a href="../store.html?room=' +
+            encodeURIComponent(last) + '&as=seller">' + last + "</a>";
+        }
+      } catch (e) {}
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var v = code.value.trim().toUpperCase();
+        if (!v) { err.textContent = "Enter the code from the email."; return; }
+        try { localStorage.setItem("gep-last-room", v); } catch (e2) {}
+        location.href = "../store.html?room=" + encodeURIComponent(v) + "&as=seller";
+      });
+    })();
+  </script>
+</body>
+</html>

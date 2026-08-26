@@ -61,12 +61,19 @@ window.Shop = (function () {
     return cfg.chat.mode === "supabase" && !!cfg.chat.url && !!cfg.chat.key;
   }
 
-  /* unguessable room id — the order email carries the seller's link */
+  /* Room code. Short on purpose: the notification service sends plain
+     text, so the link in the email is not clickable on a phone — Garrett
+     has to be able to read this off the screen and type it. Six
+     characters from a 31-symbol alphabet is about a billion combinations,
+     and a room only lives ~12 hours, so guessing one is not a real
+     threat. The ambiguous characters (0/O, 1/I/L) are left out so there
+     is nothing to squint at. */
   function roomId() {
-    var a = new Uint8Array(9);
+    var alpha = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+    var a = new Uint8Array(6);
     (window.crypto || window.msCrypto).getRandomValues(a);
     return Array.prototype.map.call(a, function (b) {
-      return ("0" + b.toString(16)).slice(-2);
+      return alpha.charAt(b % alpha.length);
     }).join("");
   }
 
@@ -87,26 +94,33 @@ window.Shop = (function () {
           return "  " + l[0] + ": " + l[1];
         }).join("\n");
 
-    var SIREN = "\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8";
+    /* One siren, not three, and no emoji in the sender name.
+       Three sirens plus an all-caps sender got the whole email filed as
+       spam by Gmail — which for an order notification is worse than being
+       quiet, because a missed order is a lost sale. A single emoji in the
+       subject is common in ordinary transactional mail and passes. The
+       durable fix is a "never send to spam" filter on the sender; see
+       SETUP.md. */
+    var SIREN = "\uD83D\uDEA8";
 
     var body = {
-      subject: order.subject || (SIREN + " SHOP ORDER " + SIREN + " — " + order.name),
-      /* Gmail shows the sender name bigger than the subject in the inbox
-         list, and it defaults to a limp "Notifications". Putting the
-         sirens here too means they land even if the mail service strips
-         non-ASCII out of the subject header, which is a common way emoji
-         quietly vanish from subject lines. */
-      from_name: order.fromName || (SIREN + " SHOP ORDER " + SIREN),
+      subject: order.subject || (SIREN + " Shop order — " + order.name),
+      from_name: order.fromName || "Garrett Photo Store",
       name: order.name,
       email: order.email,
       total: "$" + order.total,
+      chat_code: order.room || "(none)",
       chat_link: order.chatUrl || "(chat not configured)",
-      message: (order.fromName || (SIREN + " SHOP ORDER " + SIREN)) + "\n\n" +
+      message: (order.subject || (SIREN + " Shop order")) + "\n\n" +
                order.summary + "\n\n" +
                "From " + order.name + " <" + order.email + ">\n\n" +
                detail + "\n\n" +
                (order.note ? "Note: " + order.note + "\n\n" : "") +
-               "Reply in chat: " + (order.chatUrl || "n/a") + "\n"
+               (order.room
+                 ? ("TO CHAT: open garrettphoto.store/chat and enter code " +
+                    order.room + "\n\nOr open this link directly:\n" +
+                    (order.chatUrl || "") + "\n")
+                 : ("Reply in chat: " + (order.chatUrl || "n/a") + "\n"))
     };
     if (order.items) body.photos = String(order.items.length);
 
@@ -262,15 +276,15 @@ window.Shop = (function () {
     if (!ordersReady()) return Promise.resolve();
     try { localStorage.setItem(flag, "1"); } catch (e) {}
 
-    var SIREN = "\uD83D\uDCAC";
     return sendOrder({
-      subject: SIREN + " CHAT — " + (name || "a customer") + " is messaging you",
-      fromName: SIREN + " CHAT MESSAGE",
+      subject: "\uD83D\uDCAC Chat — " + (name || "a customer") + " is messaging you",
+      fromName: "Garrett Photo Chat",
       summary: "New chat message on an order",
       lines: [["From", name || "customer"], ["Message", text]],
       name: name || "customer",
       email: "(reply in the chat room)",
       total: 0,
+      room: room,
       chatUrl: roomUrl(room)
     }).catch(function () { /* a failed ping must never break the chat */ });
   }

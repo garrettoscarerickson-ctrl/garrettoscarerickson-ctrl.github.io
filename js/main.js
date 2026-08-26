@@ -1553,16 +1553,14 @@
     var total = Number(checkoutEl.dataset.total);
     var order = booking
       ? {
-          subject: "\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8 BOOKING REQUEST " +
-                   "\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8 — " +
+          subject: "\uD83D\uDEA8 Booking request — " +
                    checkoutEl._tier.name + " — " + name,
           summary: "Booking request for " + checkoutEl._tier.name,
           lines: checkoutEl._lines.concat(when ? [["When / where", when]] : []),
           total: total
         }
       : {
-          subject: "\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8 SHOP ORDER " +
-                   "\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8 — " + name + " — " +
+          subject: "\uD83D\uDEA8 Shop order — " + name + " — " +
                    checkoutEl._items.length +
                    (checkoutEl._items.length === 1 ? " photo" : " photos") +
                    ", " + money(total),
@@ -1572,9 +1570,8 @@
         };
     order.name = name; order.email = email; order.note = note;
     order.chatUrl = chatUrl;
-    order.fromName = "\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8 " +
-      (booking ? "BOOKING REQUEST" : "SHOP ORDER") +
-      " \uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8";
+    order.fromName = booking ? "Garrett Photo Booking" : "Garrett Photo Store";
+    order.room = room;
 
     Shop.sendOrder(order).then(function () {
       checkoutEl.classList.add("is-sent");

@@ -2206,3 +2206,66 @@ a { color: inherit; text-decoration: none; }
   .shop-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
   .chat { right: 0; left: 0; bottom: 0; width: auto; border-radius: var(--r-lg) var(--r-lg) 0 0; }
 }
+
+/* ---------- chat entry (garrettphoto.store/chat) ---------- */
+
+.entry {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.9rem;
+  padding: var(--pad);
+  text-align: center;
+}
+
+.entry__title {
+  font-size: clamp(2.2rem, 8vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.entry__note { color: var(--ink-dim); }
+
+.entry__form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.entry__code {
+  width: min(280px, 80vw);
+  background: var(--bg-raise);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--r-md);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 0.9rem 1rem;
+}
+
+.entry__code:focus { outline: none; border-color: var(--ink-dim); }
+
+.entry__go {
+  background: var(--ink);
+  color: var(--bg);
+  border: 0;
+  border-radius: var(--r-full);
+  padding: 0.95rem 1.6rem;
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.entry__err { color: var(--ink-dim); min-height: 1.2em; }
+.entry__err a { text-decoration: underline; color: var(--ink); }
