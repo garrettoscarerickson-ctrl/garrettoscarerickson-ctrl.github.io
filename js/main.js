@@ -1572,6 +1572,9 @@
         };
     order.name = name; order.email = email; order.note = note;
     order.chatUrl = chatUrl;
+    order.fromName = "\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8 " +
+      (booking ? "BOOKING REQUEST" : "SHOP ORDER") +
+      " \uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8";
 
     Shop.sendOrder(order).then(function () {
       checkoutEl.classList.add("is-sent");

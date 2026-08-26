@@ -73,15 +73,22 @@ window.Shop = (function () {
           return "  " + l[0] + ": " + l[1];
         }).join("\n");
 
+    var SIREN = "\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8";
+
     var body = {
-      subject: order.subject ||
-               ("\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8 SHOP ORDER " +
-                "\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8 — " + order.name),
+      subject: order.subject || (SIREN + " SHOP ORDER " + SIREN + " — " + order.name),
+      /* Gmail shows the sender name bigger than the subject in the inbox
+         list, and it defaults to a limp "Notifications". Putting the
+         sirens here too means they land even if the mail service strips
+         non-ASCII out of the subject header, which is a common way emoji
+         quietly vanish from subject lines. */
+      from_name: order.fromName || (SIREN + " SHOP ORDER " + SIREN),
       name: order.name,
       email: order.email,
       total: "$" + order.total,
       chat_link: order.chatUrl || "(chat not configured)",
-      message: order.summary + "\n\n" +
+      message: (order.fromName || (SIREN + " SHOP ORDER " + SIREN)) + "\n\n" +
+               order.summary + "\n\n" +
                "From " + order.name + " <" + order.email + ">\n\n" +
                detail + "\n\n" +
                (order.note ? "Note: " + order.note + "\n\n" : "") +
