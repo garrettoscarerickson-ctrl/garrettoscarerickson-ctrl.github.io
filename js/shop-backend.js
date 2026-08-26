@@ -21,8 +21,8 @@
 
 window.SHOP_BACKEND = {
   orders: {
-    mode: "none",          /* "none" | "web3forms" | "formspree" */
-    accessKey: "",         /* web3forms access key               */
+    mode: "web3forms",     /* "none" | "web3forms" | "formspree" */
+    accessKey: "ce2f0913-01f0-4515-af6a-aea1eea8606c",
     endpoint: ""           /* formspree endpoint URL             */
   },
   chat: {
@@ -102,9 +102,16 @@ window.Shop = (function () {
     }).then(check);
   }
 
+  /* Never show "Sent" on a bare 200 — only when the service itself says
+     it succeeded. A silent false positive here means Garrett thinks an
+     order arrived when it never did, which is the worst way to fail. */
   function check(r) {
-    if (!r.ok) throw new Error("Order service returned " + r.status);
-    return r.json().catch(function () { return {}; });
+    return r.json().catch(function () { return {}; }).then(function (j) {
+      if (!r.ok || j.success === false) {
+        throw new Error(j.message || ("Order service returned " + r.status));
+      }
+      return j;
+    });
   }
 
   /* ---------- chat ---------- */
