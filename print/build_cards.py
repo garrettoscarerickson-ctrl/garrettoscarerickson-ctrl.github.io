@@ -172,3 +172,10 @@ with open(out, "w", encoding="utf-8") as f:
     f.write(HTML)
 print("wrote %s (%.0f KB)" % (out, os.path.getsize(out) / 1024))
 print("QR ->", QR_TARGET)
+
+# To regenerate the PDF after editing this file:
+#   python3 print/build_cards.py
+#   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+#     --headless=new --disable-gpu --no-pdf-header-footer \
+#     --print-to-pdf="$PWD/print/Erickson_Garrett_Business_Cards.pdf" \
+#     "file://$PWD/print/business-cards.html"
