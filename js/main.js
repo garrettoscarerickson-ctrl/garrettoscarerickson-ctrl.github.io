@@ -728,6 +728,7 @@
     addonBox.innerHTML = ADD_ONS.map(function (a, i) {
       var val = [15, 2, 0][i];
       return '<label class="bk-addon"><input type="checkbox" data-amt="' + val +
+        '" data-label="' + a[0] + ' (' + a[1] + ')' +
         '"><span class="bk-addon__box"></span><span>' + a[0] +
         '</span><span class="mono">' + a[1] + "</span></label>";
     }).join("");
@@ -759,20 +760,14 @@
       bookingEl.querySelector("#bk-note").textContent =
         "Secure checkout opens in a new tab.";
     } else {
+      /* same one-click send as the store: the request is posted straight
+         to Garrett. No mail app opens, the visitor types nothing but
+         their name and how to reach them. */
       pay.textContent = "Request this booking";
-      pay.onclick = function () {
-        var body =
-          "Package: " + tier.name + "\n" +
-          (perPerson ? "Athletes: " : "Sessions: ") + bookingEl.dataset.qty + "\n" +
-          "Estimated total: " + money(Number(bookingEl.dataset.total)) + "\n\n" +
-          "Preferred date:\nLocation:\n";
-        window.location.href = "mailto:" + CONTACT.email +
-          "?subject=" + encodeURIComponent("Booking — " + tier.name) +
-          "&body=" + encodeURIComponent(body);
-      };
-      bookingEl.querySelector("#bk-note").textContent =
-        "Online payment isn't switched on yet — this sends a booking request " +
-        "by email and Garrett confirms the total.";
+      pay.onclick = function () { openBookingSend(tier, perPerson); };
+      bookingEl.querySelector("#bk-note").textContent = Shop.ordersReady()
+        ? "Sends straight to Garrett — he confirms the date and total."
+        : "Sending isn't switched on yet (see SETUP.md).";
     }
 
     renderPayOptions(tier, perPerson);
@@ -1265,6 +1260,405 @@
     show("home");
   }
 
+  /* ============================================================
+     STORE — photographs for sale, grouped by game
+     ============================================================ */
+
+  var PRICE = 1;          /* dollars per photograph */
+
+  function buildStore() {
+    var root = document.getElementById("store-root");
+    var forSale = PHOTOS.filter(function (p) { return p.game; });
+
+    var head = el("header", "archive-head");
+    head.innerHTML =
+      "<h1>Store</h1>" +
+      '<span class="mono">' + nPhotos(forSale.length) + " · $" + PRICE +
+      " each · pick as many as you like</span>";
+    root.appendChild(head);
+
+    if (!forSale.length) {
+      root.appendChild(el("div", "archive-empty mono",
+        "Nothing listed yet — photographs appear here once they're assigned to a game."));
+      return;
+    }
+
+    /* how it works */
+    var steps = el("section", "shop-how");
+    steps.innerHTML =
+      '<div class="shop-how__row">' +
+      '<span class="shop-how__step"><b>1</b>Tap the photos you want</span>' +
+      '<span class="shop-how__step"><b>2</b>Send your order in one click</span>' +
+      '<span class="shop-how__step"><b>3</b>Chat here to finish the sale</span>' +
+      "</div>" +
+      '<p class="mono shop-how__note">Previews are watermarked. Clean ' +
+      "full-resolution files are sent after payment.</p>";
+    root.appendChild(steps);
+
+    /* group by game, in manifest order */
+    var order = [], groups = {};
+    forSale.forEach(function (p) {
+      if (!groups[p.game]) { groups[p.game] = []; order.push(p.game); }
+      groups[p.game].push(p);
+    });
+
+    var selected = new Set();
+
+    order.forEach(function (game) {
+      var sec = el("section", "shop-game");
+      var list = groups[game];
+      sec.innerHTML =
+        '<div class="section__head">' +
+        "<span class=\"mono\">" + game + "</span>" +
+        '<span class="mono">' + nPhotos(list.length) + "</span></div>";
+      var grid = el("div", "shop-grid");
+      list.forEach(function (photo) {
+        grid.appendChild(shopCard(photo, selected, updateCart));
+      });
+      sec.appendChild(grid);
+      root.appendChild(sec);
+    });
+
+    /* sticky cart */
+    var cart = el("div", "cart");
+    cart.innerHTML =
+      '<span class="cart__count mono">No photos selected</span>' +
+      '<div class="cart__right">' +
+      '<button class="cart__clear" type="button">Clear</button>' +
+      '<button class="cart__go" type="button" disabled>Checkout</button>' +
+      "</div>";
+    document.body.appendChild(cart);
+
+    cart.querySelector(".cart__clear").addEventListener("click", function () {
+      selected.clear();
+      root.querySelectorAll(".shop-ph.is-picked")
+          .forEach(function (c) { c.classList.remove("is-picked"); });
+      updateCart();
+    });
+    cart.querySelector(".cart__go").addEventListener("click", function () {
+      openCheckout(selected, root, updateCart);
+    });
+
+    function updateCart() {
+      var n = selected.size;
+      cart.classList.toggle("is-live", n > 0);
+      cart.querySelector(".cart__count").textContent = n
+        ? n + (n === 1 ? " photo · $" : " photos · $") + (n * PRICE)
+        : "No photos selected";
+      cart.querySelector(".cart__go").disabled = n === 0;
+      cart.querySelector(".cart__go").textContent =
+        n ? "Checkout · $" + (n * PRICE) : "Checkout";
+    }
+    updateCart();
+    protectShopImages(root);
+  }
+
+  /* a selectable, watermarked store card */
+  /* Store previews are their OWN files: downscaled with the watermark
+     burned into the pixels (see tools/build_shop_previews.py). The
+     portfolio's originals are untouched — nothing is baked into those.
+     Serving a separate file is the point: deleting the overlay in
+     devtools, or opening the .jpg directly, still gets you a marked
+     1100px preview and nothing better. */
+  function shopSrc(photo) {
+    return "images/shop/" + photo.src.split("/").pop();
+  }
+
+  function shopCard(photo, selected, onChange) {
+    var card = el("button", "shop-ph" +
+      (photo.orientation === "portrait" ? " shop-ph--portrait" : ""));
+    card.type = "button";
+    card.setAttribute("aria-pressed", "false");
+    card.setAttribute("aria-label", "Select " + photo.title);
+    var ar = photo.w && photo.h ? ' style="--ar:' + photo.w + "/" + photo.h + '"' : "";
+    card.innerHTML =
+      '<span class="shop-ph__img wm-heavy"' + ar + '>' +
+      '<img loading="lazy" draggable="false" src="' + shopSrc(photo) +
+      '" alt="' + photo.title + '">' +
+      '<span class="shop-ph__tick" aria-hidden="true">✓</span>' +
+      "</span>" +
+      '<span class="shop-ph__foot">' +
+      '<span class="ph__title">' + photo.title + "</span>" +
+      '<span class="mono">$' + PRICE + "</span></span>";
+    card.addEventListener("click", function () {
+      var on = selected.has(photo.src);
+      on ? selected.delete(photo.src) : selected.add(photo.src);
+      card.classList.toggle("is-picked", !on);
+      card.setAttribute("aria-pressed", String(!on));
+      onChange();
+    });
+    return card;
+  }
+
+  /* deter casual saving: no context menu, no drag, no iOS long-press sheet */
+  function protectShopImages(scope) {
+    scope.addEventListener("contextmenu", function (e) {
+      if (e.target.closest(".shop-ph")) e.preventDefault();
+    });
+    scope.addEventListener("dragstart", function (e) { e.preventDefault(); });
+  }
+
+  /* ---------- checkout ---------- */
+
+  var checkoutEl = null;
+
+  function openCheckout(selected, root, onChange) {
+    if (!checkoutEl) buildCheckout();
+    var items = PHOTOS.filter(function (p) { return selected.has(p.src); });
+    checkoutEl._kind = "photos";
+    checkoutEl.querySelector("#co-date-row").hidden = true;
+    checkoutEl.dataset.total = items.length * PRICE;
+    checkoutEl.querySelector("#co-summary").textContent =
+      items.length + (items.length === 1 ? " photograph · $" : " photographs · $") +
+      items.length * PRICE;
+    var list = checkoutEl.querySelector("#co-items");
+    list.innerHTML = items.map(function (i) {
+      return '<li><span>' + i.title + "</span><span class=\"mono\">" +
+             i.game + "</span></li>";
+    }).join("");
+
+    var note = checkoutEl.querySelector("#co-status");
+    note.textContent = Shop.ordersReady()
+      ? ""
+      : "Ordering isn't switched on yet — see SETUP.md. Nothing will send.";
+    note.className = "co__status mono" + (Shop.ordersReady() ? "" : " is-warn");
+
+    checkoutEl.classList.remove("is-sent");
+    checkoutEl.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+    checkoutEl._items = items;
+    checkoutEl._selected = selected;
+    checkoutEl._root = root;
+    checkoutEl._onChange = onChange;
+  }
+
+
+  /* The booking request rides the exact same rails as a photo order:
+     one button, sent in the background, tick animation, then chat.
+     No mail app, nothing for the visitor to copy or paste. */
+  function openBookingSend(tier, perPerson) {
+    if (!checkoutEl) buildCheckout();
+    var n = Number(bookingEl.dataset.qty) || 1;
+    var total = Number(bookingEl.dataset.total) || 0;
+
+    var lines = [
+      ["Package", tier.name],
+      [perPerson ? "Athletes" : "Sessions", String(n)],
+      ["Estimated total", money(total)]
+    ];
+    bookingEl.querySelectorAll("#bk-addons input:checked")
+      .forEach(function (c) {
+        lines.push(["Add-on", c.dataset.label || c.value || "yes"]);
+      });
+
+    checkoutEl._kind = "booking";
+    checkoutEl._tier = tier;
+    checkoutEl._lines = lines;
+    checkoutEl.dataset.total = total;
+    checkoutEl.querySelector("#co-summary").textContent =
+      tier.name + " · " + money(total);
+    checkoutEl.querySelector("#co-items").innerHTML = lines.map(function (l) {
+      return "<li><span>" + l[0] + '</span><span class="mono">' + l[1] +
+             "</span></li>";
+    }).join("");
+    checkoutEl.querySelector("#co-date-row").hidden = false;
+
+    var note = checkoutEl.querySelector("#co-status");
+    note.textContent = Shop.ordersReady()
+      ? ""
+      : "Sending isn't switched on yet — see SETUP.md. Nothing will send.";
+    note.className = "co__status mono" + (Shop.ordersReady() ? "" : " is-warn");
+
+    checkoutEl.classList.remove("is-sent");
+    checkoutEl.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeCheckout() {
+    checkoutEl.classList.remove("is-open");
+    document.body.style.overflow = "";
+  }
+
+  function buildCheckout() {
+    checkoutEl = el("div", "checkout");
+    checkoutEl.setAttribute("role", "dialog");
+    checkoutEl.setAttribute("aria-modal", "true");
+    checkoutEl.innerHTML =
+      '<div class="checkout__card glass">' +
+      '<button class="checkout__close" type="button" aria-label="Close">✕</button>' +
+      '<div class="checkout__form">' +
+      '<span class="mono">Your order</span>' +
+      '<h3 class="checkout__sum" id="co-summary"></h3>' +
+      '<ul class="checkout__items" id="co-items"></ul>' +
+      '<label><span class="mono">Your name</span>' +
+      '<input type="text" id="co-name" autocomplete="name" required></label>' +
+      '<label><span class="mono">Your email</span>' +
+      '<input type="email" id="co-email" autocomplete="email" required></label>' +
+      '<label id="co-date-row" hidden><span class="mono">Preferred date '
+        + 'and location</span>' +
+      '<input type="text" id="co-date" placeholder="e.g. Fri Sept 12, '
+        + 'Country Day"></label>' +
+      '<label><span class="mono">Anything I should know (optional)</span>' +
+      '<textarea id="co-note" rows="2"></textarea></label>' +
+      '<button class="checkout__send" id="co-send" type="button">Send order</button>' +
+      '<p class="co__status mono" id="co-status"></p>' +
+      "</div>" +
+      '<div class="checkout__done">' +
+      '<span class="checkout__tick"><svg viewBox="0 0 52 52" aria-hidden="true">' +
+      '<circle class="tick-ring" cx="26" cy="26" r="23" fill="none"/>' +
+      '<path class="tick-mark" fill="none" d="M14 27l8 8 16-17"/></svg></span>' +
+      "<h3>Sent</h3>" +
+      '<p class="checkout__done-note">Garrett will reach you shortly to finish ' +
+      "the sale.</p>" +
+      '<button class="checkout__chat" id="co-chat" type="button">Open chat</button>' +
+      "</div></div>";
+    document.body.appendChild(checkoutEl);
+
+    checkoutEl.querySelector(".checkout__close").addEventListener("click", closeCheckout);
+    checkoutEl.addEventListener("click", function (e) {
+      if (e.target === checkoutEl) closeCheckout();
+    });
+    checkoutEl.querySelector("#co-send").addEventListener("click", submitOrder);
+    checkoutEl.querySelector("#co-chat").addEventListener("click", function () {
+      closeCheckout();
+      openChat(checkoutEl._room, "customer");
+    });
+  }
+
+  function submitOrder() {
+    var name = checkoutEl.querySelector("#co-name").value.trim();
+    var email = checkoutEl.querySelector("#co-email").value.trim();
+    var note = checkoutEl.querySelector("#co-note").value.trim();
+    var status = checkoutEl.querySelector("#co-status");
+    var btn = checkoutEl.querySelector("#co-send");
+
+    if (!name) { status.textContent = "Add your name."; return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      status.textContent = "Add an email Garrett can reply to."; return;
+    }
+
+    var room = Shop.roomId();
+    checkoutEl._room = room;
+    var chatUrl = Shop.chatReady()
+      ? location.origin + location.pathname + "?room=" + room + "&as=seller"
+      : "";
+
+    btn.disabled = true;
+    status.className = "co__status mono";
+    status.textContent = "Sending…";
+
+    var booking = checkoutEl._kind === "booking";
+    var when = booking
+      ? checkoutEl.querySelector("#co-date").value.trim() : "";
+    var total = Number(checkoutEl.dataset.total);
+    var order = booking
+      ? {
+          subject: "Booking request — " + checkoutEl._tier.name,
+          summary: "Booking request for " + checkoutEl._tier.name,
+          lines: checkoutEl._lines.concat(when ? [["When / where", when]] : []),
+          total: total
+        }
+      : {
+          subject: "Photo order — " + name + " (" +
+                   checkoutEl._items.length + " photos)",
+          summary: checkoutEl._items.length + " photo(s), total " + money(total),
+          items: checkoutEl._items,
+          total: total
+        };
+    order.name = name; order.email = email; order.note = note;
+    order.chatUrl = chatUrl;
+
+    Shop.sendOrder(order).then(function () {
+      checkoutEl.classList.add("is-sent");
+      if (!booking) {
+        checkoutEl._selected.clear();
+        checkoutEl._root.querySelectorAll(".shop-ph.is-picked")
+          .forEach(function (c) { c.classList.remove("is-picked"); });
+        checkoutEl._onChange();
+      } else if (bookingEl) {
+        bookingEl.classList.remove("is-open");
+      }
+      if (Shop.chatReady()) {
+        Shop.chatSend(room, "system", name + " — " + order.summary)
+          .catch(function () {});
+      }
+    }).catch(function (err) {
+      status.className = "co__status mono is-warn";
+      status.textContent = err.message +
+        " Nothing was sent — email Garrettoscarerickson@gmail.com instead.";
+    }).finally(function () { btn.disabled = false; });
+  }
+
+  /* ---------- chat ---------- */
+
+  var chatEl = null, chatRoom = null, chatWho = "customer", chatTimer = null;
+
+  function openChat(room, who) {
+    if (!room) return;
+    chatRoom = room; chatWho = who || "customer";
+    if (!chatEl) buildChat();
+    chatEl.classList.add("is-open");
+    chatEl.querySelector("#chat-who").textContent =
+      chatWho === "seller" ? "You are replying as Garrett" : "Chat with Garrett";
+    pullChat();
+    clearInterval(chatTimer);
+    chatTimer = setInterval(pullChat, 3000);
+  }
+
+  function closeChat() {
+    chatEl.classList.remove("is-open");
+    clearInterval(chatTimer);
+  }
+
+  function buildChat() {
+    chatEl = el("div", "chat glass");
+    chatEl.innerHTML =
+      '<div class="chat__head"><span class="mono" id="chat-who"></span>' +
+      '<button class="chat__close" type="button" aria-label="Close chat">✕</button></div>' +
+      '<div class="chat__log" id="chat-log"></div>' +
+      '<form class="chat__form" id="chat-form">' +
+      '<input type="text" id="chat-input" placeholder="Write a message…" autocomplete="off">' +
+      '<button type="submit">Send</button></form>';
+    document.body.appendChild(chatEl);
+    chatEl.querySelector(".chat__close").addEventListener("click", closeChat);
+    chatEl.querySelector("#chat-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var input = chatEl.querySelector("#chat-input");
+      var text = input.value.trim();
+      if (!text) return;
+      input.value = "";
+      Shop.chatSend(chatRoom, chatWho, text)
+        .then(pullChat)
+        .catch(function (err) {
+          chatEl.querySelector("#chat-log").insertAdjacentHTML("beforeend",
+            '<p class="chat__err mono">' + err.message + "</p>");
+        });
+    });
+  }
+
+  function pullChat() {
+    var log = chatEl.querySelector("#chat-log");
+    if (!Shop.chatReady()) {
+      log.innerHTML = '<p class="chat__err mono">Chat isn\'t switched on yet — ' +
+        "see SETUP.md. Your order was still sent.</p>";
+      return;
+    }
+    Shop.chatHistory(chatRoom).then(function (rows) {
+      log.innerHTML = rows.map(function (m) {
+        var cls = m.who === chatWho ? "is-mine" : (m.who === "system" ? "is-sys" : "");
+        return '<div class="chat__msg ' + cls + '">' + esc(m.body) + "</div>";
+      }).join("") || '<p class="chat__err mono">No messages yet.</p>';
+      log.scrollTop = log.scrollHeight;
+    });
+  }
+
+  /* seller opens ?room=…&as=seller from the order email */
+  function maybeOpenSellerChat() {
+    var q = new URLSearchParams(location.search);
+    var room = q.get("room");
+    if (room) openChat(room, q.get("as") === "seller" ? "seller" : "customer");
+  }
+
   /* ---------- boot ---------- */
 
   protectImages(document);
@@ -1272,5 +1666,6 @@
   if (page === "about") buildAbout();
   if (page === "archive") buildArchive();
   if (page === "sports") buildSports();
+  if (page === "store") { buildStore(); maybeOpenSellerChat(); }
   if (page === "spa") initSpa();
 })();

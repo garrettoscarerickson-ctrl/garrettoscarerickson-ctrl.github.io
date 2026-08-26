@@ -116,3 +116,113 @@ Stripe and never touch this site.
 Because Payment Links are a fixed price each, the per-athlete total shown
 in the panel is an estimate for the customer; confirm the final amount
 with them, or make one link per common team size.
+
+---
+
+## The store
+
+`store.html` sells the game photos at $1 each. Two things need switching on
+before it can actually take an order — until then the page says so plainly
+instead of pretending an order went through.
+
+### 1. Orders — one click, straight to your inbox
+
+Go to **web3forms.com**, type your email, and they mail you an access key.
+No account, no dashboard, free. Then in `js/shop-backend.js`:
+
+```js
+orders: {
+  mode: "web3forms",
+  accessKey: "paste-your-key-here",
+  endpoint: ""
+}
+```
+
+That's it. When someone hits *Send order* the order posts in the background
+and lands in your inbox — no mail app opens on their end, and they never
+type your address. The same rails carry booking requests from the About
+page, so both work the moment this key is in.
+
+### 2. Chat — talking to the buyer to finish the sale
+
+Uses the same free Supabase project as the reviews. In the SQL editor:
+
+```sql
+create table shop_messages (
+  id     bigserial primary key,
+  room   text not null,
+  who    text not null,
+  text   text not null,
+  at     timestamptz default now()
+);
+alter table shop_messages enable row level security;
+create policy "read"  on shop_messages for select using (true);
+create policy "write" on shop_messages for insert with check (true);
+create index on shop_messages (room, at);
+```
+
+Then in `js/shop-backend.js`:
+
+```js
+chat: { mode: "supabase", url: "https://xxxx.supabase.co", key: "your-anon-key" }
+```
+
+Each order opens a room with a random, unguessable id. The order email
+contains **your** link to that room — open it and you're in the chat as
+Garrett. Anyone holding a room link can read that room, so treat the link
+like a key.
+
+---
+
+## Store previews — how the watermark actually holds up
+
+The portfolio's watermark is a CSS overlay: nothing is burned into those
+files, exactly as you wanted. **The store is different.** An overlay can be
+deleted in devtools in five seconds, and it doesn't exist at all if someone
+just opens the `.jpg` URL directly. So the store serves its own separate
+files with the mark burned into the pixels:
+
+```bash
+python3 tools/build_shop_previews.py
+```
+
+That writes `images/shop/`. Your originals in `images/` are never touched.
+Run it again after adding photos to a game (it skips ones already built;
+`--force` rebuilds everything).
+
+What makes these hard for an AI to strip:
+
+- **It covers the whole frame.** Erasing a corner mark is easy. Rebuilding
+  every square inch of a photo is not — there's no clean area to copy from.
+- **Every tile is jittered** in position, angle, size and opacity, seeded
+  per file, so no two photos share a pattern. This matters more than it
+  sounds: the classic attack on stock-photo watermarks is to average a
+  bunch of images that share one identical mark and solve for it. There's
+  nothing here to solve for.
+- **It's drawn light *and* dark.** A single-tone mark can be pulled out by
+  thresholding in one direction; this one pushes pixels both ways.
+- **It's blended, not stamped.** The original pixel values underneath are
+  genuinely gone. Removal can't recover them, only invent replacements.
+- **Previews are 1100px at quality 72,** so the mark and the photo share
+  compression artifacts and can't be cleanly separated — and even a perfect
+  removal leaves someone with a small file that's useless for printing.
+
+**Honest limit:** none of this is 100%. A determined person with good tools
+can degrade any watermark. The point is to make it more work than paying $1.
+
+### Screenshots
+
+**Screenshots cannot be blocked on the web.** No site can do it — browsers
+don't expose that ability, and iOS Safari especially. Anyone claiming
+otherwise is selling something. What the store *does* do:
+
+- right-click → Save Image is blocked
+- drag-to-desktop is blocked
+- **iPhone long-press → Save to Photos is blocked** — the photo sits under a
+  transparent shield and is set to ignore touches, so iOS never offers the
+  save sheet
+- and if someone screenshots anyway, what they get is the watermarked
+  1100px preview, which is the whole reason the mark is burned in
+
+The real protection isn't stopping the screenshot. It's that the screenshot
+isn't worth having.

@@ -1782,3 +1782,427 @@ a { color: inherit; text-decoration: none; }
 /* the card nests .ph__img > .ph__par > img; the wrapper needs to fill the
    frame or a landscape photo letterboxes inside the 4:5 crop */
 .selected__grid .ph__par { position: absolute; inset: 0; }
+
+/* ============================================================
+   STORE
+   ============================================================ */
+
+.shop-how {
+  padding: clamp(1.5rem, 4vh, 2.5rem) var(--pad) 0;
+}
+
+.shop-how__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.shop-how__step {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--r-md);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-line);
+  font-size: 0.92rem;
+  color: var(--ink-dim);
+}
+
+.shop-how__step b {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 0.72rem;
+}
+
+.shop-how__note { padding-top: 0.9rem; }
+
+.shop-game { padding: clamp(2rem, 5vh, 3.25rem) var(--pad) 0; }
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: clamp(0.8rem, 1.6vw, 1.25rem);
+}
+
+.shop-ph {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.shop-ph__img {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--r-md);
+  background: var(--bg-sunk);
+  aspect-ratio: var(--ar, 3 / 2);
+  border: 1px solid transparent;
+  transition: border-color 0.2s ease, transform 0.4s var(--ease);
+}
+
+.shop-ph__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* the image itself never receives the touch, so iOS can't offer
+     "Save to Photos" on a long press */
+  pointer-events: none;
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* transparent shield above the photo: swallows long-press and drag */
+.wm-heavy::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.shop-ph:hover .shop-ph__img { transform: translateY(-3px); }
+.shop-ph.is-picked .shop-ph__img { border-color: var(--ink); }
+
+.shop-ph__tick {
+  position: absolute;
+  z-index: 4;
+  top: 0.55rem;
+  right: 0.55rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-line);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: transparent;
+  font-size: 0.8rem;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.3s var(--ease);
+}
+
+.shop-ph.is-picked .shop-ph__tick {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+  transform: scale(1.06);
+}
+
+.shop-ph__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+/* ---------- sticky cart ---------- */
+
+.cart {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  transform: translate(-50%, 150%);
+  width: min(560px, calc(100% - 2rem));
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.6rem 0.6rem 1.25rem;
+  border-radius: var(--r-full);
+  background: var(--glass-solid);
+  border: 1px solid var(--glass-line);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-lift);
+  transition: transform 0.45s var(--ease);
+}
+
+.cart.is-live { transform: translate(-50%, 0); }
+
+.cart__right { display: flex; align-items: center; gap: 0.5rem; }
+
+.cart__clear {
+  background: none;
+  border: 0;
+  color: var(--ink-dim);
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.5rem 0.6rem;
+}
+
+.cart__clear:hover { color: var(--ink); }
+
+.cart__go {
+  background: var(--ink);
+  color: var(--bg);
+  border: 0;
+  border-radius: var(--r-full);
+  padding: 0.75rem 1.35rem;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.cart__go:disabled { opacity: 0.4; cursor: default; }
+
+/* ---------- checkout ---------- */
+
+.checkout {
+  position: fixed;
+  inset: 0;
+  z-index: 210;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--pad);
+  background: rgba(6, 6, 9, 0.74);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.checkout.is-open { display: flex; animation: fade-in 0.25s ease both; }
+
+.checkout__card {
+  position: relative;
+  width: min(430px, 100%);
+  max-height: 88svh;
+  overflow-y: auto;
+  border-radius: var(--r-lg);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  background: var(--glass-solid);
+  animation: pop-in 0.35s var(--ease) both;
+}
+
+.checkout__close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--r-full);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-line);
+  color: var(--ink-dim);
+  cursor: pointer;
+}
+
+.checkout__form { display: flex; flex-direction: column; gap: 0.8rem; }
+.checkout.is-sent .checkout__form { display: none; }
+
+.checkout__sum { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; }
+
+.checkout__items {
+  list-style: none;
+  max-height: 9rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--hairline-soft);
+  border-bottom: 1px solid var(--hairline-soft);
+}
+
+.checkout__items li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.88rem;
+  color: var(--ink-dim);
+}
+
+.checkout label { display: flex; flex-direction: column; gap: 0.35rem; }
+/* display:flex would otherwise beat the hidden attribute */
+.checkout label[hidden] { display: none; }
+
+.checkout input, .checkout textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 0.65rem 0.8rem;
+  resize: vertical;
+}
+
+.checkout input:focus, .checkout textarea:focus {
+  outline: none; border-color: var(--ink-dim);
+}
+
+.checkout__send {
+  background: var(--ink);
+  color: var(--bg);
+  border: 0;
+  border-radius: var(--r-full);
+  padding: 0.9rem 1.25rem;
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.checkout__send:disabled { opacity: 0.5; cursor: default; }
+.co__status { line-height: 1.5; text-transform: none; letter-spacing: 0.02em; }
+.co__status.is-warn { color: #e5b76b; }
+
+/* success state */
+.checkout__done { display: none; text-align: center; gap: 0.9rem; flex-direction: column; }
+.checkout.is-sent .checkout__done { display: flex; }
+.checkout__done h3 { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.01em; }
+.checkout__done-note { color: var(--ink-dim); line-height: 1.6; }
+
+.checkout__tick { display: grid; place-items: center; padding: 0.5rem 0; }
+.checkout__tick svg { width: 76px; height: 76px; }
+
+.tick-ring {
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-dasharray: 145;
+  stroke-dashoffset: 145;
+  animation: tick-ring 0.55s var(--ease) forwards;
+}
+
+.tick-mark {
+  stroke: var(--ink);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: tick-mark 0.35s 0.45s var(--ease) forwards;
+}
+
+@keyframes tick-ring { to { stroke-dashoffset: 0; } }
+@keyframes tick-mark { to { stroke-dashoffset: 0; } }
+
+.checkout__chat {
+  align-self: center;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--r-full);
+  color: var(--ink);
+  padding: 0.8rem 1.4rem;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* ---------- chat ---------- */
+
+.chat {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 200;
+  width: min(360px, calc(100% - 2rem));
+  height: min(460px, 70svh);
+  display: none;
+  flex-direction: column;
+  border-radius: var(--r-lg);
+  background: var(--glass-solid);
+  overflow: hidden;
+}
+
+.chat.is-open { display: flex; animation: pop-in 0.3s var(--ease) both; }
+
+.chat__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.chat__close {
+  background: none; border: 0; color: var(--ink-dim); cursor: pointer;
+}
+
+.chat__log {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chat__msg {
+  align-self: flex-start;
+  max-width: 82%;
+  padding: 0.55rem 0.8rem;
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.chat__msg.is-mine { align-self: flex-end; background: var(--ink); color: var(--bg); }
+.chat__msg.is-sys {
+  align-self: center; background: none; color: var(--ink-dim);
+  font-family: var(--font-ui); font-size: 0.68rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+.chat__err { color: var(--ink-dim); line-height: 1.5; text-transform: none; }
+
+.chat__form { display: flex; gap: 0.5rem; padding: 0.8rem; border-top: 1px solid var(--hairline); }
+
+.chat__form input {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-full);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.92rem;
+  padding: 0.6rem 0.9rem;
+}
+
+.chat__form input:focus { outline: none; border-color: var(--ink-dim); }
+
+.chat__form button {
+  background: var(--ink); color: var(--bg); border: 0;
+  border-radius: var(--r-full); padding: 0.6rem 1rem;
+  font-family: var(--font-ui); font-size: 0.68rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+}
+
+@media (max-width: 560px) {
+  .shop-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+  .chat { right: 0; left: 0; bottom: 0; width: auto; border-radius: var(--r-lg) var(--r-lg) 0 0; }
+}
