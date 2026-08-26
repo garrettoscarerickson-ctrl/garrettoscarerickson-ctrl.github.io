@@ -65,8 +65,8 @@ FRONT = """
 <div class="grid">
   <span class="ln">{p}<b>{PHONE}</b></span>
   <span class="ln">{i}<b>{INSTA}</b></span>
-  <span class="ln">{m}<b>{EMAIL}</b></span>
-  <span class="ln">{v}<b>{VENMO}</b></span>
+  <span class="ln ln--wide">{m}<b>{EMAIL}</b></span>
+  <span class="ln ln--wide">{v}<b>{VENMO}</b></span>
 </div>
 """.format(p=icon("phone"), m=icon("mail"), i=icon("insta"), v=icon("venmo"),
            PHONE=PHONE, EMAIL=EMAIL, INSTA=INSTA, VENMO=VENMO)
@@ -109,10 +109,11 @@ body{{background:#6b6b70;font-family:"Archivo",Arial,sans-serif;
 .role{{margin-top:.05in;font-size:6.2pt;font-weight:500;letter-spacing:.34em;
   text-transform:uppercase;color:#9b9ba4}}
 .rule{{border-top:.4pt solid rgba(255,255,255,.26);margin:.05in 0 .06in}}
-.grid{{display:grid;grid-template-columns:1.45fr 1fr;gap:.045in .09in}}
-.ln{{display:flex;align-items:center;gap:.055in;font-size:7pt;font-weight:500;
+.grid{{display:grid;grid-template-columns:1fr 1fr;gap:.05in .09in}}
+.ln--wide{{grid-column:1 / -1}}
+.ln{{display:flex;align-items:center;gap:.06in;font-size:8.75pt;font-weight:500;
   letter-spacing:.01em;color:#f4f4f6;min-width:0}}
-.ln svg{{width:8.5pt;height:8.5pt;flex:none;color:#b9b9c2}}
+.ln svg{{width:10.5pt;height:10.5pt;flex:none;color:#b9b9c2}}
 .ln b{{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
 
 /* ---------- back ---------- */
