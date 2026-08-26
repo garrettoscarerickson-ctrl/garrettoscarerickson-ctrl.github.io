@@ -1601,7 +1601,7 @@
   /* ---------- chat ---------- */
 
   var chatEl = null, chatRoom = null, chatWho = "customer", chatTimer = null;
-  var chatName = "";
+  var chatName = "", chatStop = null, chatSeen = {};
 
   function openChat(room, who) {
     if (!room) return;
@@ -1610,14 +1610,35 @@
     chatEl.classList.add("is-open");
     chatEl.querySelector("#chat-who").textContent =
       chatWho === "seller" ? "You are replying as Garrett" : "Chat with Garrett";
+    chatSeen = {};
     pullChat();
+
+    /* prefer the live stream; only fall back to polling if there isn't
+       one, because polling a rate-limited service throttles the buyer */
     clearInterval(chatTimer);
-    chatTimer = setInterval(pullChat, 3000);
+    if (chatStop) { chatStop(); chatStop = null; }
+    chatStop = Shop.chatSubscribe(chatRoom, function (m) {
+      if (m.id && chatSeen[m.id]) return;
+      if (m.id) chatSeen[m.id] = 1;
+      appendChat(m);
+    });
+    if (!chatStop) chatTimer = setInterval(pullChat, 3000);
+  }
+
+  function appendChat(m) {
+    var log = chatEl.querySelector("#chat-log");
+    var empty = log.querySelector(".chat__err");
+    if (empty) empty.remove();
+    var cls = m.who === chatWho ? "is-mine" : (m.who === "system" ? "is-sys" : "");
+    log.insertAdjacentHTML("beforeend",
+      '<div class="chat__msg ' + cls + '">' + esc(m.body) + "</div>");
+    log.scrollTop = log.scrollHeight;
   }
 
   function closeChat() {
     chatEl.classList.remove("is-open");
     clearInterval(chatTimer);
+    if (chatStop) { chatStop(); chatStop = null; }
   }
 
   function buildChat() {
@@ -1642,7 +1663,7 @@
           /* nothing notifies Garrett of a chat message, so the customer's
              first one pings the channel he actually watches */
           if (chatWho === "customer") Shop.chatNotify(chatRoom, chatName, text);
-          return pullChat();
+          if (!chatStop) return pullChat();
         })
         .catch(function (err) {
           chatEl.querySelector("#chat-log").insertAdjacentHTML("beforeend",
@@ -1659,6 +1680,7 @@
       return;
     }
     Shop.chatHistory(chatRoom).then(function (rows) {
+      rows.forEach(function (m) { if (m.id) chatSeen[m.id] = 1; });
       log.innerHTML = rows.map(function (m) {
         var cls = m.who === chatWho ? "is-mine" : (m.who === "system" ? "is-sys" : "");
         return '<div class="chat__msg ' + cls + '">' + esc(m.body) + "</div>";

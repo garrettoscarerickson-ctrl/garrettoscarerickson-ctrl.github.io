@@ -160,6 +160,12 @@ Two limits worth knowing:
 - **Anyone with the room link can read that room**, so treat the link
   like a key, and never type a customer's email or phone into the chat.
 
+Messages arrive over a live stream, not by polling. That matters: ntfy's
+free tier rate-limits requests per IP, and polling every few seconds
+trips it (HTTP 429) — which would throttle a real buyer, not just
+testing. One long-lived connection per open chat stays well clear, and
+messages land instantly instead of up to three seconds late.
+
 **Notifications:** the chat itself cannot notify you — no website can
 push to your phone without an installed app. So the first time a customer
 writes in a room, the site emails you (`💬 CHAT — …`) using the same

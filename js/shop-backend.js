@@ -160,6 +160,7 @@ window.Shop = (function () {
             if (env.event !== "message") return null;
             var m = JSON.parse(env.message);
             m.created_at = env.time;
+            m.id = env.id;
             return m;
           } catch (e) { return null; }
         }).filter(Boolean);
@@ -174,6 +175,34 @@ window.Shop = (function () {
       if (!r.ok) throw new Error("Chat service error " + r.status);
       return r.json().catch(function () { return {}; });
     });
+  }
+
+  /* Polling ntfy every few seconds trips its free-tier rate limit (429)
+     and would throttle a real buyer, not just testing. So take the live
+     stream instead: one long-lived connection per open chat, no repeated
+     requests, and messages land instantly rather than up to 3s late. */
+  function ntfySubscribe(room, onMsg) {
+    var es;
+    try {
+      es = new EventSource("https://ntfy.sh/" + ntfyTopic(room) + "/sse");
+    } catch (e) { return null; }
+    es.onmessage = function (ev) {
+      try {
+        var env = JSON.parse(ev.data);
+        if (env.event !== "message") return;
+        var m = JSON.parse(env.message);
+        m.created_at = env.time;
+        m.id = env.id;
+        onMsg(m);
+      } catch (e) { /* keepalives and non-JSON frames are not messages */ }
+    };
+    return function () { try { es.close(); } catch (e) {} };
+  }
+
+  /* null means "no stream available — caller should poll instead" */
+  function chatSubscribe(room, onMsg) {
+    if (!chatReady() || cfg.chat.mode !== "ntfy") return null;
+    return ntfySubscribe(room, onMsg);
   }
 
   /* ---- supabase (optional, permanent history) ---- */
@@ -241,6 +270,7 @@ window.Shop = (function () {
     sendOrder: sendOrder,
     chatHistory: chatHistory,
     chatSend: chatSend,
+    chatSubscribe: chatSubscribe,
     chatNotify: chatNotify
   };
 })();
