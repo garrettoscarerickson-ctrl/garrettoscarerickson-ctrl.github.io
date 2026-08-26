@@ -44,8 +44,10 @@
         var last = localStorage.getItem("gep-last-room");
         if (last) {
           code.value = last;
+          var r0 = new URLSearchParams(location.search).get("as") === "customer"
+            ? "customer" : "seller";
           err.innerHTML = 'Last room: <a href="../store.html?room=' +
-            encodeURIComponent(last) + '&as=seller">' + last + "</a>";
+            encodeURIComponent(last) + "&as=" + r0 + '">' + last + "</a>";
         }
       } catch (e) {}
 
@@ -54,7 +56,13 @@
         var v = code.value.trim().toUpperCase();
         if (!v) { err.textContent = "Enter the code from the email."; return; }
         try { localStorage.setItem("gep-last-room", v); } catch (e2) {}
-        location.href = "../store.html?room=" + encodeURIComponent(v) + "&as=seller";
+        /* Garrett bookmarks this page, so seller is the default. A buyer
+           who followed the link on their receipt gets ?as=customer, and
+           the roles only change the labels, never who can read the room. */
+        var role = new URLSearchParams(location.search).get("as") === "customer"
+          ? "customer" : "seller";
+        location.href = "../store.html?room=" + encodeURIComponent(v) +
+                        "&as=" + role;
       });
     })();
   </script>

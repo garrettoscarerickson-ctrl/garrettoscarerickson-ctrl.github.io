@@ -181,6 +181,20 @@ lost sale, and this is the only thing that reliably prevents it. It is
 also why the emails use one siren rather than a row of them: three
 emoji plus an all-caps sender got the whole message filtered.
 
+**If a buyer closes the chat:** they get back in two ways, neither of
+which involves making an account. Their browser remembers the room, so
+returning to the store shows a "Reopen chat" bar. And the receipt shows
+a chat code they can type at garrettphoto.store/chat from any device.
+
+**Why there are no customer accounts.** A real login needs a server
+holding password hashes, and this site has no server — GitHub Pages only
+hands out files. Any login built here would keep the password somewhere
+readable, and people reuse passwords, so it would be worse than having
+none. It also would not help: chat messages expire in ~12 hours either
+way, so logging in later would just show an empty room. **If a buyer has
+gone quiet, reply to their email** — it is in every order notification,
+it never expires, and it is the one channel that always reaches them.
+
 **Notifications:** the chat itself cannot notify you — no website can
 push to your phone without an installed app. So the first time a customer
 writes in a room, the site emails you (`💬 CHAT — …`) using the same

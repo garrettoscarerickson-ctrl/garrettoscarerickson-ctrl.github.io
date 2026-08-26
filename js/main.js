@@ -1510,6 +1510,12 @@
       "<h3>Sent</h3>" +
       '<p class="checkout__done-note">Garrett will reach you shortly to finish ' +
       "the sale.</p>" +
+      '<div class="checkout__code" id="co-code-box">' +
+      '<span class="mono">Your chat code</span>' +
+      '<b id="co-code"></b>' +
+      '<span class="checkout__code-note">Keep this. If you close the chat, ' +
+      'reopen it any time at garrettphoto.store/chat</span>' +
+      "</div>" +
       '<button class="checkout__chat" id="co-chat" type="button">Open chat</button>' +
       "</div></div>";
     document.body.appendChild(checkoutEl);
@@ -1576,6 +1582,8 @@
     Shop.sendOrder(order).then(function () {
       checkoutEl.classList.add("is-sent");
       chatName = name;
+      checkoutEl.querySelector("#co-code").textContent = room;
+      rememberMyRoom(room, name);
       if (!booking) {
         checkoutEl._selected.clear();
         checkoutEl._root.querySelectorAll(".shop-ph.is-picked")
@@ -1593,6 +1601,50 @@
       status.textContent = err.message +
         " Nothing was sent — email Garrettoscarerickson@gmail.com instead.";
     }).finally(function () { btn.disabled = false; });
+  }
+
+  /* A buyer who closes the chat has no way back in — they never made an
+     account, and there is nothing to make one against. So their own
+     browser holds the room for them: come back to the store and there is
+     a button waiting. The code on the receipt covers the other case,
+     where they return on a different device. */
+  var MY_ROOM = "gep-my-room";
+
+  function rememberMyRoom(room, name) {
+    try {
+      localStorage.setItem(MY_ROOM, JSON.stringify({
+        room: room, name: name, at: Date.now()
+      }));
+    } catch (e) {}
+  }
+
+  function myRoom() {
+    try {
+      var v = JSON.parse(localStorage.getItem(MY_ROOM) || "null");
+      if (!v || !v.room) return null;
+      /* messages only live ~12h, so a older room would open empty and
+         read as broken. Better to offer nothing than an empty room. */
+      if (Date.now() - (v.at || 0) > 12 * 60 * 60 * 1000) {
+        localStorage.removeItem(MY_ROOM);
+        return null;
+      }
+      return v;
+    } catch (e) { return null; }
+  }
+
+  function mountResume(root) {
+    var mine = myRoom();
+    if (!mine) return;
+    var bar = el("button", "resume");
+    bar.type = "button";
+    bar.innerHTML = '<span class="resume__dot"></span>' +
+      '<span>You have a conversation open with Garrett</span>' +
+      '<span class="resume__go mono">Reopen chat</span>';
+    bar.addEventListener("click", function () {
+      chatName = mine.name || "";
+      openChat(mine.room, "customer");
+    });
+    root.insertBefore(bar, root.firstChild);
   }
 
   /* ---------- chat ---------- */
@@ -1700,6 +1752,10 @@
   if (page === "about") buildAbout();
   if (page === "archive") buildArchive();
   if (page === "sports") buildSports();
-  if (page === "store") { buildStore(); maybeOpenSellerChat(); }
+  if (page === "store") {
+    buildStore();
+    mountResume(document.getElementById("store-root"));
+    maybeOpenSellerChat();
+  }
   if (page === "spa") initSpa();
 })();
