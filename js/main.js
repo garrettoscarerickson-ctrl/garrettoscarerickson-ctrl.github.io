@@ -1540,7 +1540,7 @@
     var room = Shop.roomId();
     checkoutEl._room = room;
     var chatUrl = Shop.chatReady()
-      ? location.origin + location.pathname + "?room=" + room + "&as=seller"
+      ? Shop.roomUrl(room)
       : "";
 
     btn.disabled = true;

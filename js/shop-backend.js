@@ -20,6 +20,12 @@
    ============================================================ */
 
 window.SHOP_BACKEND = {
+  /* The store's real public address. Chat links in email are built from
+     THIS, never from location.origin — otherwise an order placed while
+     testing on localhost mails out a link that only works on that one
+     machine, which is useless on a phone. */
+  siteUrl: "https://garrettphoto.store/store.html",
+
   orders: {
     mode: "web3forms",     /* "none" | "web3forms" | "formspree" */
     accessKey: "ce2f0913-01f0-4515-af6a-aea1eea8606c",
@@ -42,6 +48,12 @@ window.Shop = (function () {
     var o = cfg.orders;
     return (o.mode === "web3forms" && !!o.accessKey) ||
            (o.mode === "formspree" && !!o.endpoint);
+  }
+
+  /* seller's link into a room — always on the public site */
+  function roomUrl(room) {
+    var base = cfg.siteUrl || (location.origin + location.pathname);
+    return base + "?room=" + room + "&as=seller";
   }
 
   function chatReady() {
@@ -259,7 +271,7 @@ window.Shop = (function () {
       name: name || "customer",
       email: "(reply in the chat room)",
       total: 0,
-      chatUrl: location.origin + location.pathname + "?room=" + room + "&as=seller"
+      chatUrl: roomUrl(room)
     }).catch(function () { /* a failed ping must never break the chat */ });
   }
 
@@ -267,6 +279,7 @@ window.Shop = (function () {
     ordersReady: ordersReady,
     chatReady: chatReady,
     roomId: roomId,
+    roomUrl: roomUrl,
     sendOrder: sendOrder,
     chatHistory: chatHistory,
     chatSend: chatSend,
