@@ -18,13 +18,27 @@ def font_uri(rel):
 
 
 def qr_svg(data, scale=10):
-    """QR as an inline SVG, dark modules only — scales crisply for print."""
+    """QR as an inline SVG sized by CSS.
+
+    Three things matter for a code that actually scans:
+      * a viewBox, or the fixed width/height keeps the drawing at its
+        natural size and CSS sizing just clips it
+      * a real white background, not transparency
+      * a 4-module quiet zone, which the spec requires
+    Error level M keeps the module count down (fewer, bigger modules
+    scan better at card size) while still carrying 15% redundancy.
+    """
     qr = segno.make(data, error="m")
     buf = io.BytesIO()          # segno writes bytes, not text
-    qr.save(buf, kind="svg", scale=scale, border=2,
-            dark="#000000", light=None, xmldecl=False, svgns=True,
+    qr.save(buf, kind="svg", scale=scale, border=4,
+            dark="#000000", light="#ffffff", xmldecl=False, svgns=True,
             svgclass=None, lineclass=None)
-    return buf.getvalue().decode("utf-8")
+    svg = buf.getvalue().decode("utf-8")
+    side = qr.symbol_size(scale=scale, border=4)[0]
+    return svg.replace(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d"' % (side, side),
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d"' % (side, side),
+        1)
 
 
 ICON = {
@@ -103,8 +117,8 @@ body{{background:#6b6b70;font-family:"Archivo",Arial,sans-serif;
 
 /* ---------- back ---------- */
 .card--back{{background:#fff;color:#101014;display:flex;align-items:center;
-  gap:.16in;padding:.2in .22in}}
-.qr-wrap{{flex:none;width:1.44in;height:1.44in;display:flex}}
+  gap:.14in;padding:.18in .2in}}
+.qr-wrap{{flex:none;width:1.55in;height:1.55in;display:flex}}
 .qr-wrap svg{{width:100%;height:100%;display:block;shape-rendering:crispEdges}}
 .qr-side{{display:flex;flex-direction:column;justify-content:center;gap:.07in;min-width:0}}
 .qr-name{{font-family:"Oswald",sans-serif;font-weight:300;font-size:15pt;line-height:.97;
