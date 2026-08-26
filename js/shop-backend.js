@@ -74,7 +74,9 @@ window.Shop = (function () {
         }).join("\n");
 
     var body = {
-      subject: order.subject || ("Photo order — " + order.name),
+      subject: order.subject ||
+               ("\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8 SHOP ORDER " +
+                "\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8 — " + order.name),
       name: order.name,
       email: order.email,
       total: "$" + order.total,

@@ -1553,14 +1553,19 @@
     var total = Number(checkoutEl.dataset.total);
     var order = booking
       ? {
-          subject: "Booking request — " + checkoutEl._tier.name,
+          subject: "\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8 BOOKING REQUEST " +
+                   "\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8 — " +
+                   checkoutEl._tier.name + " — " + name,
           summary: "Booking request for " + checkoutEl._tier.name,
           lines: checkoutEl._lines.concat(when ? [["When / where", when]] : []),
           total: total
         }
       : {
-          subject: "Photo order — " + name + " (" +
-                   checkoutEl._items.length + " photos)",
+          subject: "\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8 SHOP ORDER " +
+                   "\uD83D\uDEA8\uD83D\uDEA8\uD83D\uDEA8 — " + name + " — " +
+                   checkoutEl._items.length +
+                   (checkoutEl._items.length === 1 ? " photo" : " photos") +
+                   ", " + money(total),
           summary: checkoutEl._items.length + " photo(s), total " + money(total),
           items: checkoutEl._items,
           total: total
