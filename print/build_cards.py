@@ -8,7 +8,7 @@ QR_TARGET = "https://garrettphoto.store/card"
 PHONE = "248-225-4437"
 EMAIL = "Garrettoscarerickson@gmail.com"
 INSTA = "@shot_by_ge"
-VENMO = "@Garrett-Erickosn-31"
+VENMO = "@Garrett-Erickson-31"
 SITE  = "garrettphoto.store"
 
 
