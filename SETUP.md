@@ -149,16 +149,16 @@ Uses the same free Supabase project as the reviews. In the SQL editor:
 
 ```sql
 create table shop_messages (
-  id     bigserial primary key,
-  room   text not null,
-  who    text not null,
-  text   text not null,
-  at     timestamptz default now()
+  id         bigserial primary key,
+  room       text not null,
+  who        text not null,
+  body       text not null,
+  created_at timestamptz default now()
 );
 alter table shop_messages enable row level security;
 create policy "read"  on shop_messages for select using (true);
 create policy "write" on shop_messages for insert with check (true);
-create index on shop_messages (room, at);
+create index on shop_messages (room, created_at);
 ```
 
 Then in `js/shop-backend.js`:
