@@ -20,7 +20,15 @@
 window.REVIEW_BACKEND = {
   mode: "local",
   supabaseUrl: "",
-  supabaseKey: ""
+  supabaseKey: "",
+
+  /* Reviews are public and anyone can post one — there is no login on a
+     static site, so there is nothing stopping a stranger putting
+     anything they like on Garrett's page in front of the parents who
+     read it. With this on, a new review is stored but stays hidden until
+     Garrett approves it in the Supabase dashboard, and he gets an email
+     the moment one arrives. Set it to false for instant publishing. */
+  requireApproval: true
 };
 
 window.ReviewStore = (function () {
@@ -31,7 +39,7 @@ window.ReviewStore = (function () {
   var memo = null;           /* cache of the shared fetch */
 
   function isShared() {
-    return cfg.mode === "supabase" && cfg.supabaseUrl && cfg.supabaseKey;
+    return !!(cfg.mode === "supabase" && cfg.supabaseUrl && cfg.supabaseKey);
   }
 
   function rest(path, opts) {
@@ -64,8 +72,9 @@ window.ReviewStore = (function () {
   function all(force) {
     if (!isShared()) return Promise.resolve(localAll());
     if (memo && !force) return memo;
-    memo = rest("photo_reviews?select=*&order=created_at.desc")
-      .catch(function () { return []; });
+    var q = "photo_reviews?select=*&order=created_at.desc";
+    if (cfg.requireApproval) q += "&approved=eq.true";
+    memo = rest(q).catch(function () { return []; });
     return memo;
   }
 
@@ -93,8 +102,34 @@ window.ReviewStore = (function () {
       photo: row.photo, name: row.name, rating: row.rating, text: row.text
     }}).then(function (res) {
       memo = null;                       /* force a refetch next read */
+      notify(row);
       return (res && res[0]) || row;
     });
+  }
+
+  /* A held review is invisible until approved, so Garrett needs telling
+     it exists. Reuses the order email that is already working — a
+     failure here must never break leaving a review, so it is swallowed. */
+  function notify(row) {
+    if (!window.Shop || !Shop.ordersReady()) return;
+    var held = cfg.requireApproval;
+    Shop.sendOrder({
+      subject: "\u2B50 " + row.rating + "-star review from " +
+               (row.name || "someone") + (held ? " — needs approval" : ""),
+      fromName: "Garrett Photo Reviews",
+      summary: held
+        ? "A new review is waiting for approval. It is not on the site yet."
+        : "A new review just went live on the site.",
+      lines: [
+        ["Rating", row.rating + " / 5"],
+        ["From", row.name || "(no name)"],
+        ["Photo", row.photo],
+        ["Review", row.text || "(no text)"]
+      ],
+      name: row.name || "Reviewer",
+      email: "(no reply address — reviews are anonymous)",
+      total: 0
+    }).catch(function () {});
   }
 
   /* { src: {avg, count} } for every photo that has reviews */

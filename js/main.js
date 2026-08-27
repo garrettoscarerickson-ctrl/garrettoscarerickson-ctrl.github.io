@@ -311,9 +311,14 @@
     var list = lb.querySelector("#lb-list");
     var note = lb.querySelector("#lb-form-note");
     list.innerHTML = '<p class="mono lb-list__empty">Loading…</p>';
-    note.textContent = ReviewStore.isShared()
-      ? "Posts publicly — everyone visiting sees it."
-      : "Saved in your browser. Shared reviews switch on once a backend is connected.";
+    /* say what actually happens — with approval on, a review does not
+       appear the moment it is posted, and telling someone it did would
+       have them refreshing to look for it */
+    note.textContent = !ReviewStore.isShared()
+      ? "Saved in your browser. Shared reviews switch on once a backend is connected."
+      : (window.REVIEW_BACKEND && REVIEW_BACKEND.requireApproval)
+        ? "Goes to Garrett first, then appears on the site."
+        : "Posts publicly — everyone visiting sees it.";
 
     ReviewStore.forPhoto(photo.src).then(function (rows) {
       if (lightboxSet[lightboxIdx] !== photo) return;

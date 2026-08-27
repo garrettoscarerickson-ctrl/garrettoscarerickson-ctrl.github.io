@@ -22,29 +22,51 @@ create table photo_reviews (
   name        text not null,
   rating      int  not null check (rating between 1 and 5),
   text        text default '',
+  approved    boolean not null default false,
   created_at  timestamptz not null default now()
 );
 
 alter table photo_reviews enable row level security;
 
--- anyone may read reviews
-create policy "public read"
+-- the public only ever sees reviews you have approved
+create policy "public read approved"
   on photo_reviews for select
-  using (true);
+  using (approved = true);
 
--- anyone may post a review, but only a well-formed one
+-- anyone may post a review, but only a well-formed one, and it lands
+-- UNAPPROVED. The `approved = false` check is the important line: without
+-- it a stranger could post a review already marked approved and put it
+-- straight on your site.
 create policy "public insert"
   on photo_reviews for insert
   with check (
-    rating between 1 and 5
+    approved = false
+    and rating between 1 and 5
     and length(name) between 1 and 60
     and length(text) <= 1000
   );
 ```
 
-Note there is deliberately **no update or delete policy**, so visitors can
-post but can never edit or erase anyone's reviews. You can always remove
-one yourself from the Supabase table editor.
+There is deliberately **no update or delete policy**, so a visitor can post
+but can never edit, approve, or erase anything — including their own.
+Approving is something only you can do, from the dashboard.
+
+### Approving a review
+
+You will get an email the moment one arrives (`⭐ 5-star review from …
+needs approval`). To publish it:
+
+**Table Editor → photo_reviews →** tick the `approved` box on that row.
+That is the whole job. It appears on the site immediately.
+
+### If you would rather skip approval entirely
+
+In `js/reviews-store.js` set `requireApproval: false`, and change the read
+policy to `using (true)`. Reviews then appear the instant someone posts
+one. Understand what that means: there is no login on a static site, so
+anyone on the internet can put any text they like on your page, in front
+of the parents and coaches reading it, with nothing between them and it.
+Approving takes one tap. I would keep it on.
 
 ## 3. Copy your keys
 
