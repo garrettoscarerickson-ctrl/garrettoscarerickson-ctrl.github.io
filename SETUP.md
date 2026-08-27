@@ -51,6 +51,18 @@ There is deliberately **no update or delete policy**, so a visitor can post
 but can never edit, approve, or erase anything — including their own.
 Approving is something only you can do, from the dashboard.
 
+Two things about this schema that are easy to get wrong, both hit and
+fixed while wiring it up:
+
+- The site must send `approved: false` explicitly rather than relying on
+  the column default. An omitted column reads as `NULL` when the policy
+  is checked, and `NULL = false` is not true, so the database refuses
+  every honest review while the security rule itself works fine.
+- The insert must **not** ask for the new row back
+  (`Prefer: return=minimal`). Reading it back runs the *select* policy
+  against a row that is not approved yet, which is denied — so a
+  perfectly legal write fails with a security error.
+
 ### Approving a review
 
 You will get an email the moment one arrives (`⭐ 5-star review from …

@@ -18,9 +18,9 @@
    ============================================================ */
 
 window.REVIEW_BACKEND = {
-  mode: "local",
-  supabaseUrl: "",
-  supabaseKey: "",
+  mode: "supabase",
+  supabaseUrl: "https://wtvoftdnoptgxwbnzbzq.supabase.co",
+  supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind0dm9mdGRub3B0Z3h3Ym56YnpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3OTUwMjAsImV4cCI6MjEwMzM3MTAyMH0.32Wl8vMG-HM7J-TJbIAPVhL1sDYIWxNlPUE3mfNc-wA",
 
   /* Reviews are public and anyone can post one — there is no login on a
      static site, so there is nothing stopping a stranger putting
@@ -50,12 +50,15 @@ window.ReviewStore = (function () {
         "apikey": cfg.supabaseKey,
         "Authorization": "Bearer " + cfg.supabaseKey,
         "Content-Type": "application/json",
-        "Prefer": "return=representation"
+        "Prefer": opts.prefer || "return=representation"
       },
       body: opts.body ? JSON.stringify(opts.body) : undefined
     }).then(function (r) {
       if (!r.ok) throw new Error("Review service error " + r.status);
-      return r.status === 204 ? null : r.json();
+      if (r.status === 204) return null;
+      return r.text().then(function (t) {
+        return t ? JSON.parse(t) : null;
+      });
     });
   }
 
@@ -99,8 +102,21 @@ window.ReviewStore = (function () {
       return Promise.resolve(row);
     }
     return rest("photo_reviews", { method: "POST", body: {
-      photo: row.photo, name: row.name, rating: row.rating, text: row.text
-    }}).then(function (res) {
+      photo: row.photo, name: row.name, rating: row.rating, text: row.text,
+      /* Sent explicitly rather than left to the column default. The
+         insert policy checks `approved = false`, and an omitted column
+         reads as NULL at check time — NULL = false is not true, so the
+         database refused every honest review while still (correctly)
+         refusing hostile ones. Stating it fails closed either way: a
+         client that sends true is rejected by the same policy. */
+      approved: false
+    },
+      /* Do NOT ask for the row back. Reading it would run the select
+         policy against a row that is not approved yet, which is denied —
+         so the whole insert failed with an RLS error even though the
+         write itself was perfectly legal. */
+      prefer: "return=minimal"
+    }).then(function (res) {
       memo = null;                       /* force a refetch next read */
       notify(row);
       return (res && res[0]) || row;
