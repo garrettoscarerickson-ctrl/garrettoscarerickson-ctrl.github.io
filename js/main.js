@@ -864,6 +864,28 @@
   function buildReviews() {
     var list = (window.REVIEWS || []).slice();
     var sec = el("section", "reviews reveal");
+    /* approved site reviews arrive from the database and join the list
+       that is curated by hand in data/reviews.json */
+    ReviewStore.forSite().then(function (rows) {
+      if (!rows.length) return;
+      var box = sec.querySelector(".review-list");
+      var empty = sec.querySelector(".reviews__empty");
+      if (!box) {
+        box = el("div", "review-list");
+        if (empty) empty.replaceWith(box); else sec.insertBefore(box, sec.firstChild.nextSibling);
+      }
+      box.insertAdjacentHTML("afterbegin", rows.map(function (r) {
+        return '<article class="review">' + stars(r.rating) +
+          (r.text ? "<p>" + esc(r.text) + "</p>" : "") +
+          '<footer class="mono">' + esc(r.name) +
+          (r.role ? " · " + esc(r.role) : "") + "</footer></article>";
+      }).join(""));
+      var all = list.concat(rows);
+      var a = all.reduce(function (x, r) { return x + r.rating; }, 0) / all.length;
+      var h = sec.querySelector(".section__head .mono:last-child");
+      if (h) h.textContent = a.toFixed(1) + " / 5 · " + all.length +
+        (all.length === 1 ? " review" : " reviews");
+    });
     var avg = list.length
       ? (list.reduce(function (s, r) { return s + r.rating; }, 0) / list.length)
       : 0;
@@ -901,8 +923,7 @@
       '<label class="review-form__msg"><span class="mono">Review</span>' +
       '<textarea id="rf-text" rows="4" required></textarea></label>' +
       '<button class="review-form__send" type="submit">Send review</button>' +
-      '<p class="review-form__note mono">Sends by email for approval before it ' +
-      "appears here.</p>" +
+      '<p class="review-form__note mono" id="rf-note"></p>' +
       "</form>";
 
     /* interactive star picker */
@@ -935,7 +956,7 @@
     /* recent per-photo reviews, pulled from whatever backend is wired up */
     var recent = el("div", "recent-reviews");
     sec.insertBefore(recent, sec.querySelector("#review-form"));
-    ReviewStore.all().then(function (rows) {
+    ReviewStore.forPhotos().then(function (rows) {
       if (!rows.length) { recent.remove(); return; }
       var avg = rows.reduce(function (a, r) { return a + r.rating; }, 0) / rows.length;
       var byTitle = {};
@@ -954,20 +975,42 @@
         }).join("") + "</div>";
     });
 
+    var note = sec.querySelector("#rf-note");
+    var send = sec.querySelector(".review-form__send");
+    note.textContent = !ReviewStore.isShared()
+      ? "Saved in your browser. Shared reviews switch on once a backend is connected."
+      : (window.REVIEW_BACKEND && REVIEW_BACKEND.requireApproval)
+        ? "Goes to Garrett first, then appears here."
+        : "Posts publicly — everyone visiting sees it.";
+
+    /* Same one-tap path as a photo review: posted straight to the shared
+       store, held for approval, and Garrett is emailed. It used to open
+       the visitor's mail app, which asked them to do the work and lost
+       anyone without mail set up. */
     sec.querySelector("#review-form").addEventListener("submit", function (e) {
       e.preventDefault();
       var name = sec.querySelector("#rf-name").value.trim();
       var role = sec.querySelector("#rf-role").value.trim();
       var text = sec.querySelector("#rf-text").value.trim();
-      if (!chosen) { alert("Pick a star rating first."); return; }
-      var body =
-        "Rating: " + chosen + "/5\n" +
-        "Name: " + name + "\n" +
-        (role ? "Booked: " + role + "\n" : "") +
-        "\n" + text + "\n";
-      window.location.href = "mailto:" + CONTACT.email +
-        "?subject=" + encodeURIComponent("Review — " + name) +
-        "&body=" + encodeURIComponent(body);
+      if (!chosen) { note.textContent = "Pick a star rating first."; return; }
+      if (!name)   { note.textContent = "Add your name."; return; }
+      if (!text)   { note.textContent = "Write a little about the shoot."; return; }
+
+      send.disabled = true;
+      note.textContent = "Sending…";
+      ReviewStore.add({
+        photo: ReviewStore.SITE, name: name, rating: chosen,
+        text: text, role: role
+      }).then(function () {
+        sec.querySelector("#review-form").reset();
+        chosen = 0; paint(0);
+        note.textContent = REVIEW_BACKEND.requireApproval
+          ? "Thank you — sent to Garrett. It appears here once he approves it."
+          : "Thank you — your review is live.";
+      }).catch(function (err) {
+        note.textContent = "Couldn't send that (" + err.message +
+          "). Email " + CONTACT.email + " instead.";
+      }).finally(function () { send.disabled = false; });
     });
 
     return sec;

@@ -34,6 +34,11 @@ window.REVIEW_BACKEND = {
 window.ReviewStore = (function () {
   "use strict";
 
+  /* Reviews of Garrett generally, rather than of one photograph, live in
+     the same table under this key. Nothing else can collide with it —
+     every other value in that column is an image path. */
+  var SITE = "__site__";
+
   var KEY = "ge.photoreviews.v1";
   var cfg = window.REVIEW_BACKEND;
   var memo = null;           /* cache of the shared fetch */
@@ -93,6 +98,7 @@ window.ReviewStore = (function () {
       name: review.name,
       rating: review.rating,
       text: review.text || "",
+      role: review.role || "",
       created_at: new Date().toISOString()
     };
     if (!isShared()) {
@@ -101,7 +107,7 @@ window.ReviewStore = (function () {
       localSave(rows);
       return Promise.resolve(row);
     }
-    return rest("photo_reviews", { method: "POST", body: {
+    var payload = {
       photo: row.photo, name: row.name, rating: row.rating, text: row.text,
       /* Sent explicitly rather than left to the column default. The
          insert policy checks `approved = false`, and an omitted column
@@ -110,16 +116,28 @@ window.ReviewStore = (function () {
          refusing hostile ones. Stating it fails closed either way: a
          client that sends true is rejected by the same policy. */
       approved: false
-    },
-      /* Do NOT ask for the row back. Reading it would run the select
-         policy against a row that is not approved yet, which is denied —
-         so the whole insert failed with an RLS error even though the
-         write itself was perfectly legal. */
-      prefer: "return=minimal"
-    }).then(function (res) {
+    };
+    if (row.role) payload.role = row.role;
+
+    /* Do NOT ask for the row back. Reading it would run the select policy
+       against a row that is not approved yet, which is denied — so the
+       whole insert failed with an RLS error even though the write itself
+       was perfectly legal. */
+    var opts = { method: "POST", body: payload, prefer: "return=minimal" };
+
+    function done(res) {
       memo = null;                       /* force a refetch next read */
       notify(row);
       return (res && res[0]) || row;
+    }
+
+    return rest("photo_reviews", opts).then(done, function (err) {
+      /* `role` is an optional column. If this table predates it, drop the
+         field and post the review anyway rather than losing someone's
+         writing over a column that only adds a subtitle. */
+      if (!payload.role) throw err;
+      delete payload.role;
+      return rest("photo_reviews", opts).then(done);
     });
   }
 
@@ -152,7 +170,7 @@ window.ReviewStore = (function () {
   function summary() {
     return all().then(function (rows) {
       var by = {};
-      rows.forEach(function (r) {
+      rows.filter(function (r) { return r.photo !== SITE; }).forEach(function (r) {
         var s = by[r.photo] || (by[r.photo] = { total: 0, count: 0 });
         s.total += r.rating;
         s.count += 1;
@@ -164,10 +182,27 @@ window.ReviewStore = (function () {
     });
   }
 
+  /* reviews of Garrett, not of a single photograph */
+  function forSite() {
+    return all().then(function (rows) {
+      return rows.filter(function (r) { return r.photo === SITE; });
+    });
+  }
+
+  /* everything except the site-wide ones */
+  function forPhotos() {
+    return all().then(function (rows) {
+      return rows.filter(function (r) { return r.photo !== SITE; });
+    });
+  }
+
   return {
+    SITE: SITE,
     isShared: isShared,
     all: all,
     forPhoto: forPhoto,
+    forSite: forSite,
+    forPhotos: forPhotos,
     add: add,
     summary: summary
   };

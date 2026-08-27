@@ -63,6 +63,20 @@ fixed while wiring it up:
   against a row that is not approved yet, which is denied — so a
   perfectly legal write fails with a security error.
 
+### Optional: the "what you booked" subtitle
+
+The About page's review form has an optional "What you booked" field
+(`Team session`, `portraits`…) that shows as a subtitle under the
+reviewer's name. Storing it needs one extra column:
+
+```sql
+alter table photo_reviews add column if not exists role text default '';
+```
+
+This is genuinely optional. Without it the site notices the column is
+missing and posts the review without the subtitle rather than losing
+someone's writing over a line of small text.
+
 ### Approving a review
 
 You will get an email the moment one arrives (`⭐ 5-star review from …
