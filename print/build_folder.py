@@ -247,8 +247,9 @@ SHEET2 = """
     </span></div>
     <div class="step"><span class="step__n">2</span><span class="step__t">
       <b>Find your game and tap your photos</b>
-      <span>Photos are grouped by game. Tap as many as you want — they cost
-      $1 each and the total updates as you go.</span>
+      <span>Open your game, then tap as many photos as you want. They cost
+      $1 each, the total updates as you go, and you can pick from more than
+      one game before checking out.</span>
     </span></div>
     <div class="step"><span class="step__n">3</span><span class="step__t">
       <b>Send the order in one tap</b>

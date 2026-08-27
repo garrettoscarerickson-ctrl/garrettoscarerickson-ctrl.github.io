@@ -2327,3 +2327,123 @@ a { color: inherit; text-decoration: none; }
 
 .resume__go { margin-left: auto; color: var(--ink); }
 .resume:hover { background: var(--glass-bg-hover); }
+
+/* ---------- store: game albums ---------- */
+
+.shop-body { display: block; }
+
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+  padding: clamp(1.5rem, 4vh, 2.5rem) var(--pad) 0;
+}
+
+.album {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.album__img {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  background: var(--bg-sunk);
+  aspect-ratio: 4 / 3;
+  border: 1px solid transparent;
+  transition: transform 0.45s var(--ease), border-color 0.25s ease;
+}
+
+.album__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* the stack of sheets behind the cover — reads as a folder, not a photo */
+.album__img::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(180deg,
+    rgba(10, 10, 12, 0) 45%,
+    rgba(10, 10, 12, 0.55) 100%);
+  pointer-events: none;
+}
+
+.album:hover .album__img {
+  transform: translateY(-5px);
+  border-color: var(--glass-line);
+}
+
+.album__foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+
+.album__foot b {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+/* the count is short and fixed-width; let the game name take the wrap */
+.album__foot .mono {
+  flex: none;
+  white-space: nowrap;
+}
+
+.album-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: clamp(1.25rem, 3vh, 2rem) var(--pad) 0;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--r-full);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-line);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.album-back:hover { background: var(--glass-bg-hover); }
+
+/* the photo grid sits under the back button inside a game */
+.shop-body > .shop-grid {
+  padding: clamp(1.25rem, 3vh, 1.75rem) var(--pad) 0;
+}
+
+@media (max-width: 560px) {
+  .album-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .album__foot b { font-size: 0.92rem; }
+  /* a ~160px card has no room for name and count side by side — they
+     collided into each other, so stack them */
+  .album__foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+  }
+}

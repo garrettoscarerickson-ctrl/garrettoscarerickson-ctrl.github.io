@@ -1271,13 +1271,10 @@
     var forSale = PHOTOS.filter(function (p) { return p.game; });
 
     var head = el("header", "archive-head");
-    head.innerHTML =
-      "<h1>Store</h1>" +
-      '<span class="mono">' + nPhotos(forSale.length) + " · $" + PRICE +
-      " each · pick as many as you like</span>";
     root.appendChild(head);
 
     if (!forSale.length) {
+      head.innerHTML = "<h1>Store</h1>";
       root.appendChild(el("div", "archive-empty mono",
         "Nothing listed yet — photographs appear here once they're assigned to a game."));
       return;
@@ -1287,9 +1284,9 @@
     var steps = el("section", "shop-how");
     steps.innerHTML =
       '<div class="shop-how__row">' +
-      '<span class="shop-how__step"><b>1</b>Tap the photos you want</span>' +
-      '<span class="shop-how__step"><b>2</b>Send your order in one click</span>' +
-      '<span class="shop-how__step"><b>3</b>Chat here to finish the sale</span>' +
+      '<span class="shop-how__step"><b>1</b>Open your game</span>' +
+      '<span class="shop-how__step"><b>2</b>Tap the photos you want</span>' +
+      '<span class="shop-how__step"><b>3</b>Send your order in one click</span>' +
       "</div>" +
       '<p class="mono shop-how__note">Previews are watermarked. Clean ' +
       "full-resolution files are sent after payment.</p>";
@@ -1302,21 +1299,81 @@
       groups[p.game].push(p);
     });
 
+    /* The cart lives out here, not inside a view, so a buyer can pick a
+       few frames from one game, open another, and check out with the lot.
+       Switching games never reloads the page — that would empty it. */
     var selected = new Set();
+    var body = el("div", "shop-body");
+    root.appendChild(body);
 
-    order.forEach(function (game) {
-      var sec = el("section", "shop-game");
+    function showGames() {
+      body.innerHTML = "";
+      head.innerHTML =
+        "<h1>Store</h1>" +
+        '<span class="mono">' + order.length +
+        (order.length === 1 ? " game · " : " games · ") +
+        nPhotos(forSale.length) + " · $" + PRICE + " each</span>";
+
+      var grid = el("div", "album-grid");
+      order.forEach(function (game) {
+        var list = groups[game];
+        var cover = list[0];
+        var card = el("button", "album");
+        card.type = "button";
+        card.innerHTML =
+          '<span class="album__img wm-heavy">' +
+          '<img loading="lazy" draggable="false" src="' + shopSrc(cover) +
+          '" alt="">' + "</span>" +
+          '<span class="album__foot">' +
+          "<b>" + game + "</b>" +
+          '<span class="mono">' + nPhotos(list.length) + "</span></span>";
+        card.addEventListener("click", function () { go(game); });
+        grid.appendChild(card);
+      });
+      body.appendChild(grid);
+      protectShopImages(body);
+      updateCart();
+    }
+
+    function showGame(game) {
       var list = groups[game];
-      sec.innerHTML =
-        '<div class="section__head">' +
-        "<span class=\"mono\">" + game + "</span>" +
-        '<span class="mono">' + nPhotos(list.length) + "</span></div>";
+      if (!list) return showGames();
+      body.innerHTML = "";
+      head.innerHTML =
+        "<h1>" + game + "</h1>" +
+        '<span class="mono">' + nPhotos(list.length) + " · $" + PRICE +
+        " each · pick as many as you like</span>";
+
+      var back = el("button", "album-back");
+      back.type = "button";
+      back.innerHTML = '<span aria-hidden="true">←</span> All games';
+      back.addEventListener("click", function () { go(null); });
+      body.appendChild(back);
+
       var grid = el("div", "shop-grid");
       list.forEach(function (photo) {
         grid.appendChild(shopCard(photo, selected, updateCart));
       });
-      sec.appendChild(grid);
-      root.appendChild(sec);
+      body.appendChild(grid);
+      protectShopImages(body);
+      updateCart();
+      window.scrollTo(0, 0);
+    }
+
+    /* keep the view in the URL so the phone back gesture does the
+       obvious thing instead of leaving the store entirely */
+    function go(game, replace) {
+      var url = location.pathname + (game ? "?game=" + encodeURIComponent(game) : "");
+      try {
+        history[replace ? "replaceState" : "pushState"]({ game: game || null }, "", url);
+      } catch (e) {}
+      game ? showGame(game) : showGames();
+    }
+
+    window.addEventListener("popstate", function (e) {
+      var g = (e.state && e.state.game) ||
+              new URLSearchParams(location.search).get("game");
+      g && groups[g] ? showGame(g) : showGames();
     });
 
     /* sticky cart */
@@ -1331,12 +1388,12 @@
 
     cart.querySelector(".cart__clear").addEventListener("click", function () {
       selected.clear();
-      root.querySelectorAll(".shop-ph.is-picked")
+      body.querySelectorAll(".shop-ph.is-picked")
           .forEach(function (c) { c.classList.remove("is-picked"); });
       updateCart();
     });
     cart.querySelector(".cart__go").addEventListener("click", function () {
-      openCheckout(selected, root, updateCart);
+      openCheckout(selected, body, updateCart);
     });
 
     function updateCart() {
@@ -1349,8 +1406,9 @@
       cart.querySelector(".cart__go").textContent =
         n ? "Checkout · $" + (n * PRICE) : "Checkout";
     }
-    updateCart();
-    protectShopImages(root);
+
+    var opening = new URLSearchParams(location.search).get("game");
+    go(opening && groups[opening] ? opening : null, true);
   }
 
   /* a selectable, watermarked store card */
@@ -1365,10 +1423,16 @@
   }
 
   function shopCard(photo, selected, onChange) {
+    /* Cards are rebuilt every time a game is opened, so a photo already
+       in the cart has to come back already ticked. Otherwise a buyer who
+       returns to a game sees nothing selected, taps it again, and
+       silently REMOVES it from their cart. */
+    var picked = selected.has(photo.src);
     var card = el("button", "shop-ph" +
-      (photo.orientation === "portrait" ? " shop-ph--portrait" : ""));
+      (photo.orientation === "portrait" ? " shop-ph--portrait" : "") +
+      (picked ? " is-picked" : ""));
     card.type = "button";
-    card.setAttribute("aria-pressed", "false");
+    card.setAttribute("aria-pressed", String(picked));
     card.setAttribute("aria-label", "Select " + photo.title);
     var ar = photo.w && photo.h ? ' style="--ar:' + photo.w + "/" + photo.h + '"' : "";
     card.innerHTML =
