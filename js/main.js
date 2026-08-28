@@ -2129,7 +2129,12 @@
         '<span class="mono">' + esc(Account.email()) + "</span>";
       body.innerHTML = '<p class="account__note">Loading your files…</p>';
 
-      Account.deliveries().then(function (rows) {
+      Account.deliveries().catch(function (err) {
+        body.innerHTML = '<p class="account__note"><b>Couldn\'t load your ' +
+          "photographs.</b><br>" + esc(err.message) + "</p>";
+        return null;
+      }).then(function (rows) {
+        if (rows === null) return;
         var out = '<div class="account__bar">' +
           '<span class="mono">Signed in as ' + esc(Account.email()) + "</span>" +
           '<button class="account__out" type="button" id="ac-out">Sign out</button>' +

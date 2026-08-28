@@ -183,9 +183,12 @@ window.Account = (function () {
 
   /* Row-level security does the filtering, not this query — a buyer can
      only ever read rows whose email matches their signed-in one. */
+  /* Swallowing the error here made a failed query look identical to
+     "you haven't bought anything yet" — so a buyer whose files were
+     sitting right there saw an empty page, and there was nothing to
+     debug from. Let it through. */
   function deliveries() {
-    return rest("deliveries?select=*&order=created_at.desc")
-      .catch(function () { return []; });
+    return rest("deliveries?select=*&order=created_at.desc");
   }
 
   /* Ask the Edge Function for a fresh link. The row stores an object key
