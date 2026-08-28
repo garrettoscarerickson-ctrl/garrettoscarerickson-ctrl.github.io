@@ -14,22 +14,50 @@ import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { AwsClient } from "https://esm.sh/aws4fetch@1.0.20";
 
-const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
-  apiVersion: "2024-06-20",
-  httpClient: Stripe.createFetchHttpClient(),
-});
+// Built on first use, not at module load. A missing secret in a
+// top-level constructor kills the whole worker before it can run a line
+// of handler code — the request then fails with an opaque 500 and no
+// hint as to which secret is absent. Lazily, the same problem produces a
+// message that names it.
+let _stripe: Stripe | null = null;
+function stripeClient() {
+  const key = Deno.env.get("STRIPE_SECRET_KEY");
+  if (!key) throw new Error("STRIPE_SECRET_KEY is not set");
+  if (!_stripe) {
+    _stripe = new Stripe(key, {
+      apiVersion: "2024-06-20",
+      httpClient: Stripe.createFetchHttpClient(),
+    });
+  }
+  return _stripe;
+}
 
-const admin = createClient(
-  Deno.env.get("SUPABASE_URL")!,
-  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-);
+let _admin: ReturnType<typeof createClient> | null = null;
+function adminClient() {
+  if (!_admin) {
+    _admin = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+  }
+  return _admin;
+}
 
-const r2 = new AwsClient({
-  accessKeyId: Deno.env.get("R2_ACCESS_KEY_ID")!,
-  secretAccessKey: Deno.env.get("R2_SECRET_ACCESS_KEY")!,
-  service: "s3",
-  region: "auto",
-});
+let _r2: AwsClient | null = null;
+function r2Client() {
+  const id = Deno.env.get("R2_ACCESS_KEY_ID");
+  const secret = Deno.env.get("R2_SECRET_ACCESS_KEY");
+  if (!id || !secret) throw new Error("R2 credentials are not set");
+  if (!_r2) {
+    _r2 = new AwsClient({
+      accessKeyId: id,
+      secretAccessKey: secret,
+      service: "s3",
+      region: "auto",
+    });
+  }
+  return _r2;
+}
 
 const ENDPOINT = `https://${Deno.env.get("R2_ACCOUNT_ID")}.r2.cloudflarestorage.com`;
 const BUCKET = Deno.env.get("R2_BUCKET") || "garrettphoto";
@@ -47,7 +75,7 @@ async function signed(key: string, title: string) {
     "response-content-disposition",
     `attachment; filename="${title.replace(/[^\w \-]/g, "")}.jpg"`,
   );
-  const req = await r2.sign(new Request(u, { method: "GET" }),
+  const req = await r2Client().sign(new Request(u, { method: "GET" }),
                             { aws: { signQuery: true } });
   return req.url;
 }
@@ -95,6 +123,19 @@ async function sendEmail(to: string, name: string, links: Array<{ title: string;
 }
 
 Deno.serve(async (req) => {
+  // GET reports which secrets are present, so a misconfiguration is
+  // findable without reading worker logs.
+  if (req.method === "GET") {
+    return new Response(JSON.stringify({
+      ok: true,
+      stripe_key: !!Deno.env.get("STRIPE_SECRET_KEY"),
+      stripe_webhook_secret: !!Deno.env.get("STRIPE_WEBHOOK_SECRET"),
+      r2: !!Deno.env.get("R2_ACCESS_KEY_ID") && !!Deno.env.get("R2_SECRET_ACCESS_KEY"),
+      r2_account: !!Deno.env.get("R2_ACCOUNT_ID"),
+      resend: !!Deno.env.get("RESEND_API_KEY"),
+    }), { status: 200, headers: { "Content-Type": "application/json" } });
+  }
+
   if (req.method !== "POST") {
     return new Response("Method not allowed", { status: 405 });
   }
@@ -106,7 +147,7 @@ Deno.serve(async (req) => {
   // "paid" event and hand themselves the photographs for free.
   let event: Stripe.Event;
   try {
-    event = await stripe.webhooks.constructEventAsync(
+    event = await stripeClient().webhooks.constructEventAsync(
       body,
       sig!,
       Deno.env.get("STRIPE_WEBHOOK_SECRET")!,
@@ -114,6 +155,10 @@ Deno.serve(async (req) => {
       Stripe.createSubtleCryptoProvider(),
     );
   } catch (err) {
+    if (String(err.message).includes("is not set")) {
+      console.error(err.message);
+      return new Response(err.message, { status: 503 });
+    }
     console.error("bad signature:", err.message);
     return new Response("Invalid signature", { status: 400 });
   }
@@ -132,7 +177,7 @@ Deno.serve(async (req) => {
     return new Response("ok", { status: 200 });
   }
 
-  const { data: order, error } = await admin
+  const { data: order, error } = await adminClient()
     .from("orders").select("*").eq("code", code).maybeSingle();
 
   if (error || !order) {
@@ -147,7 +192,7 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ already: true }), { status: 200 });
   }
 
-  await admin.from("orders").update({
+  await adminClient().from("orders").update({
     paid: true,
     paid_at: new Date().toISOString(),
     stripe_session: session.id,
@@ -170,7 +215,7 @@ Deno.serve(async (req) => {
   }));
 
   if (rows.length) {
-    const { error: insErr } = await admin.from("deliveries").insert(rows);
+    const { error: insErr } = await adminClient().from("deliveries").insert(rows);
     if (insErr) console.error("delivery insert failed:", insErr.message);
   }
 
