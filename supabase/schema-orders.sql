@@ -51,3 +51,8 @@ create policy "read own deliveries"
   using (lower(email) = lower(auth.jwt() ->> 'email'));
 
 create index if not exists deliveries_email_idx on deliveries (lower(email));
+
+-- Fee pass-through: what the buyer was actually charged, kept alongside
+-- the net so a payout can be reconciled against an order later.
+alter table orders add column if not exists fee   numeric default 0;
+alter table orders add column if not exists gross numeric default 0;

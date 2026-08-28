@@ -1549,6 +1549,18 @@
     checkoutEl.querySelector("#co-summary").textContent =
       items.length + (items.length === 1 ? " photograph · $" : " photographs · $") +
       items.length * PRICE;
+    /* Show the card fee up front. Finding an unexplained extra charge on
+       the payment screen is how a buyer abandons a checkout. */
+    var feeEl = checkoutEl.querySelector("#co-fee");
+    if (PAYMENT.enabled) {
+      var net = items.length * PRICE * 100;
+      var gross = Math.ceil((net + 30) / (1 - 0.029));
+      feeEl.textContent = "Card processing adds " + money((gross - net) / 100) +
+        " — " + money(gross / 100) + " total.";
+      feeEl.hidden = false;
+    } else {
+      feeEl.hidden = true;
+    }
     var list = checkoutEl.querySelector("#co-items");
     list.innerHTML = items.map(function (i) {
       return '<li><span>' + i.title + "</span><span class=\"mono\">" +
@@ -1669,14 +1681,39 @@
      button is worse than none. */
   function paintPayButton(info) {
     var a = checkoutEl.querySelector("#co-pay");
-    var link = PAYMENT.links && PAYMENT.links.Photos;
-    if (!info || !PAYMENT.enabled || !link) { a.hidden = true; return; }
-    var u = link + (link.indexOf("?") > -1 ? "&" : "?") +
-      "client_reference_id=" + encodeURIComponent(info.code) +
-      "&prefilled_email=" + encodeURIComponent(info.email);
-    a.href = u;
-    a.textContent = "Pay " + money(info.total) + " now";
+    if (!info || !PAYMENT.enabled) { a.hidden = true; return; }
     a.hidden = false;
+    a.textContent = "Pay " + money(info.total) + " now";
+    a.removeAttribute("href");
+
+    /* The amount is worked out server-side from the saved order, not
+       here — a price the page could name is a price a buyer could edit.
+       The card fee is added there too, since it is mostly a flat 30c and
+       so cannot be expressed as a per-photo markup. */
+    a.onclick = function (e) {
+      e.preventDefault();
+      a.textContent = "Opening checkout…";
+      var rb = window.REVIEW_BACKEND || {};
+      fetch(rb.supabaseUrl.replace(/\/$/, "") + "/functions/v1/create-checkout", {
+        method: "POST",
+        headers: {
+          "apikey": rb.supabaseKey,
+          "Authorization": "Bearer " + rb.supabaseKey,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ code: info.code })
+      }).then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (j) {
+          if (!r.ok || !j.url) throw new Error(j.error || "Couldn't start checkout.");
+          window.location.href = j.url;
+        });
+      }).catch(function (err) {
+        a.textContent = "Pay " + money(info.total) + " now";
+        var note = checkoutEl.querySelector("#co-status");
+        note.className = "co__status mono is-warn";
+        note.textContent = err.message + " You can still pay in the chat.";
+      });
+    };
   }
 
   function closeCheckout() {
@@ -1706,6 +1743,7 @@
         + 'Country Day"></label>' +
       '<label><span class="mono">Anything I should know (optional)</span>' +
       '<textarea id="co-note" rows="2"></textarea></label>' +
+      '<p class="checkout__fee mono" id="co-fee"></p>' +
       '<p class="checkout__licence">Personal use only. These photographs may ' +
       "not be used commercially — no advertising, resale, merchandise, or " +
       "business promotion — without written permission.</p>" +

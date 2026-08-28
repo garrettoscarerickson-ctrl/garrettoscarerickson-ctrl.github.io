@@ -2693,3 +2693,7 @@ a { color: inherit; text-decoration: none; }
   .delivery { flex-direction: row; align-items: center; flex-wrap: wrap; }
   .delivery__get { width: 100%; text-align: center; }
 }
+
+.checkout__fee { line-height: 1.5; color: var(--ink-dim); text-transform: none;
+                 letter-spacing: 0.02em; }
+.checkout__fee[hidden] { display: none; }
