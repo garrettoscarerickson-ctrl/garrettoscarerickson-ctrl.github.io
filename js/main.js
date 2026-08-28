@@ -2150,8 +2150,15 @@
               ? new Date(d.created_at).toLocaleDateString(undefined,
                   { year: "numeric", month: "short", day: "numeric" })
               : "";
-            return '<li class="delivery">' +
-              '<div><b>' + esc(d.title || "Your photographs") + "</b>" +
+            /* The watermarked store preview doubles as the thumbnail:
+               already public, already tiny, and it identifies the photo
+               without needing a signed link just to draw a 60px image. */
+            var thumb = d.object_key
+              ? '<span class="delivery__thumb"><img src="images/shop/' +
+                esc(d.object_key) + '" alt="" loading="lazy"></span>'
+              : "";
+            return '<li class="delivery">' + thumb +
+              '<div class="delivery__meta"><b>' + esc(d.title || "Your photographs") + "</b>" +
               (d.note ? '<span class="delivery__note">' + esc(d.note) + "</span>" : "") +
               '<span class="mono delivery__when">' + when + "</span></div>" +
               ((d.url || d.object_key)
