@@ -152,6 +152,7 @@
       '<span class="mono" id="lb-count"></span>' +
       '<button id="lb-prev">← Prev</button>' +
       '<button id="lb-next">Next →</button>' +
+      '<button id="lb-remove" class="lb-remove">Request removal</button>' +
       "</div></div>" +
       '<aside class="lb-drawer" id="lb-drawer" aria-label="Reviews">' +
       '<div class="lb-drawer__head">' +
@@ -173,6 +174,9 @@
     lb.querySelector(".lightbox__close").addEventListener("click", closeLightbox);
     lb.querySelector("#lb-prev").addEventListener("click", function () { stepLightbox(-1); });
     lb.querySelector("#lb-next").addEventListener("click", function () { stepLightbox(1); });
+    lb.querySelector("#lb-remove").addEventListener("click", function () {
+      openRemoval(lightboxSet[lightboxIdx]);
+    });
     lb.addEventListener("click", function (e) {
       if (e.target === lb || e.target.classList.contains("lightbox__stage")) closeLightbox();
     });
@@ -1488,10 +1492,22 @@
       '<img loading="lazy" draggable="false" src="' + shopSrc(photo) +
       '" alt="' + photo.title + '">' +
       '<span class="shop-ph__tick" aria-hidden="true">✓</span>' +
+      '<span class="shop-ph__flag" role="button" tabindex="0" ' +
+      'aria-label="Request removal of ' + esc(photo.title) + '" ' +
+      'title="Request removal">!</span>' +
       "</span>" +
       '<span class="shop-ph__foot">' +
       '<span class="ph__title">' + photo.title + "</span>" +
       '<span class="mono">$' + PRICE + "</span></span>";
+    /* the flag sits inside the card, so stop the click selecting the
+       photo on its way out */
+    var flag = card.querySelector(".shop-ph__flag");
+    function flagged(e) { e.stopPropagation(); e.preventDefault(); openRemoval(photo); }
+    flag.addEventListener("click", flagged);
+    flag.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") flagged(e);
+    });
+
     card.addEventListener("click", function () {
       var on = selected.has(photo.src);
       on ? selected.delete(photo.src) : selected.add(photo.src);
@@ -1612,6 +1628,9 @@
         + 'Country Day"></label>' +
       '<label><span class="mono">Anything I should know (optional)</span>' +
       '<textarea id="co-note" rows="2"></textarea></label>' +
+      '<p class="checkout__licence">Personal use only. These photographs may ' +
+      "not be used commercially — no advertising, resale, merchandise, or " +
+      "business promotion — without written permission.</p>" +
       '<button class="checkout__send" id="co-send" type="button">Send order</button>' +
       '<p class="co__status mono" id="co-status"></p>' +
       "</div>" +
@@ -1757,6 +1776,116 @@
       openChat(mine.room, "customer");
     });
     root.insertBefore(bar, root.firstChild);
+  }
+
+  /* ---------- removal requests ----------
+     Garrett photographs minors at school events. Someone who does not
+     want their child on a public website needs a way to say so that does
+     not depend on them finding an email address, and it must not be
+     buried. This asks for nothing they might not want to give: every
+     field is optional, because demanding ID before someone can ask for a
+     photo of their kid to come down gets the request abandoned.
+
+     It emails Garrett; it does not take the photo down by itself. If a
+     button could remove a photo, anyone could remove any photo. */
+
+  var removalEl = null;
+
+  function openRemoval(photo) {
+    if (!removalEl) buildRemoval();
+    removalEl._photo = photo;
+    removalEl.classList.remove("is-sent");
+    removalEl.querySelector("#rm-which").textContent =
+      photo ? photo.title + (photo.location ? " · " + photo.location : "") : "";
+    var note = removalEl.querySelector("#rm-status");
+    note.className = "co__status mono" + (Shop.ordersReady() ? "" : " is-warn");
+    note.textContent = Shop.ordersReady() ? "" :
+      "Sending isn't switched on — email " + CONTACT.email + " instead.";
+    removalEl.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeRemoval() {
+    removalEl.classList.remove("is-open");
+    document.body.style.overflow = "";
+  }
+
+  function buildRemoval() {
+    removalEl = el("div", "checkout removal");
+    removalEl.setAttribute("role", "dialog");
+    removalEl.setAttribute("aria-modal", "true");
+    removalEl.innerHTML =
+      '<div class="checkout__card glass">' +
+      '<button class="checkout__close" type="button" aria-label="Close">✕</button>' +
+      '<div class="checkout__form">' +
+      '<span class="mono">Request removal</span>' +
+      '<h3 class="checkout__sum">Ask for this photograph to be taken down</h3>' +
+      '<p class="rm__which mono" id="rm-which"></p>' +
+      '<p class="rm__lead">If this is a photograph of you or your child and you ' +
+      "would rather it were not online, say so and Garrett will take it down. " +
+      "You do not have to explain yourself, and you do not have to leave your " +
+      "details — but an email lets him confirm once it is gone.</p>" +
+      '<label><span class="mono">Your name (optional)</span>' +
+      '<input type="text" id="rm-name" autocomplete="name"></label>' +
+      '<label><span class="mono">Email, if you want a reply (optional)</span>' +
+      '<input type="email" id="rm-email" autocomplete="email"></label>' +
+      '<label><span class="mono">Anything you want to add (optional)</span>' +
+      '<textarea id="rm-note" rows="3"></textarea></label>' +
+      '<button class="checkout__send" id="rm-send" type="button">Send request</button>' +
+      '<p class="co__status mono" id="rm-status"></p>' +
+      "</div>" +
+      '<div class="checkout__done">' +
+      '<span class="checkout__tick"><svg viewBox="0 0 52 52" aria-hidden="true">' +
+      '<circle class="tick-ring" cx="26" cy="26" r="23" fill="none"/>' +
+      '<path class="tick-mark" fill="none" d="M14 27l8 8 16-17"/></svg></span>' +
+      "<h3>Sent</h3>" +
+      '<p class="checkout__done-note">Garrett has your request and will take ' +
+      "the photograph down. If you left an email he will confirm when it is " +
+      "done.</p>" +
+      "</div></div>";
+    document.body.appendChild(removalEl);
+
+    removalEl.querySelector(".checkout__close").addEventListener("click", closeRemoval);
+    removalEl.addEventListener("click", function (e) {
+      if (e.target === removalEl) closeRemoval();
+    });
+    removalEl.querySelector("#rm-send").addEventListener("click", submitRemoval);
+  }
+
+  function submitRemoval() {
+    var photo = removalEl._photo || {};
+    var name = removalEl.querySelector("#rm-name").value.trim();
+    var email = removalEl.querySelector("#rm-email").value.trim();
+    var note = removalEl.querySelector("#rm-note").value.trim();
+    var status = removalEl.querySelector("#rm-status");
+    var btn = removalEl.querySelector("#rm-send");
+
+    btn.disabled = true;
+    status.className = "co__status mono";
+    status.textContent = "Sending…";
+
+    Shop.sendOrder({
+      subject: "\u26A0\uFE0F REMOVAL REQUEST — " + (photo.title || "a photograph"),
+      fromName: "Garrett Photo — Removal request",
+      summary: "Someone has asked for a photograph to be taken down.",
+      lines: [
+        ["Photograph", photo.title || "(unknown)"],
+        ["File", photo.src || "(unknown)"],
+        ["Location", photo.location || "—"],
+        ["From", name || "(not given)"],
+        ["Reply to", email || "(not given)"],
+        ["Message", note || "(none)"]
+      ],
+      name: name || "Anonymous",
+      email: email || "(no reply address given)",
+      total: 0
+    }).then(function () {
+      removalEl.classList.add("is-sent");
+    }).catch(function (err) {
+      status.className = "co__status mono is-warn";
+      status.textContent = err.message + " Nothing was sent — please email " +
+        CONTACT.email + " instead.";
+    }).finally(function () { btn.disabled = false; });
   }
 
   /* ---------- chat ---------- */
