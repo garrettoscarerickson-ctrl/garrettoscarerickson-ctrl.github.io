@@ -2203,6 +2203,19 @@
 
   /* ---------- boot ---------- */
 
+  /* A sign-in link can land anywhere. Supabase falls back to the Site URL
+     when a redirect is not in its allow-list, so the tokens arrive on
+     whatever page that is — and a page not looking for them drops them,
+     leaving someone who did everything right still signed out with no
+     explanation. Catch them wherever they land and carry on to the
+     account page. */
+  if (location.hash && location.hash.indexOf("access_token") > -1 &&
+      window.Account && document.body.dataset.page !== "account") {
+    Account.absorbRedirect().then(function () {
+      location.replace("/account.html");
+    });
+  }
+
   protectImages(document);
 
   if (page === "about") buildAbout();
