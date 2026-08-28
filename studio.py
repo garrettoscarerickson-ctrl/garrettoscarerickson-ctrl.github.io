@@ -262,13 +262,22 @@ class StudioHandler(SimpleHTTPRequestHandler):
         if len(keep) == len(photos):
             raise ValueError("Photo not found: %s" % body.get("src"))
         os.makedirs(REMOVED, exist_ok=True)
+        stamp = time.strftime("%Y%m%d-%H%M%S-")
         img = os.path.join(ROOT, body["src"])
         if os.path.exists(img):
-            dest = os.path.join(
-                REMOVED, time.strftime("%Y%m%d-%H%M%S-") + os.path.basename(img))
-            shutil.move(img, dest)
+            shutil.move(img, os.path.join(REMOVED, stamp + os.path.basename(img)))
+
+        # The store serves its own watermarked copy under images/shop/. Taking
+        # a photo out of the manifest hides it from every page but leaves that
+        # file sitting at a guessable public URL — so a takedown looked done
+        # while the picture was still downloadable. Remove it too.
+        preview = os.path.join(IMAGES, "shop", os.path.basename(body["src"]))
+        if os.path.exists(preview):
+            shutil.move(preview, os.path.join(REMOVED, stamp + "shop-" +
+                                              os.path.basename(preview)))
+
         save_photos(keep)
-        self.send_json({"ok": True})
+        self.send_json({"ok": True, "removedPreview": os.path.exists(preview) is False})
 
     def api_publish(self):
         def run(*cmd):
@@ -612,7 +621,8 @@ function loadLibrary() {
       };
       remove.onclick = function () {
         if (!confirm('Remove "' + photo.title + '" from the site?\n' +
-          "The image file is kept in images/_removed/.")) return;
+          "The original and the store copy both move to images/_removed/, " +
+          "so the picture stops being reachable on the site.")) return;
         api("/api/remove", { src: photo.src }).then(function () { loadLibrary(); });
       };
       lib.appendChild(card);
