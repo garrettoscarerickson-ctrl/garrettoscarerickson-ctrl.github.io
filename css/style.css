@@ -2697,3 +2697,45 @@ a { color: inherit; text-decoration: none; }
 .checkout__fee { line-height: 1.5; color: var(--ink-dim); text-transform: none;
                  letter-spacing: 0.02em; }
 .checkout__fee[hidden] { display: none; }
+
+/* "My Photos" — a buyer's way back to their files without hunting for an
+   old email. Marked so it reads as theirs rather than another section of
+   the portfolio. */
+.nav__mine { position: relative; }
+
+.nav__mine::before {
+  content: "";
+  position: absolute;
+  left: 0.35rem;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin-top: -2.5px;
+  border-radius: 50%;
+  background: #6ee7a8;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* the dot only appears once they're actually signed in */
+body.is-signed-in .nav__mine { padding-left: 1.25rem; }
+body.is-signed-in .nav__mine::before { opacity: 1; }
+
+/* Five items on a phone. Wrapping put "My Photos" alone on a second row
+   and knocked the wordmark out of line, so the items shrink to fit one
+   row instead — a nav that stays one line is worth more than a couple of
+   points of letter-spacing. */
+@media (max-width: 720px) {
+  .nav { padding: 0 0.45rem 0 0.85rem; }
+  .nav__links { flex-wrap: nowrap; gap: 0; }
+  .nav__links a { padding: 0.45rem 0.42rem; font-size: 0.62rem; letter-spacing: 0.05em; }
+  /* deliberately NOT touching .nav__name here — the 520px rule below
+     hides it with font-size:0 and draws "GE" instead, and any later
+     font-size on the same selector undoes that, printing both */
+  body.is-signed-in .nav__mine { padding-left: 0.9rem; }
+  .nav__mine::before { left: 0.18rem; }
+}
+
+@media (max-width: 430px) {
+  .nav__links a { padding: 0.45rem 0.32rem; font-size: 0.58rem; letter-spacing: 0.03em; }
+}

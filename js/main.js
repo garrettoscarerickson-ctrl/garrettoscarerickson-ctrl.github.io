@@ -2270,6 +2270,13 @@
     });
   }
 
+  /* Flag a signed-in buyer so the nav can show it. Their photographs are
+     the reason they came back; making them hunt for an old email to find
+     them is the difference between a repeat customer and a lost one. */
+  if (window.Account && Account.email()) {
+    document.body.classList.add("is-signed-in");
+  }
+
   protectImages(document);
 
   if (page === "about") buildAbout();
