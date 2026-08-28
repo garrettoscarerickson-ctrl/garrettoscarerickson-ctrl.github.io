@@ -563,6 +563,11 @@
      booking panel starts sending people to a real checkout. Until then
      the same panel sends a booking request by email. */
   var PAYMENT = {
+    /* Slug of the deployed checkout Edge Function. Supabase generated
+       this name itself; if it is ever redeployed under another, this is
+       the one line to change. */
+    checkoutFunction: "rapid-function",
+
     /* Card checkout via Stripe Payment Links. Needs an account holder who
        is 18+, so this stays off until a parent's account is set up. */
     enabled: false,
@@ -1694,7 +1699,11 @@
       e.preventDefault();
       a.textContent = "Opening checkout…";
       var rb = window.REVIEW_BACKEND || {};
-      fetch(rb.supabaseUrl.replace(/\/$/, "") + "/functions/v1/create-checkout", {
+      /* Supabase auto-named this one on deploy and its slug cannot be
+         changed afterwards — renaming the function only relabels it. The
+         URL is what matters, so it is pinned here rather than fought. */
+      fetch(rb.supabaseUrl.replace(/\/$/, "") + "/functions/v1/" +
+            (PAYMENT.checkoutFunction || "rapid-function"), {
         method: "POST",
         headers: {
           "apikey": rb.supabaseKey,
