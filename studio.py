@@ -45,6 +45,34 @@ def save_photos(photos):
     regenerate_photos_js(photos)
 
 
+SHOP = os.path.join(ROOT, "data", "shop.json")
+
+
+def load_shop():
+    try:
+        with open(SHOP, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (IOError, ValueError):
+        return {"photoPrice": 1, "tiers": [], "addOns": []}
+
+
+def save_shop(cfg):
+    """Prices -> data/shop.json -> js/shop-config.js, the same
+    manifest-then-generate shape the photos already use."""
+    with open(SHOP, "w", encoding="utf-8") as f:
+        json.dump(cfg, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    header = ("/* GENERATED FILE - do not edit by hand.\n"
+              "   Source of truth: data/shop.json\n"
+              "   Change prices in Studio (Store tab), or edit the JSON and run:\n"
+              "     python3 studio.py --regen\n"
+              "*/\n\n")
+    with open(os.path.join(ROOT, "js", "shop-config.js"), "w",
+              encoding="utf-8") as f:
+        f.write(header + "window.SHOP_CONFIG = " +
+                json.dumps(cfg, indent=2, ensure_ascii=False) + ";\n")
+
+
 def regenerate_reviews_js():
     """Approved reviews -> js/reviews.js for the About page."""
     path = os.path.join(ROOT, "data", "reviews.json")
@@ -189,7 +217,8 @@ class StudioHandler(SimpleHTTPRequestHandler):
             return
         if self.path == "/api/manifest":
             photos = load_photos()
-            self.send_json({"photos": photos, "tags": all_tags(photos)})
+            self.send_json({"photos": photos, "tags": all_tags(photos),
+                            "shop": load_shop()})
             return
         super().do_GET()
 
@@ -201,6 +230,10 @@ class StudioHandler(SimpleHTTPRequestHandler):
                 self.api_update()
             elif self.path == "/api/remove":
                 self.api_remove()
+            elif self.path == "/api/shop":
+                self.api_shop()
+            elif self.path == "/api/game":
+                self.api_game()
             elif self.path == "/api/publish":
                 self.api_publish()
             else:
@@ -279,6 +312,47 @@ class StudioHandler(SimpleHTTPRequestHandler):
         save_photos(keep)
         self.send_json({"ok": True, "removedPreview": os.path.exists(preview) is False})
 
+    def api_shop(self):
+        body = self.read_body()
+        cfg = load_shop()
+        if "photoPrice" in body:
+            try:
+                price = float(body["photoPrice"])
+            except (TypeError, ValueError):
+                raise ValueError("Price must be a number.")
+            if price < 0:
+                raise ValueError("Price cannot be negative.")
+            cfg["photoPrice"] = int(price) if price == int(price) else price
+        if "tiers" in body:
+            cfg["tiers"] = body["tiers"]
+        if "addOns" in body:
+            cfg["addOns"] = body["addOns"]
+        save_shop(cfg)
+        self.send_json({"ok": True, "shop": cfg})
+
+    def api_game(self):
+        """Rename a group, or clear it so its photographs leave the store."""
+        body = self.read_body()
+        old_name = (body.get("from") or "").strip()
+        new_name = (body.get("to") or "").strip()
+        if not old_name:
+            raise ValueError("Which group?")
+
+        photos = load_photos()
+        hits = [p for p in photos if p.get("game") == old_name]
+        if not hits:
+            raise ValueError("No photographs in group: %s" % old_name)
+
+        for p in hits:
+            if new_name:
+                p["game"] = new_name
+            else:
+                # dropping the game takes them off the store but leaves them
+                # in the archive - removing a photograph is a separate act
+                p.pop("game", None)
+        save_photos(photos)
+        self.send_json({"ok": True, "moved": len(hits)})
+
     def api_publish(self):
         def run(*cmd):
             r = subprocess.run(cmd, cwd=ROOT, capture_output=True,
@@ -333,6 +407,36 @@ header{display:flex;justify-content:space-between;align-items:baseline;
   flex-wrap:wrap;gap:1rem;padding:1.4rem 0;border-bottom:1px solid var(--line)}
 header h1{font-size:.9rem;font-weight:600;letter-spacing:.32em;text-transform:uppercase}
 header nav{display:flex;gap:1.5rem;align-items:baseline}
+.tabs{display:flex;gap:.4rem;margin:0 0 1.5rem}
+.tab{background:none;border:1px solid var(--line);color:var(--dim);
+     border-radius:999px;padding:.5rem 1.1rem;cursor:pointer;font:inherit;
+     font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+.tab.is-on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.hint{max-width:46rem;line-height:1.6;margin:-.4rem 0 1rem}
+.pricebox{border:1px solid var(--line);border-radius:14px;padding:1.25rem;
+          display:flex;flex-direction:column;gap:.9rem;max-width:52rem}
+.pricerow{display:flex;justify-content:space-between;align-items:center;
+          gap:1rem;padding:.5rem 0}
+.dollar{display:inline-flex;align-items:center;gap:.25rem;color:var(--dim)}
+.pricerow input,.tierrow input{background:#111;border:1px solid var(--line);
+  border-radius:8px;color:var(--ink);font:inherit;padding:.45rem .6rem}
+.pricerow input[type=number]{width:6rem;text-align:right}
+.tierrow{display:grid;grid-template-columns:1fr 7rem 10rem;gap:.5rem;
+         align-items:center;padding:.35rem 0}
+.tierrow .mono{color:var(--dim)}
+.gcard{border:1px solid var(--line);border-radius:14px;padding:1rem 1.15rem;
+       margin-bottom:.9rem}
+.ghead{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.ghead input{flex:1;min-width:14rem;background:#111;border:1px solid var(--line);
+             border-radius:8px;color:var(--ink);font:inherit;padding:.5rem .7rem}
+.gthumbs{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.9rem}
+.gthumb{position:relative;width:78px;height:78px;border-radius:8px;
+        overflow:hidden;border:1px solid var(--line)}
+.gthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.gthumb button{position:absolute;top:2px;right:2px;width:20px;height:20px;
+  border-radius:50%;border:0;background:rgba(0,0,0,.72);color:#f87171;
+  cursor:pointer;font-size:12px;line-height:1;padding:0}
+.gthumb button:hover{background:#f87171;color:#000}
 header nav a:hover{color:var(--ink)}
 h2{font-size:1rem;letter-spacing:.2em;text-transform:uppercase;
   font-weight:600;margin:3rem 0 1.2rem}
@@ -386,15 +490,43 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim)}
   </nav>
 </header>
 
-<div id="drop">
-  <span class="mono">Drop photos here — or click to choose (JPG / PNG)</span>
-  <input type="file" id="file-input" multiple accept="image/jpeg,image/png">
+<div class="tabs mono" id="tabs">
+  <button class="tab is-on" data-panel="panel-photos">Photos</button>
+  <button class="tab" data-panel="panel-store">Store</button>
 </div>
 
-<div id="pending" class="cards" style="margin-top:1.25rem"></div>
+<section id="panel-photos">
+  <div id="drop">
+    <span class="mono">Drop photos here — or click to choose (JPG / PNG)</span>
+    <input type="file" id="file-input" multiple accept="image/jpeg,image/png">
+  </div>
 
-<h2>Library <span class="mono" id="lib-count"></span></h2>
-<div id="library" class="cards"></div>
+  <div id="pending" class="cards" style="margin-top:1.25rem"></div>
+
+  <h2>Library <span class="mono" id="lib-count"></span></h2>
+  <div id="library" class="cards"></div>
+</section>
+
+<section id="panel-store" hidden>
+  <h2>Prices</h2>
+  <div class="pricebox">
+    <label class="pricerow">
+      <span class="mono">Per photograph in the store</span>
+      <span class="dollar">$<input type="number" id="sh-price" min="0" step="1"></span>
+    </label>
+    <div id="sh-tiers"></div>
+    <h3 class="mono">Add-ons</h3>
+    <div id="sh-addons"></div>
+    <button class="primary" id="sh-save">Save prices</button>
+    <span class="status" id="sh-status"></span>
+  </div>
+
+  <h2>Groups <span class="mono" id="sh-gcount"></span></h2>
+  <p class="mono hint">A group is one game or shoot. Renaming one renames it on
+    every photograph in it. Removing a photograph here takes it off the whole
+    site — store, archive and sports page.</p>
+  <div id="sh-games"></div>
+</section>
 
 <div id="publish-wrap">
   <button class="primary" id="publish">Publish to the web</button>
@@ -584,6 +716,8 @@ function addPendingCard(file, dataUrl, orientation, pxW, pxH) {
 function loadLibrary() {
   fetch("/api/manifest").then(function (r) { return r.json(); }).then(function (data) {
     KNOWN_TAGS = data.tags;
+    renderShop(data);
+    renderGames(data.photos);
     var lib = document.getElementById("library");
     lib.innerHTML = "";
     document.getElementById("lib-count").textContent =
@@ -648,6 +782,131 @@ document.getElementById("publish").onclick = function () {
   });
 };
 
+/* ---------- tabs ---------- */
+document.getElementById("tabs").addEventListener("click", function (e) {
+  var b = e.target.closest(".tab");
+  if (!b) return;
+  document.querySelectorAll(".tab").forEach(function (t) {
+    t.classList.toggle("is-on", t === b);
+  });
+  ["panel-photos", "panel-store"].forEach(function (id) {
+    document.getElementById(id).hidden = (id !== b.dataset.panel);
+  });
+});
+
+/* ---------- store: prices ---------- */
+
+var SHOP = null;
+
+function q(v) { return String(v == null ? "" : v).replace(/"/g, "&quot;"); }
+
+function renderShop(data) {
+  SHOP = data.shop || { photoPrice: 1, tiers: [], addOns: [] };
+  document.getElementById("sh-price").value = SHOP.photoPrice;
+
+  var tw = document.getElementById("sh-tiers");
+  tw.innerHTML = "<h3 class='mono'>Booking packages</h3>";
+  (SHOP.tiers || []).forEach(function (t, i) {
+    var row = el("div", "tierrow");
+    row.innerHTML =
+      '<input value="' + q(t.name)  + '" data-k="name"  data-i="' + i + '">' +
+      '<input value="' + q(t.price) + '" data-k="price" data-i="' + i + '">' +
+      '<input value="' + q(t.unit)  + '" data-k="unit"  data-i="' + i + '">';
+    tw.appendChild(row);
+  });
+
+  var aw = document.getElementById("sh-addons");
+  aw.innerHTML = "";
+  (SHOP.addOns || []).forEach(function (a, i) {
+    var row = el("div", "tierrow");
+    row.innerHTML =
+      '<input value="' + q(a[0]) + '" data-a="0" data-i="' + i + '">' +
+      '<input value="' + q(a[1]) + '" data-a="1" data-i="' + i + '">' +
+      '<span class="mono">on the About page</span>';
+    aw.appendChild(row);
+  });
+}
+
+document.getElementById("sh-save").onclick = function () {
+  var st = document.getElementById("sh-status");
+  var tiers = JSON.parse(JSON.stringify(SHOP.tiers || []));
+  document.querySelectorAll("#sh-tiers input").forEach(function (inp) {
+    tiers[Number(inp.dataset.i)][inp.dataset.k] = inp.value.trim();
+  });
+  var addOns = (SHOP.addOns || []).map(function (a) { return a.slice(); });
+  document.querySelectorAll("#sh-addons input").forEach(function (inp) {
+    addOns[Number(inp.dataset.i)][Number(inp.dataset.a)] = inp.value.trim();
+  });
+
+  st.textContent = "Saving...";
+  api("/api/shop", {
+    photoPrice: document.getElementById("sh-price").value,
+    tiers: tiers, addOns: addOns
+  }).then(function () {
+    st.textContent = "Saved. Hit Publish to put it on the live site.";
+    loadLibrary();
+  }).catch(function (e) { st.textContent = e.message; });
+};
+
+/* ---------- store: groups ---------- */
+
+function renderGames(photos) {
+  var order = [], groups = {};
+  photos.forEach(function (p) {
+    if (!p.game) return;
+    if (!groups[p.game]) { groups[p.game] = []; order.push(p.game); }
+    groups[p.game].push(p);
+  });
+
+  document.getElementById("sh-gcount").textContent =
+    "- " + order.length + (order.length === 1 ? " group" : " groups");
+
+  var wrap = document.getElementById("sh-games");
+  wrap.innerHTML = "";
+  if (!order.length) {
+    wrap.innerHTML = "<p class='mono'>No groups yet. Give a photograph a game " +
+      "in the Photos tab and it shows up in the store.</p>";
+    return;
+  }
+
+  order.forEach(function (game) {
+    var list = groups[game];
+    var card = el("div", "gcard");
+    var head = el("div", "ghead");
+    head.innerHTML = '<input value="' + q(game) + '">' +
+      "<span class='mono'>" + list.length + " photos</span>" +
+      "<button class='ghost'>Rename</button>";
+    card.appendChild(head);
+
+    var input = head.querySelector("input");
+    head.querySelector("button").onclick = function () {
+      var to = input.value.trim();
+      if (!to || to === game) return;
+      api("/api/game", { from: game, to: to })
+        .then(function () { loadLibrary(); })
+        .catch(function (e) { alert(e.message); });
+    };
+
+    var thumbs = el("div", "gthumbs");
+    list.forEach(function (p) {
+      var t = el("div", "gthumb");
+      t.innerHTML = '<img src="/' + p.src + '" alt="" loading="lazy">' +
+                    "<button title='Remove'>x</button>";
+      t.querySelector("button").onclick = function () {
+        if (!confirm('Remove "' + p.title + '" from the site?\n\n' +
+          "It comes off the store, the archive and the sports page. The " +
+          "original and the store copy both move to images/_removed/.")) return;
+        api("/api/remove", { src: p.src })
+          .then(function () { loadLibrary(); })
+          .catch(function (e) { alert(e.message); });
+      };
+      thumbs.appendChild(t);
+    });
+    card.appendChild(thumbs);
+    wrap.appendChild(card);
+  });
+}
+
 loadLibrary();
 </script>
 </body>
@@ -661,6 +920,7 @@ if __name__ == "__main__":
     import sys
     regenerate_photos_js(load_photos())
     regenerate_reviews_js()
+    save_shop(load_shop())
     if "--regen" in sys.argv:
         print("js/photos.js + js/reviews.js regenerated from data/")
         sys.exit(0)

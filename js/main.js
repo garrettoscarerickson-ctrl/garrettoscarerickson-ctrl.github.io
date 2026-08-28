@@ -513,7 +513,14 @@
     instagram: "shot_by_ge"
   };
 
-  var PRICING = [
+  /* Prices come from data/shop.json via js/shop-config.js so they can be
+     changed in Studio without touching code. The literals below stay as
+     the fallback for any page that has not loaded that file. Declared
+     here, above first use — `var` hoists the name but not the value, so
+     assigning it further down would read as undefined right here. */
+  var CFG = window.SHOP_CONFIG || {};
+
+  var PRICING = CFG.tiers || [
     {
       name: "Individual",
       price: "$20",
@@ -577,7 +584,7 @@
     cash: false       /* offer "pay in person" as a fallback           */
   };
 
-  var ADD_ONS = [
+  var ADD_ONS = CFG.addOns || [
     ["Same-day rush delivery", "+$15"],
     ["Additional edited photograph", "$2 each"],
     ["Travel beyond 30 miles", "$0.30 / mile"]
@@ -1316,7 +1323,7 @@
      STORE — photographs for sale, grouped by game
      ============================================================ */
 
-  var PRICE = 1;          /* dollars per photograph */
+  var PRICE = CFG.photoPrice != null ? CFG.photoPrice : 1;          /* dollars per photograph */
 
   function buildStore() {
     var root = document.getElementById("store-root");

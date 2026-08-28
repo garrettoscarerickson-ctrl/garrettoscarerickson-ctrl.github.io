@@ -1,0 +1,64 @@
+/* GENERATED FILE - do not edit by hand.
+   Source of truth: data/shop.json
+   Change prices in Studio (Store tab), or edit the JSON and run:
+     python3 studio.py --regen
+*/
+
+window.SHOP_CONFIG = {
+  "photoPrice": 1,
+  "tiers": [
+    {
+      "name": "Individual",
+      "price": "$20",
+      "unit": "per session",
+      "lead": "One athlete, one session.",
+      "items": [
+        "10+ edited photographs",
+        "Guaranteed 24-hour delivery",
+        "Full-resolution digital files",
+        "Personal and social use included"
+      ],
+      "featured": true
+    },
+    {
+      "name": "Team",
+      "price": "$10–15",
+      "unit": "per athlete",
+      "lead": "Whole roster, one shoot.",
+      "items": [
+        "30+ edited photographs guaranteed",
+        "One team photograph included",
+        "Action and individual frames",
+        "Per-athlete galleries"
+      ],
+      "featured": false
+    },
+    {
+      "name": "Event & Meets",
+      "price": "From $75",
+      "unit": "up to 2 hours",
+      "lead": "Car meets, games, gatherings.",
+      "items": [
+        "40+ edited photographs",
+        "48-hour delivery",
+        "Extra hours billed at $30",
+        "Commercial use on request"
+      ],
+      "featured": false
+    }
+  ],
+  "addOns": [
+    [
+      "Same-day rush delivery",
+      "+$15"
+    ],
+    [
+      "Additional edited photograph",
+      "$2 each"
+    ],
+    [
+      "Travel beyond 30 miles",
+      "$0.30 / mile"
+    ]
+  ]
+};
