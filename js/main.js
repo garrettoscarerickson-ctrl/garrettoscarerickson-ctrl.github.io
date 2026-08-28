@@ -1742,10 +1742,12 @@
       '<h3 class="checkout__sum" id="co-summary"></h3>' +
       '<ul class="checkout__items" id="co-items"></ul>' +
       '<div class="checkout__acct" id="co-acct"></div>' +
-      '<label><span class="mono">Your name</span>' +
+      '<label><span class="mono">Your name <b class="req">required</b></span>' +
       '<input type="text" id="co-name" autocomplete="name" required></label>' +
-      '<label><span class="mono">Your email</span>' +
-      '<input type="email" id="co-email" autocomplete="email" required></label>' +
+      '<label><span class="mono">Your email <b class="req">required</b></span>' +
+      '<input type="email" id="co-email" autocomplete="email" required>' +
+      '<span class="field-note">Your photographs are sent here, and it\'s ' +
+      "the account you sign in with to download them again later.</span></label>" +
       '<label id="co-date-row" hidden><span class="mono">Preferred date '
         + 'and location</span>' +
       '<input type="text" id="co-date" placeholder="e.g. Fri Sept 12, '

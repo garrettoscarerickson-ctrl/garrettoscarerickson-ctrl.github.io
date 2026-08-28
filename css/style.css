@@ -2739,3 +2739,24 @@ body.is-signed-in .nav__mine::before { opacity: 1; }
 @media (max-width: 430px) {
   .nav__links a { padding: 0.45rem 0.32rem; font-size: 0.58rem; letter-spacing: 0.03em; }
 }
+
+/* Only one field said "(optional)", so the others gave no signal at all
+   and read as optional by default. Mark what is actually needed. */
+.req {
+  margin-left: 0.4rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--r-full);
+  background: rgba(248, 113, 113, 0.14);
+  color: #f87171;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.field-note {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--ink-dim);
+}
