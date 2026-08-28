@@ -39,6 +39,39 @@ window.SHOP_BACKEND = {
   }
 };
 
+/* Record the order in Supabase before payment, so Stripe's webhook has
+   something to match its payment against. Written unpaid; only the Edge
+   Function may ever mark it paid, because only it can verify Stripe
+   actually sent the message. */
+window.ShopOrders = {
+  save: function (order) {
+    var rb = window.REVIEW_BACKEND || {};
+    if (rb.mode !== "supabase" || !rb.supabaseUrl || !rb.supabaseKey) {
+      return Promise.resolve(false);
+    }
+    return fetch(rb.supabaseUrl.replace(/\/$/, "") + "/rest/v1/orders", {
+      method: "POST",
+      headers: {
+        "apikey": rb.supabaseKey,
+        "Authorization": "Bearer " + rb.supabaseKey,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify({
+        code: order.code,
+        email: (order.email || "").toLowerCase(),
+        name: order.name,
+        items: order.items,
+        total: order.total,
+        paid: false
+      })
+    }).then(function (r) { return r.ok; })
+      /* a failure here must never block the order email, which is the
+         channel Garrett actually watches */
+      .catch(function () { return false; });
+  }
+};
+
 window.Shop = (function () {
   "use strict";
 

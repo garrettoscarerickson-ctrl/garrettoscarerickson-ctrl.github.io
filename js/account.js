@@ -188,8 +188,33 @@ window.Account = (function () {
       .catch(function () { return []; });
   }
 
+  /* Ask the Edge Function for a fresh link. The row stores an object key
+     rather than a URL, because a stored link would expire and the buyer
+     would find a dead download months later — which is the exact failure
+     this whole feature exists to prevent. */
+  function link(deliveryId) {
+    return fresh().then(function (t) {
+      if (!t) throw new Error("Not signed in.");
+      return fetch(base() + "/functions/v1/download", {
+        method: "POST",
+        headers: {
+          "apikey": cfg().supabaseKey,
+          "Authorization": "Bearer " + t,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id: deliveryId })
+      });
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok || !j.url) throw new Error(j.error || "Couldn't get that file.");
+        return j.url;
+      });
+    });
+  }
+
   return {
     ready: ready,
+    link: link,
     signIn: signIn,
     signOut: signOut,
     user: user,

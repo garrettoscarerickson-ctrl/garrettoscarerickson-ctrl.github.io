@@ -568,6 +568,9 @@
     enabled: false,
     currency: "USD",
     links: {
+      /* Stripe Payment Link for store photographs. Create it as a $1
+         product with "customers can adjust quantity" switched on. */
+      "Photos": "",
       "Individual": "",
       "Team": "",
       "Event & Meets": ""
@@ -1660,6 +1663,22 @@
     });
   }
 
+  /* Sends the buyer to Stripe carrying their order code, so the webhook
+     can tie the payment back to exactly which photographs were bought.
+     Hidden entirely until a payment link exists — a dead "Pay now"
+     button is worse than none. */
+  function paintPayButton(info) {
+    var a = checkoutEl.querySelector("#co-pay");
+    var link = PAYMENT.links && PAYMENT.links.Photos;
+    if (!info || !PAYMENT.enabled || !link) { a.hidden = true; return; }
+    var u = link + (link.indexOf("?") > -1 ? "&" : "?") +
+      "client_reference_id=" + encodeURIComponent(info.code) +
+      "&prefilled_email=" + encodeURIComponent(info.email);
+    a.href = u;
+    a.textContent = "Pay " + money(info.total) + " now";
+    a.hidden = false;
+  }
+
   function closeCheckout() {
     checkoutEl.classList.remove("is-open");
     document.body.style.overflow = "";
@@ -1706,6 +1725,7 @@
       '<span class="checkout__code-note">Keep this. If you close the chat, ' +
       'reopen it any time at garrettphoto.store/chat</span>' +
       "</div>" +
+      '<a class="checkout__pay" id="co-pay" target="_blank" rel="noopener" hidden>Pay now</a>' +
       '<button class="checkout__chat" id="co-chat" type="button">Open chat</button>' +
       "</div></div>";
     document.body.appendChild(checkoutEl);
@@ -1775,6 +1795,18 @@
       chatName = name;
       checkoutEl.querySelector("#co-code").textContent = room;
       rememberMyRoom(room, name);
+
+      if (!booking && window.ShopOrders) {
+        ShopOrders.save({
+          code: room, email: email, name: name, total: total,
+          items: checkoutEl._items.map(function (i) {
+            return { src: i.src, title: i.title, game: i.game };
+          })
+        });
+      }
+      paintPayButton(booking ? null : {
+        code: room, email: email, count: checkoutEl._items.length, total: total
+      });
       if (!booking) {
         checkoutEl._selected.clear();
         checkoutEl._root.querySelectorAll(".shop-ph.is-picked")
@@ -2113,14 +2145,34 @@
               '<div><b>' + esc(d.title || "Your photographs") + "</b>" +
               (d.note ? '<span class="delivery__note">' + esc(d.note) + "</span>" : "") +
               '<span class="mono delivery__when">' + when + "</span></div>" +
-              (d.url
-                ? '<a class="delivery__get" href="' + esc(d.url) +
-                  '" target="_blank" rel="noopener">Download</a>'
+              ((d.url || d.object_key)
+                ? '<button class="delivery__get" type="button" data-id="' +
+                  d.id + '">Download</button>'
                 : '<span class="mono delivery__pending">Preparing</span>') +
               "</li>";
           }).join("") + "</ul>";
         }
         body.innerHTML = out;
+        /* Each click mints a new link rather than reusing a stored one,
+           so a download still works however long after the sale it is. */
+        body.querySelectorAll(".delivery__get").forEach(function (b) {
+          b.addEventListener("click", function () {
+            var was = b.textContent;
+            b.disabled = true;
+            b.textContent = "Preparing…";
+            Account.link(Number(b.dataset.id)).then(function (url) {
+              b.textContent = was;
+              b.disabled = false;
+              window.location.href = url;
+            }).catch(function (e) {
+              b.textContent = was;
+              b.disabled = false;
+              var note = el("p", "account__note", esc(e.message));
+              b.parentNode.appendChild(note);
+            });
+          });
+        });
+
         body.querySelector("#ac-out").addEventListener("click", function () {
           Account.signOut();
           signedOut("Signed out.");
