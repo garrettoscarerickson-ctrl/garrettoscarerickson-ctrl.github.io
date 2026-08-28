@@ -132,8 +132,12 @@ def build_layer(size, seed):
 
 
 def process(src_rel, force=False):
-    src = os.path.join(ROOT, src_rel)
     name = os.path.basename(src_rel)
+    # Prefer the clean copy. Once protect_archive.py has run, the file in
+    # images/ carries a burned mark of its own, and building a preview
+    # from that would stack two watermarks.
+    clean = os.path.join(ROOT, "images", "_originals", name)
+    src = clean if os.path.exists(clean) else os.path.join(ROOT, src_rel)
     dst = os.path.join(OUT_DIR, name)
     if os.path.exists(dst) and not force:
         return dst, False

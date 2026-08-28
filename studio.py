@@ -53,7 +53,7 @@ def load_shop():
         with open(SHOP, "r", encoding="utf-8") as f:
             return json.load(f)
     except (IOError, ValueError):
-        return {"photoPrice": 1, "tiers": [], "addOns": []}
+        return {"photoPrice": 1, "tiers": [], "addOns": [], "games": {}}
 
 
 def save_shop(cfg):
@@ -327,6 +327,8 @@ class StudioHandler(SimpleHTTPRequestHandler):
             cfg["tiers"] = body["tiers"]
         if "addOns" in body:
             cfg["addOns"] = body["addOns"]
+        if "games" in body:
+            cfg["games"] = body["games"]
         save_shop(cfg)
         self.send_json({"ok": True, "shop": cfg})
 
@@ -351,6 +353,16 @@ class StudioHandler(SimpleHTTPRequestHandler):
                 # in the archive - removing a photograph is a separate act
                 p.pop("game", None)
         save_photos(photos)
+
+        cfg = load_shop()
+        games = cfg.get("games") or {}
+        if old_name in games:
+            entry = games.pop(old_name)
+            if new_name:
+                games[new_name] = entry
+            cfg["games"] = games
+            save_shop(cfg)
+
         self.send_json({"ok": True, "moved": len(hits)})
 
     def api_publish(self):
@@ -429,6 +441,11 @@ header nav{display:flex;gap:1.5rem;align-items:baseline}
 .ghead{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
 .ghead input{flex:1;min-width:14rem;background:#111;border:1px solid var(--line);
              border-radius:8px;color:var(--ink);font:inherit;padding:.5rem .7rem}
+.delivrow{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;
+          margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--line)}
+.delivrow input{flex:1;min-width:18rem;background:#111;border:1px solid var(--line);
+                border-radius:8px;color:var(--ink);font:inherit;padding:.45rem .6rem}
+.dstatus{color:var(--dim)}
 .gthumbs{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.9rem}
 .gthumb{position:relative;width:78px;height:78px;border-radius:8px;
         overflow:hidden;border:1px solid var(--line)}
@@ -885,6 +902,28 @@ function renderGames(photos) {
       api("/api/game", { from: game, to: to })
         .then(function () { loadLibrary(); })
         .catch(function (e) { alert(e.message); });
+    };
+
+    var deliv = el("div", "delivrow");
+    var url = ((SHOP.games || {})[game] || {}).deliveryUrl || "";
+    deliv.innerHTML =
+      "<span class='mono'>Delivery folder</span>" +
+      '<input placeholder="Paste the Google Drive share link for this game" ' +
+        'value="' + q(url) + '">' +
+      "<button class='ghost'>Save link</button>" +
+      "<span class='mono dstatus'></span>";
+    card.appendChild(deliv);
+
+    var durl = deliv.querySelector("input");
+    var dstat = deliv.querySelector(".dstatus");
+    deliv.querySelector("button").onclick = function () {
+      var games = JSON.parse(JSON.stringify(SHOP.games || {}));
+      games[game] = games[game] || {};
+      games[game].deliveryUrl = durl.value.trim();
+      dstat.textContent = "Saving...";
+      api("/api/shop", { games: games })
+        .then(function (r) { SHOP.games = r.shop.games; dstat.textContent = "Saved"; })
+        .catch(function (e) { dstat.textContent = e.message; });
     };
 
     var thumbs = el("div", "gthumbs");

@@ -60,5 +60,10 @@ window.SHOP_CONFIG = {
       "Travel beyond 30 miles",
       "$0.30 / mile"
     ]
-  ]
+  ],
+  "games": {
+    "DCDS JV Football — Practice": {
+      "deliveryUrl": ""
+    }
+  }
 };
