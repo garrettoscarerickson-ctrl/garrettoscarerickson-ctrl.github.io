@@ -18,7 +18,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-02.jpg",
@@ -33,7 +33,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-03.jpg",
@@ -48,7 +48,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-04.jpg",
@@ -63,7 +63,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-05.jpg",
@@ -78,7 +78,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-06.jpg",
@@ -93,7 +93,7 @@ window.PHOTOS = [
     "w": 2400,
     "h": 1600,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-07.jpg",
@@ -108,7 +108,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-08.jpg",
@@ -123,7 +123,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-09.jpg",
@@ -138,7 +138,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-10.jpg",
@@ -154,7 +154,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-11.jpg",
@@ -170,7 +170,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-12.jpg",
@@ -185,7 +185,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-13.jpg",
@@ -201,7 +201,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-14.jpg",
@@ -217,7 +217,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/court-56.jpg",
@@ -232,7 +232,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Match"
+    "game": "DCDS Varsity Boys Tennis — Practice"
   },
   {
     "src": "images/court-57.jpg",
@@ -247,7 +247,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Match"
+    "game": "DCDS Varsity Boys Tennis — Practice"
   },
   {
     "src": "images/court-58.jpg",
@@ -262,7 +262,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Match"
+    "game": "DCDS Varsity Boys Tennis — Practice"
   },
   {
     "src": "images/court-59.jpg",
@@ -277,7 +277,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Match"
+    "game": "DCDS Varsity Boys Tennis — Practice"
   },
   {
     "src": "images/court-60.jpg",
@@ -292,7 +292,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Match"
+    "game": "DCDS Varsity Boys Tennis — Practice"
   },
   {
     "src": "images/court-61.jpg",
@@ -307,7 +307,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Match"
+    "game": "DCDS Varsity Boys Tennis — Practice"
   },
   {
     "src": "images/court-62.jpg",
@@ -322,7 +322,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Match"
+    "game": "DCDS Varsity Boys Tennis — Practice"
   },
   {
     "src": "images/practice-15.jpg",
@@ -337,7 +337,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-16.jpg",
@@ -352,7 +352,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-17.jpg",
@@ -367,7 +367,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-18.jpg",
@@ -382,7 +382,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-19.jpg",
@@ -397,7 +397,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-20.jpg",
@@ -412,7 +412,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-21.jpg",
@@ -427,7 +427,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-22.jpg",
@@ -442,7 +442,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-23.jpg",
@@ -457,7 +457,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-24.jpg",
@@ -472,7 +472,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-25.jpg",
@@ -487,7 +487,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-26.jpg",
@@ -503,7 +503,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-27.jpg",
@@ -518,7 +518,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/practice-28.jpg",
@@ -533,7 +533,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "JV Football — Practice"
+    "game": "DCDS JV Football — Practice"
   },
   {
     "src": "images/woodgrain.jpg",
@@ -792,7 +792,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-02.jpg",
@@ -807,7 +807,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-03.jpg",
@@ -822,7 +822,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-04.jpg",
@@ -837,7 +837,7 @@ window.PHOTOS = [
     "w": 2400,
     "h": 1600,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-05.jpg",
@@ -852,7 +852,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-06.jpg",
@@ -867,7 +867,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-07.jpg",
@@ -882,7 +882,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-08.jpg",
@@ -897,7 +897,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-09.jpg",
@@ -912,7 +912,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-10.jpg",
@@ -927,7 +927,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-11.jpg",
@@ -942,7 +942,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-12.jpg",
@@ -957,7 +957,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-13.jpg",
@@ -972,7 +972,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-14.jpg",
@@ -987,7 +987,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-15.jpg",
@@ -1002,7 +1002,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-16.jpg",
@@ -1017,7 +1017,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-17.jpg",
@@ -1032,7 +1032,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-18.jpg",
@@ -1047,7 +1047,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-19.jpg",
@@ -1062,7 +1062,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-20.jpg",
@@ -1077,7 +1077,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-21.jpg",
@@ -1092,7 +1092,7 @@ window.PHOTOS = [
     "w": 2400,
     "h": 1600,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-22.jpg",
@@ -1107,7 +1107,7 @@ window.PHOTOS = [
     "w": 2400,
     "h": 1600,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-23.jpg",
@@ -1122,7 +1122,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-24.jpg",
@@ -1137,7 +1137,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-25.jpg",
@@ -1152,7 +1152,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-26.jpg",
@@ -1167,7 +1167,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-27.jpg",
@@ -1182,7 +1182,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-28.jpg",
@@ -1197,7 +1197,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-29.jpg",
@@ -1212,7 +1212,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-30.jpg",
@@ -1227,7 +1227,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-31.jpg",
@@ -1242,7 +1242,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-32.jpg",
@@ -1257,7 +1257,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-33.jpg",
@@ -1272,7 +1272,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-34.jpg",
@@ -1287,7 +1287,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-35.jpg",
@@ -1302,7 +1302,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-36.jpg",
@@ -1317,7 +1317,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-37.jpg",
@@ -1332,7 +1332,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-38.jpg",
@@ -1347,7 +1347,7 @@ window.PHOTOS = [
     "w": 2400,
     "h": 1600,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-39.jpg",
@@ -1362,7 +1362,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-40.jpg",
@@ -1377,7 +1377,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-41.jpg",
@@ -1392,7 +1392,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-42.jpg",
@@ -1407,7 +1407,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-43.jpg",
@@ -1422,7 +1422,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-44.jpg",
@@ -1437,7 +1437,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-45.jpg",
@@ -1452,7 +1452,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-46.jpg",
@@ -1467,7 +1467,7 @@ window.PHOTOS = [
     "w": 2400,
     "h": 1600,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-47.jpg",
@@ -1482,7 +1482,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-48.jpg",
@@ -1497,7 +1497,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-49.jpg",
@@ -1512,7 +1512,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-50.jpg",
@@ -1527,7 +1527,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-51.jpg",
@@ -1542,7 +1542,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-52.jpg",
@@ -1557,7 +1557,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-53.jpg",
@@ -1572,7 +1572,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-54.jpg",
@@ -1587,7 +1587,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/court-55.jpg",
@@ -1602,7 +1602,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "Boys Tennis — Team Day"
+    "game": "Seaholm Boys Varsity Tennis - Match Day"
   },
   {
     "src": "images/biker-in-coney-islands.jpg",
