@@ -107,14 +107,16 @@ window.Account = (function () {
      buyer does not have to "register" before they can buy. */
   function signIn(addr, redirectTo) {
     if (!ready()) return Promise.reject(new Error("Accounts aren't switched on yet."));
-    return fetch(base() + "/auth/v1/otp", {
+    /* redirect_to is a QUERY parameter on the REST endpoint. Nesting it
+       in an `options` object is the JS SDK's shape — the REST API simply
+       ignores that, sends no redirect at all, and Supabase falls back to
+       the project's Site URL. The sign-in still works, so nothing errors;
+       the person just lands on the wrong page. */
+    var to = redirectTo || (location.origin + "/account.html");
+    return fetch(base() + "/auth/v1/otp?redirect_to=" + encodeURIComponent(to), {
       method: "POST",
       headers: { "apikey": cfg().supabaseKey, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: addr,
-        create_user: true,
-        options: { email_redirect_to: redirectTo || (location.origin + "/account.html") }
-      })
+      body: JSON.stringify({ email: addr, create_user: true })
     }).then(function (r) {
       if (r.ok) return true;
       return r.json().catch(function () { return {}; }).then(function (j) {
