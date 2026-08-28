@@ -2100,8 +2100,11 @@
         '<button class="entry__go" type="submit">Email me a link</button>' +
         "</form>" +
         '<p class="account__note" id="ac-note">' + (msg ||
-          "No password. Enter the email you used when ordering and Garrett's " +
-          "site will send you a one-time link that signs you in.") + "</p>";
+          "No password. Enter the email you used when ordering and we'll " +
+          "send you a one-time link.<br><b>Open that link on this device</b> " +
+          "— whichever device opens it is the one that gets signed in. " +
+          "You stay signed in afterwards, so this is a one-time step per " +
+          "phone or computer.") + "</p>";
 
       body.querySelector("#ac-form").addEventListener("submit", function (e) {
         e.preventDefault();
@@ -2113,8 +2116,9 @@
         note.textContent = "Sending…";
         Account.signIn(addr, location.origin + location.pathname)
           .then(function () {
-            note.innerHTML = "<b>Check your email.</b> The link signs you in — " +
-              "it works once and lasts an hour. Look in spam if it isn't there.";
+            note.innerHTML = "<b>Check your email.</b> Open the link " +
+              "<b>on this device</b> — it signs in whichever one opens it. " +
+              "Works once, lasts an hour. Look in spam if it isn't there.";
           })
           .catch(function (err) { note.textContent = err.message; });
       });
