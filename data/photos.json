@@ -2093,5 +2093,709 @@
     "archiveOnly": true,
     "w": 2000,
     "h": 1333
+  },
+  {
+    "src": "images/varsoc-01.jpg",
+    "title": "Varsity Soccer 01",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Soccer"
+  },
+  {
+    "src": "images/varsoc-02.jpg",
+    "title": "Varsity Soccer 02",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 2400,
+    "h": 1600,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Soccer"
+  },
+  {
+    "src": "images/varsoc-03.jpg",
+    "title": "Varsity Soccer 03",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Soccer"
+  },
+  {
+    "src": "images/varsoc-04.jpg",
+    "title": "Varsity Soccer 04",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Soccer"
+  },
+  {
+    "src": "images/varsoc-05.jpg",
+    "title": "Varsity Soccer 05",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Soccer"
+  },
+  {
+    "src": "images/varsoc-06.jpg",
+    "title": "Varsity Soccer 06",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Soccer"
+  },
+  {
+    "src": "images/varsoc-07.jpg",
+    "title": "Varsity Soccer 07",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Soccer"
+  },
+  {
+    "src": "images/varsoc-08.jpg",
+    "title": "Varsity Soccer 08",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Soccer"
+  },
+  {
+    "src": "images/varsoc-09.jpg",
+    "title": "Varsity Soccer 09",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Soccer"
+  },
+  {
+    "src": "images/varsoc-10.jpg",
+    "title": "Varsity Soccer 10",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Soccer"
+  },
+  {
+    "src": "images/varsoc-11.jpg",
+    "title": "Varsity Soccer 11",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Soccer"
+  },
+  {
+    "src": "images/varsoc-12.jpg",
+    "title": "Varsity Soccer 12",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Soccer"
+  },
+  {
+    "src": "images/ligget-01.jpg",
+    "title": "DCDS vs Liggett 01",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/ligget-02.jpg",
+    "title": "DCDS vs Liggett 02",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 2400,
+    "h": 1600,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/ligget-03.jpg",
+    "title": "DCDS vs Liggett 03",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/ligget-04.jpg",
+    "title": "DCDS vs Liggett 04",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/ligget-05.jpg",
+    "title": "DCDS vs Liggett 05",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/ligget-06.jpg",
+    "title": "DCDS vs Liggett 06",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/ligget-07.jpg",
+    "title": "DCDS vs Liggett 07",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/ligget-08.jpg",
+    "title": "DCDS vs Liggett 08",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/ligget-09.jpg",
+    "title": "DCDS vs Liggett 09",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/ligget-10.jpg",
+    "title": "DCDS vs Liggett 10",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/ligget-11.jpg",
+    "title": "DCDS vs Liggett 11",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/ligget-12.jpg",
+    "title": "DCDS vs Liggett 12",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/ligget-13.jpg",
+    "title": "DCDS vs Liggett 13",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/ligget-14.jpg",
+    "title": "DCDS vs Liggett 14",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/ligget-15.jpg",
+    "title": "DCDS vs Liggett 15",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "tennis"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS vs Liggett — Tennis"
+  },
+  {
+    "src": "images/vol-01.jpg",
+    "title": "Volleyball 01",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "volleyball"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Volleyball"
+  },
+  {
+    "src": "images/vol-02.jpg",
+    "title": "Volleyball 02",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "volleyball"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Volleyball"
+  },
+  {
+    "src": "images/vol-03.jpg",
+    "title": "Volleyball 03",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "volleyball"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Volleyball"
+  },
+  {
+    "src": "images/vol-04.jpg",
+    "title": "Volleyball 04",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "volleyball"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Volleyball"
+  },
+  {
+    "src": "images/vol-05.jpg",
+    "title": "Volleyball 05",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "volleyball"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Volleyball"
+  },
+  {
+    "src": "images/vol-06.jpg",
+    "title": "Volleyball 06",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "volleyball"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Volleyball"
+  },
+  {
+    "src": "images/vol-07.jpg",
+    "title": "Volleyball 07",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "volleyball"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Volleyball"
+  },
+  {
+    "src": "images/vol-08.jpg",
+    "title": "Volleyball 08",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "volleyball"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Volleyball"
+  },
+  {
+    "src": "images/vol-09.jpg",
+    "title": "Volleyball 09",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "sports",
+      "volleyball"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Volleyball"
+  },
+  {
+    "src": "images/jvsoc-01.jpg",
+    "title": "JV Soccer 01",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS JV Soccer"
+  },
+  {
+    "src": "images/jvsoc-02.jpg",
+    "title": "JV Soccer 02",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS JV Soccer"
+  },
+  {
+    "src": "images/jvsoc-03.jpg",
+    "title": "JV Soccer 03",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS JV Soccer"
+  },
+  {
+    "src": "images/jvsoc-04.jpg",
+    "title": "JV Soccer 04",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "people",
+      "soccer",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS JV Soccer"
+  },
+  {
+    "src": "images/practice-29.jpg",
+    "title": "Practice 29",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS JV Football — Practice"
+  },
+  {
+    "src": "images/practice-30.jpg",
+    "title": "Practice 30",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS JV Football — Practice"
+  },
+  {
+    "src": "images/practice-31.jpg",
+    "title": "Practice 31",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS JV Football — Practice"
+  },
+  {
+    "src": "images/practice-32.jpg",
+    "title": "Practice 32",
+    "location": "Detroit Country Day, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS JV Football — Practice"
   }
 ]
