@@ -109,11 +109,13 @@ window.Shop = (function () {
       name: order.name,
       email: order.email,
       total: "$" + order.total,
+      account: order.account || "(not signed in)",
       chat_code: order.room || "(none)",
       chat_link: order.chatUrl || "(chat not configured)",
       message: (order.subject || (SIREN + " Shop order")) + "\n\n" +
                order.summary + "\n\n" +
-               "From " + order.name + " <" + order.email + ">\n\n" +
+               "From " + order.name + " <" + order.email + ">\n" +
+               (order.account ? "Account: " + order.account + "\n" : "") + "\n" +
                detail + "\n\n" +
                (order.note ? "Note: " + order.note + "\n\n" : "") +
                (order.room

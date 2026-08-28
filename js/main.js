@@ -1551,6 +1551,7 @@
       : "Ordering isn't switched on yet — see SETUP.md. Nothing will send.";
     note.className = "co__status mono" + (Shop.ordersReady() ? "" : " is-warn");
 
+    paintAccountGate();
     checkoutEl.classList.remove("is-sent");
     checkoutEl.classList.add("is-open");
     document.body.style.overflow = "hidden";
@@ -1590,6 +1591,7 @@
              "</span></li>";
     }).join("");
     checkoutEl.querySelector("#co-date-row").hidden = false;
+    paintAccountGate();
 
     var note = checkoutEl.querySelector("#co-status");
     note.textContent = Shop.ordersReady()
@@ -1600,6 +1602,55 @@
     checkoutEl.classList.remove("is-sent");
     checkoutEl.classList.add("is-open");
     document.body.style.overflow = "hidden";
+  }
+
+  /* Signing in is asked for HERE and nowhere else. Browsing, the archive,
+     reviews and removal requests all stay open — a login in front of the
+     photographs would cost far more sales than it saves. It earns its
+     place at checkout because it is what lets someone come back for their
+     files months later instead of hunting for a lost email. */
+  function paintAccountGate() {
+    var box = checkoutEl.querySelector("#co-acct");
+    if (!window.Account || !Account.ready()) { box.hidden = true; return; }
+    box.hidden = false;
+
+    var who = Account.email();
+    if (who) {
+      box.className = "checkout__acct is-in";
+      box.innerHTML = '<span class="mono">Signed in · ' + esc(who) + "</span>" +
+        '<span class="mono checkout__acct-sub">Your files will wait for you at ' +
+        'garrettphoto.store/account</span>';
+      var f = checkoutEl.querySelector("#co-email");
+      if (f && !f.value) f.value = who;
+      return;
+    }
+
+    box.className = "checkout__acct";
+    box.innerHTML =
+      '<span class="mono">Sign in so your photographs are saved</span>' +
+      '<p class="checkout__acct-sub">No password. We email you a one-time link. ' +
+      "This is what lets you re-download your files any time instead of " +
+      "digging for an old email.</p>" +
+      '<div class="checkout__acct-row">' +
+      '<input type="email" id="co-acct-email" placeholder="you@example.com" ' +
+      'autocomplete="email" aria-label="Email for sign-in">' +
+      '<button type="button" id="co-acct-go">Send link</button></div>' +
+      '<p class="checkout__acct-msg mono" id="co-acct-msg"></p>';
+
+    box.querySelector("#co-acct-go").addEventListener("click", function () {
+      var addr = box.querySelector("#co-acct-email").value.trim();
+      var msg = box.querySelector("#co-acct-msg");
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(addr)) {
+        msg.textContent = "Add an email first."; return;
+      }
+      msg.textContent = "Sending…";
+      Account.signIn(addr, location.origin + "/account.html")
+        .then(function () {
+          msg.innerHTML = "<b>Check your email</b> — the link signs you in. " +
+            "You can finish this order now either way.";
+        })
+        .catch(function (err) { msg.textContent = err.message; });
+    });
   }
 
   function closeCheckout() {
@@ -1618,6 +1669,7 @@
       '<span class="mono">Your order</span>' +
       '<h3 class="checkout__sum" id="co-summary"></h3>' +
       '<ul class="checkout__items" id="co-items"></ul>' +
+      '<div class="checkout__acct" id="co-acct"></div>' +
       '<label><span class="mono">Your name</span>' +
       '<input type="text" id="co-name" autocomplete="name" required></label>' +
       '<label><span class="mono">Your email</span>' +
@@ -1706,6 +1758,7 @@
           total: total
         };
     order.name = name; order.email = email; order.note = note;
+    order.account = (window.Account && Account.email()) || "(not signed in)";
     order.chatUrl = chatUrl;
     order.fromName = booking ? "Garrett Photo Booking" : "Garrett Photo Store";
     order.room = room;
@@ -1986,6 +2039,100 @@
     if (room) openChat(room, q.get("as") === "seller" ? "seller" : "customer");
   }
 
+  /* ---------- account page ---------- */
+
+  function buildAccount() {
+    var root = document.getElementById("account-root");
+    root.innerHTML = "";
+
+    var head = el("header", "archive-head");
+    root.appendChild(head);
+    var body = el("div", "account");
+    root.appendChild(body);
+
+    function signedOut(msg) {
+      head.innerHTML = "<h1>Your photographs</h1>" +
+        '<span class="mono">Sign in to download what you have bought</span>';
+      body.innerHTML =
+        '<form class="entry__form account__form" id="ac-form">' +
+        '<input class="account__email" id="ac-email" type="email" ' +
+        'placeholder="you@example.com" autocomplete="email" ' +
+        'aria-label="Your email"> ' +
+        '<button class="entry__go" type="submit">Email me a link</button>' +
+        "</form>" +
+        '<p class="account__note" id="ac-note">' + (msg ||
+          "No password. Enter the email you used when ordering and Garrett's " +
+          "site will send you a one-time link that signs you in.") + "</p>";
+
+      body.querySelector("#ac-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var addr = body.querySelector("#ac-email").value.trim();
+        var note = body.querySelector("#ac-note");
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(addr)) {
+          note.textContent = "That doesn't look like an email address."; return;
+        }
+        note.textContent = "Sending…";
+        Account.signIn(addr, location.origin + location.pathname)
+          .then(function () {
+            note.innerHTML = "<b>Check your email.</b> The link signs you in — " +
+              "it works once and lasts an hour. Look in spam if it isn't there.";
+          })
+          .catch(function (err) { note.textContent = err.message; });
+      });
+    }
+
+    function signedIn() {
+      head.innerHTML = "<h1>Your photographs</h1>" +
+        '<span class="mono">' + esc(Account.email()) + "</span>";
+      body.innerHTML = '<p class="account__note">Loading your files…</p>';
+
+      Account.deliveries().then(function (rows) {
+        var out = '<div class="account__bar">' +
+          '<span class="mono">Signed in as ' + esc(Account.email()) + "</span>" +
+          '<button class="account__out" type="button" id="ac-out">Sign out</button>' +
+          "</div>";
+
+        if (!rows.length) {
+          out += '<p class="account__note">Nothing delivered yet. Once Garrett ' +
+            "sends your photographs they appear here, and they stay here — you " +
+            "can come back and download them again any time.</p>";
+        } else {
+          out += '<ul class="deliveries">' + rows.map(function (d) {
+            var when = d.created_at
+              ? new Date(d.created_at).toLocaleDateString(undefined,
+                  { year: "numeric", month: "short", day: "numeric" })
+              : "";
+            return '<li class="delivery">' +
+              '<div><b>' + esc(d.title || "Your photographs") + "</b>" +
+              (d.note ? '<span class="delivery__note">' + esc(d.note) + "</span>" : "") +
+              '<span class="mono delivery__when">' + when + "</span></div>" +
+              (d.url
+                ? '<a class="delivery__get" href="' + esc(d.url) +
+                  '" target="_blank" rel="noopener">Download</a>'
+                : '<span class="mono delivery__pending">Preparing</span>') +
+              "</li>";
+          }).join("") + "</ul>";
+        }
+        body.innerHTML = out;
+        body.querySelector("#ac-out").addEventListener("click", function () {
+          Account.signOut();
+          signedOut("Signed out.");
+        });
+      });
+    }
+
+    if (!Account.ready()) {
+      head.innerHTML = "<h1>Your photographs</h1>";
+      body.innerHTML = '<p class="account__note">Accounts aren\'t switched ' +
+        "on yet.</p>";
+      return;
+    }
+
+    Account.absorbRedirect().then(function (u) {
+      u ? signedIn() : signedOut();
+    });
+  }
+
   /* ---------- boot ---------- */
 
   protectImages(document);
@@ -1998,5 +2145,6 @@
     mountResume(document.getElementById("store-root"));
     maybeOpenSellerChat();
   }
+  if (page === "account") buildAccount();
   if (page === "spa") initSpa();
 })();

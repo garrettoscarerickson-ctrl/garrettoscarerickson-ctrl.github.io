@@ -327,3 +327,87 @@ otherwise is selling something. What the store *does* do:
 
 The real protection isn't stopping the screenshot. It's that the screenshot
 isn't worth having.
+
+
+---
+
+## Accounts — so a buyer never loses their files
+
+`account.html` lets a buyer sign in and re-download everything you have
+delivered them, any time. It uses Supabase's own auth, so there is **no
+password anywhere** — they type their email, Supabase sends a one-time
+link, clicking it signs them in. Nothing on the site ever handles a
+password, which matters because people reuse them.
+
+Signing in is asked for at **checkout only**. Browsing, the archive,
+reviews and removal requests all stay open. A login in front of the
+photographs would cost more sales than it saves; it earns its place at
+checkout because it is what lets someone come back months later instead
+of hunting for a lost email.
+
+### 1. The deliveries table
+
+SQL Editor → New query → Run:
+
+```sql
+create table deliveries (
+  id          bigint generated always as identity primary key,
+  email       text not null,
+  title       text not null,
+  note        text default '',
+  url         text,
+  created_at  timestamptz not null default now()
+);
+
+alter table deliveries enable row level security;
+
+-- a signed-in buyer sees only rows addressed to their own email
+create policy "read own deliveries"
+  on deliveries for select
+  using (lower(email) = lower(auth.jwt() ->> 'email'));
+
+create index on deliveries (lower(email));
+```
+
+There is no insert, update or delete policy, so nobody visiting the site
+can add or change a delivery. You add them yourself.
+
+### 2. Point the sign-in links at the real site
+
+**Authentication → URL Configuration**:
+
+- **Site URL**: `https://garrettphoto.store`
+- **Redirect URLs**: add `https://garrettphoto.store/account.html`
+  and `https://garrettphoto.store/store.html`
+
+Without this the emailed link points at `localhost:3000` and does
+nothing when a customer taps it.
+
+### Delivering someone their photos
+
+**Table Editor → deliveries → Insert row:**
+
+| column | what to put |
+|---|---|
+| `email` | the buyer's email, exactly as they typed it at checkout |
+| `title` | e.g. `JV Football — 3 photographs` |
+| `note` | optional, e.g. `Full resolution, no watermark` |
+| `url` | the download link |
+
+The email must match what they signed in with, or the row stays
+invisible to them — that match is the whole security model.
+
+For `url`, anything durable works: a Google Drive share link, or a file
+in Supabase Storage. **Avoid WeTransfer and anything else that expires**
+— the entire point of this page is that the files do not go away.
+
+### The one real limitation
+
+Supabase's built-in email service is rate-limited to a handful of
+messages per hour and is explicitly not meant for production. At a few
+orders a week you will not notice; on a busy weekend after a tournament
+you would, and buyers would just see the link never arriving.
+
+The fix, when you need it, is a free SMTP provider (Resend and Brevo
+both have free tiers) plugged into **Authentication → Emails → SMTP
+Settings**. Not worth doing until it actually bites.
