@@ -22,6 +22,7 @@ constrained by policy and legitimately lives in the page.
 import json
 import os
 import sys
+from urllib.parse import quote
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ORIGINALS = os.path.join(ROOT, "images", "_originals")
@@ -105,8 +106,11 @@ def main():
     for i, (name, path, game) in enumerate(todo, 1):
         s3.upload_file(path, bucket, name, ExtraArgs={
             "ContentType": "image/jpeg",
-            # the game rides along so a delivery can be audited later
-            "Metadata": {"game": game},
+            # The game rides along so a delivery can be audited later.
+            # URL-encoded because S3 metadata is ASCII-only and every one
+            # of these names contains an em-dash, which fails validation
+            # and aborts the whole upload.
+            "Metadata": {"game": quote(game)},
         })
         if i % 20 == 0:
             print("  %d/%d..." % (i, len(todo)))
