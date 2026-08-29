@@ -2914,7 +2914,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "11"
+    ]
   },
   {
     "src": "images/casstech-07.jpg",
@@ -2968,7 +2971,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "9"
+    ]
   },
   {
     "src": "images/casstech-10.jpg",
@@ -3016,7 +3022,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "11"
+    ]
   },
   {
     "src": "images/casstech-13.jpg",
@@ -3070,7 +3079,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "11"
+    ]
   },
   {
     "src": "images/casstech-16.jpg",
@@ -3086,7 +3098,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "10"
+    ]
   },
   {
     "src": "images/casstech-17.jpg",
@@ -3118,7 +3133,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "8"
+    ]
   },
   {
     "src": "images/casstech-19.jpg",
@@ -3172,7 +3190,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "13"
+    ]
   },
   {
     "src": "images/casstech-22.jpg",
@@ -3303,7 +3324,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "18"
+    ]
   },
   {
     "src": "images/casstech-29.jpg",
@@ -3452,7 +3476,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "12"
+    ]
   },
   {
     "src": "images/casstech-37.jpg",
@@ -3468,7 +3495,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "12"
+    ]
   },
   {
     "src": "images/casstech-38.jpg",
@@ -3503,7 +3533,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "23"
+    ]
   },
   {
     "src": "images/casstech-40.jpg",
@@ -3576,7 +3609,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "32"
+    ]
   },
   {
     "src": "images/casstech-44.jpg",
@@ -3592,7 +3628,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "23"
+    ]
   },
   {
     "src": "images/casstech-45.jpg",
@@ -3627,7 +3666,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "9"
+    ]
   },
   {
     "src": "images/casstech-47.jpg",
@@ -3739,7 +3781,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "6"
+    ]
   },
   {
     "src": "images/casstech-53.jpg",
@@ -3774,7 +3819,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "6"
+    ]
   },
   {
     "src": "images/casstech-55.jpg",
@@ -3790,7 +3838,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "6"
+    ]
   },
   {
     "src": "images/casstech-56.jpg",
@@ -3806,7 +3857,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "5"
+    ]
   },
   {
     "src": "images/casstech-57.jpg",
@@ -3822,7 +3876,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "5"
+    ]
   },
   {
     "src": "images/casstech-58.jpg",
@@ -3878,7 +3935,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "11"
+    ]
   },
   {
     "src": "images/casstech-61.jpg",
@@ -3913,7 +3973,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "8"
+    ]
   },
   {
     "src": "images/casstech-63.jpg",
@@ -4062,7 +4125,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer"
+    "game": "DCDS vs Cass Tech — Varsity Soccer",
+    "players": [
+      "9"
+    ]
   },
   {
     "src": "images/casstech-71.jpg",
