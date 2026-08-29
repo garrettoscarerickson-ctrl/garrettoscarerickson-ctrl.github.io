@@ -1579,6 +1579,12 @@
     note.className = "co__status mono" + (Shop.ordersReady() ? "" : " is-warn");
 
     paintAccountGate();
+    /* When payment is on, the button leads to paying — saying "Send
+       order" and then revealing a Pay button afterwards reads as though
+       the order is finished, and buyers stop there. */
+    checkoutEl.querySelector("#co-send").textContent = PAYMENT.enabled
+      ? "Continue to payment · " + money(Math.ceil((items.length * PRICE * 100 + 30) / 0.971) / 100)
+      : "Send order";
     checkoutEl.classList.remove("is-sent");
     checkoutEl.classList.add("is-open");
     document.body.style.overflow = "hidden";
@@ -1684,6 +1690,30 @@
      can tie the payment back to exactly which photographs were bought.
      Hidden entirely until a payment link exists — a dead "Pay now"
      button is worse than none. */
+  /* Asks the Edge Function for a Stripe session and goes there. The
+     amount is computed server-side from the saved order — a total the
+     page could name is a total a buyer could edit. */
+  function goToPayment(code) {
+    var rb = window.REVIEW_BACKEND || {};
+    return fetch(rb.supabaseUrl.replace(/\/$/, "") + "/functions/v1/" +
+                 (PAYMENT.checkoutFunction || "rapid-function"), {
+      method: "POST",
+      headers: {
+        "apikey": rb.supabaseKey,
+        "Authorization": "Bearer " + rb.supabaseKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ code: code })
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok || !j.url) {
+          throw new Error(j.detail || j.error || "Couldn't start checkout.");
+        }
+        window.location.href = j.url;
+      });
+    });
+  }
+
   function paintPayButton(info) {
     var a = checkoutEl.querySelector("#co-pay");
     if (!info || !PAYMENT.enabled) { a.hidden = true; return; }
@@ -1845,17 +1875,37 @@
       checkoutEl.querySelector("#co-code").textContent = room;
       rememberMyRoom(room, name);
 
-      if (!booking && window.ShopOrders) {
-        ShopOrders.save({
-          code: room, email: email, name: name, total: total,
-          items: checkoutEl._items.map(function (i) {
-            return { src: i.src, title: i.title, game: i.game };
+      /* The order row must exist before Stripe is asked for a session —
+         the amount is read from it, not from the browser. So wait for the
+         save rather than firing both off together. */
+      var saved = (!booking && window.ShopOrders)
+        ? ShopOrders.save({
+            code: room, email: email, name: name, total: total,
+            items: checkoutEl._items.map(function (i) {
+              return { src: i.src, title: i.title, game: i.game };
+            })
           })
+        : Promise.resolve(false);
+
+      if (!booking && PAYMENT.enabled) {
+        saved.then(function (ok) {
+          if (!ok) throw new Error("Couldn't save the order.");
+          return goToPayment(room);
+        }).catch(function (err) {
+          /* Fall back to the chat flow rather than stranding them: the
+             order email has already reached Garrett either way. */
+          paintPayButton({ code: room, email: email,
+                           count: checkoutEl._items.length, total: total });
+          var note = checkoutEl.querySelector("#co-status");
+          note.className = "co__status mono is-warn";
+          note.textContent = err.message + " Your order reached Garrett — " +
+            "use the button below to pay, or sort it out in the chat.";
+        });
+      } else {
+        paintPayButton(booking ? null : {
+          code: room, email: email, count: checkoutEl._items.length, total: total
         });
       }
-      paintPayButton(booking ? null : {
-        code: room, email: email, count: checkoutEl._items.length, total: total
-      });
       if (!booking) {
         checkoutEl._selected.clear();
         checkoutEl._root.querySelectorAll(".shop-ph.is-picked")
