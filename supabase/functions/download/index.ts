@@ -61,8 +61,9 @@ Deno.serve(async (req) => {
   const email = userData.user.email.toLowerCase();
 
   let id: number | null = null;
+  let inline = false;
   try {
-    ({ id } = await req.json());
+    ({ id, inline } = await req.json());
   } catch {
     return json({ error: "Bad request" }, 400);
   }
@@ -88,12 +89,15 @@ Deno.serve(async (req) => {
 
   const target = new URL(`${ENDPOINT}/${BUCKET}/${row.object_key}`);
   target.searchParams.set("X-Amz-Expires", String(TTL));
-  // Ask R2 to serve it as a download with a meaningful filename, rather
-  // than opening a tab called "varsoc-01.jpg".
+  /* `attachment` forces a download, which on a phone lands in Files —
+     not the camera roll, which is where someone who just bought a photo
+     of their kid expects it. Served inline the image simply opens, and a
+     long press offers "Add to Photos". Desktop keeps the download, where
+     a file in the Downloads folder is what people want. */
   const filename = `${row.title.replace(/[^\w \-]/g, "")}.jpg`;
   target.searchParams.set(
     "response-content-disposition",
-    `attachment; filename="${filename}"`,
+    `${inline ? "inline" : "attachment"}; filename="${filename}"`,
   );
 
   const signed = await r2.sign(

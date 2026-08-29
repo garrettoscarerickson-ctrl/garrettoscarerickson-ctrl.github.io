@@ -197,6 +197,16 @@ window.Account = (function () {
      rather than a URL, because a stored link would expire and the buyer
      would find a dead download months later — which is the exact failure
      this whole feature exists to prevent. */
+  /* A phone should open the photo, not download it — a forced download
+     lands in Files, and someone who just bought a picture of their kid
+     wants it in the camera roll. Detected by touch rather than screen
+     width, since a narrow desktop window is still a desktop. */
+  function wantsInline() {
+    try {
+      return window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+    } catch (e) { return false; }
+  }
+
   function link(deliveryId) {
     return fresh().then(function (t) {
       if (!t) throw new Error("Not signed in.");
@@ -207,7 +217,7 @@ window.Account = (function () {
           "Authorization": "Bearer " + t,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ id: deliveryId })
+        body: JSON.stringify({ id: deliveryId, inline: wantsInline() })
       });
     }).then(function (r) {
       return r.json().catch(function () { return {}; }).then(function (j) {
@@ -220,6 +230,7 @@ window.Account = (function () {
   return {
     ready: ready,
     link: link,
+    wantsInline: wantsInline,
     signIn: signIn,
     signOut: signOut,
     user: user,

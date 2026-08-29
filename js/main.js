@@ -1578,7 +1578,11 @@
       : "Ordering isn't switched on yet — see SETUP.md. Nothing will send.";
     note.className = "co__status mono" + (Shop.ordersReady() ? "" : " is-warn");
 
-    paintAccountGate();
+    /* No sign-in before paying. Every field between wanting a photo and
+       paying for it is somewhere a buyer stops, and an account is not
+       needed to buy — the delivery is addressed by the email they type,
+       so signing in later reaches the same files. Offered afterwards. */
+    checkoutEl.querySelector("#co-acct").hidden = true;
     /* When payment is on, the button leads to paying — saying "Send
        order" and then revealing a Pay button afterwards reads as though
        the order is finished, and buyers stop there. */
@@ -1624,7 +1628,7 @@
              "</span></li>";
     }).join("");
     checkoutEl.querySelector("#co-date-row").hidden = false;
-    paintAccountGate();
+    checkoutEl.querySelector("#co-acct").hidden = true;
 
     var note = checkoutEl.querySelector("#co-status");
     note.textContent = Shop.ordersReady()
@@ -1870,7 +1874,12 @@
     order.room = room;
 
     Shop.sendOrder(order).then(function () {
-      checkoutEl.classList.add("is-sent");
+      var paying = !booking && PAYMENT.enabled;
+      /* Don't show the "Sent — Garrett will reach you shortly" panel when
+         payment is next. It reads as the order being finished, and the
+         redirect that follows looks like the page jumping for no reason.
+         The panel is for the fallback path only. */
+      if (!paying) checkoutEl.classList.add("is-sent");
       chatName = name;
       checkoutEl.querySelector("#co-code").textContent = room;
       rememberMyRoom(room, name);
@@ -1887,13 +1896,17 @@
           })
         : Promise.resolve(false);
 
-      if (!booking && PAYMENT.enabled) {
+      if (paying) {
+        var status = checkoutEl.querySelector("#co-status");
+        status.className = "co__status mono";
+        status.textContent = "Taking you to payment…";
         saved.then(function (ok) {
           if (!ok) throw new Error("Couldn't save the order.");
           return goToPayment(room);
         }).catch(function (err) {
           /* Fall back to the chat flow rather than stranding them: the
              order email has already reached Garrett either way. */
+          checkoutEl.classList.add("is-sent");
           paintPayButton({ code: room, email: email,
                            count: checkoutEl._items.length, total: total });
           var note = checkoutEl.querySelector("#co-status");
@@ -2244,7 +2257,12 @@
             "sends your photographs they appear here, and they stay here — you " +
             "can come back and download them again any time.</p>";
         } else {
-          out += '<ul class="deliveries">' + rows.map(function (d) {
+          if (Account.wantsInline()) {
+          out += '<p class="account__note account__hint">Tap <b>Open</b>, ' +
+            "then press and hold the photograph and choose " +
+            "<b>Add to Photos</b> to save it to your camera roll.</p>";
+        }
+        out += '<ul class="deliveries">' + rows.map(function (d) {
             var when = d.created_at
               ? new Date(d.created_at).toLocaleDateString(undefined,
                   { year: "numeric", month: "short", day: "numeric" })
@@ -2262,7 +2280,8 @@
               '<span class="mono delivery__when">' + when + "</span></div>" +
               ((d.url || d.object_key)
                 ? '<button class="delivery__get" type="button" data-id="' +
-                  d.id + '">Download</button>'
+                  d.id + '">' + (Account.wantsInline() ? "Open" : "Download") +
+                  "</button>"
                 : '<span class="mono delivery__pending">Preparing</span>') +
               "</li>";
           }).join("") + "</ul>";

@@ -2760,3 +2760,6 @@ body.is-signed-in .nav__mine::before { opacity: 1; }
   line-height: 1.45;
   color: var(--ink-dim);
 }
+
+.account__hint { margin: 0.9rem 0 0; font-size: 0.92rem; }
+.account__hint b { color: var(--ink); }
