@@ -1394,7 +1394,7 @@
           '<span class="album__foot">' +
           "<b>" + game + "</b>" +
           '<span class="mono">' + nPhotos(list.length) + "</span></span>";
-        card.addEventListener("click", function () { go(game); });
+        card.addEventListener("click", function () { go(game, null); });
         grid.appendChild(card);
       });
       body.appendChild(grid);
@@ -1402,7 +1402,19 @@
       updateCart();
     }
 
-    function showGame(game) {
+    /* Jersey numbers a buyer can filter by. A parent looking for their
+       kid should not have to scan 72 frames — they know the number. */
+    function playersIn(list) {
+      var seen = {};
+      list.forEach(function (p) {
+        (p.players || []).forEach(function (n) { seen[n] = (seen[n] || 0) + 1; });
+      });
+      return Object.keys(seen).sort(function (a, b) {
+        return Number(a) - Number(b);
+      }).map(function (n) { return { n: n, count: seen[n] }; });
+    }
+
+    function showGame(game, player) {
       var list = groups[game];
       if (!list) return showGames();
       body.innerHTML = "";
@@ -1414,11 +1426,42 @@
       var back = el("button", "album-back");
       back.type = "button";
       back.innerHTML = '<span aria-hidden="true">←</span> All games';
-      back.addEventListener("click", function () { go(null); });
+      back.addEventListener("click", function () { go(null, null); });
       body.appendChild(back);
 
+      var nums = playersIn(list);
+      if (nums.length) {
+        var bar = el("div", "players");
+        bar.innerHTML = '<span class="mono players__label">Find a player</span>';
+        var all = el("button", "player" + (player ? "" : " is-on"), "All");
+        all.type = "button";
+        all.addEventListener("click", function () { go(game, null); });
+        bar.appendChild(all);
+        nums.forEach(function (x) {
+          var b = el("button", "player" + (player === x.n ? " is-on" : ""));
+          b.type = "button";
+          b.innerHTML = "#" + esc(x.n) +
+            '<span class="player__n">' + x.count + "</span>";
+          b.addEventListener("click", function () { go(game, x.n); });
+          bar.appendChild(b);
+        });
+        body.appendChild(bar);
+      }
+
+      var shown = player
+        ? list.filter(function (p) {
+            return (p.players || []).indexOf(player) > -1;
+          })
+        : list;
+
+      if (player) {
+        head.innerHTML = "<h1>" + game + "</h1>" +
+          '<span class="mono">#' + esc(player) + " · " +
+          nPhotos(shown.length) + " · $" + PRICE + " each</span>";
+      }
+
       var grid = el("div", "shop-grid");
-      list.forEach(function (photo) {
+      shown.forEach(function (photo) {
         grid.appendChild(shopCard(photo, selected, updateCart));
       });
       body.appendChild(grid);
@@ -1429,18 +1472,22 @@
 
     /* keep the view in the URL so the phone back gesture does the
        obvious thing instead of leaving the store entirely */
-    function go(game, replace) {
-      var url = location.pathname + (game ? "?game=" + encodeURIComponent(game) : "");
+    function go(game, player, replace) {
+      var url = location.pathname +
+        (game ? "?game=" + encodeURIComponent(game) : "") +
+        (game && player ? "&player=" + encodeURIComponent(player) : "");
       try {
-        history[replace ? "replaceState" : "pushState"]({ game: game || null }, "", url);
+        history[replace ? "replaceState" : "pushState"](
+          { game: game || null, player: player || null }, "", url);
       } catch (e) {}
-      game ? showGame(game) : showGames();
+      game ? showGame(game, player) : showGames();
     }
 
     window.addEventListener("popstate", function (e) {
-      var g = (e.state && e.state.game) ||
-              new URLSearchParams(location.search).get("game");
-      g && groups[g] ? showGame(g) : showGames();
+      var q = new URLSearchParams(location.search);
+      var g = (e.state && e.state.game) || q.get("game");
+      var pl = (e.state && e.state.player) || q.get("player");
+      g && groups[g] ? showGame(g, pl) : showGames();
     });
 
     /* sticky cart */
@@ -1474,8 +1521,9 @@
         n ? "Checkout · $" + (n * PRICE) : "Checkout";
     }
 
-    var opening = new URLSearchParams(location.search).get("game");
-    go(opening && groups[opening] ? opening : null, true);
+    var q0 = new URLSearchParams(location.search);
+    var opening = q0.get("game");
+    go(opening && groups[opening] ? opening : null, q0.get("player"), true);
   }
 
   /* a selectable, watermarked store card */

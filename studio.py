@@ -147,6 +147,19 @@ def clean_entry(body, photos, existing=None):
     orientation = body.get("orientation") or entry.get("orientation") or "landscape"
     entry["orientation"] = "portrait" if orientation == "portrait" else "landscape"
     entry["tags"] = tags
+    # Jersey numbers, so a parent can filter a game down to their kid.
+    # Free text rather than a picker: numbers vary by sport and season,
+    # and a wrong-but-fixed list is worse than none.
+    if "players" in body:
+        nums = []
+        for n in (body.get("players") or []):
+            n = re.sub(r"[^0-9]", "", str(n))
+            if n and n not in nums:
+                nums.append(n)
+        if nums:
+            entry["players"] = sorted(nums, key=int)
+        else:
+            entry.pop("players", None)
     # placement decides where a photo lives:
     #   archive  -> archive only, never on the home page (all Studio uploads)
     #   gallery  -> shown in the home gallery (subject to the 10-photo cap)
@@ -454,6 +467,12 @@ header nav{display:flex;gap:1.5rem;align-items:baseline}
   border-radius:50%;border:0;background:rgba(0,0,0,.72);color:#f87171;
   cursor:pointer;font-size:12px;line-height:1;padding:0}
 .gthumb button:hover{background:#f87171;color:#000}
+.gthumb{height:auto;width:78px}
+.gthumb img{height:78px}
+.jersey{width:100%;box-sizing:border-box;background:#111;border:1px solid var(--line);
+        border-top:0;border-radius:0 0 8px 8px;color:var(--ink);font:inherit;
+        font-size:11px;text-align:center;padding:3px 2px}
+.jersey:focus{outline:none;border-color:var(--ink)}
 header nav a:hover{color:var(--ink)}
 h2{font-size:1rem;letter-spacing:.2em;text-transform:uppercase;
   font-weight:600;margin:3rem 0 1.2rem}
@@ -541,7 +560,10 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim)}
   <h2>Groups <span class="mono" id="sh-gcount"></span></h2>
   <p class="mono hint">A group is one game or shoot. Renaming one renames it on
     every photograph in it. Removing a photograph here takes it off the whole
-    site — store, archive and sports page.</p>
+    site — store, archive and sports page.<br>
+    The box under each photograph is its jersey numbers — type them separated
+    by spaces (<b>7 12</b> for two players) and they become filters buyers can
+    search by. Leave it blank if no number is visible.</p>
   <div id="sh-games"></div>
 </section>
 
@@ -930,7 +952,23 @@ function renderGames(photos) {
     list.forEach(function (p) {
       var t = el("div", "gthumb");
       t.innerHTML = '<img src="/' + p.src + '" alt="" loading="lazy">' +
-                    "<button title='Remove'>x</button>";
+                    "<button title='Remove'>x</button>" +
+                    '<input class="jersey" value="' +
+                      q((p.players || []).join(" ")) +
+                      '" placeholder="#" title="Jersey numbers, space separated">';
+      var jin = t.querySelector(".jersey");
+      jin.onclick = function (e) { e.stopPropagation(); };
+      jin.onchange = function () {
+        api("/api/update", {
+          src: p.src, title: p.title, tags: p.tags,
+          location: p.location, year: p.year, orientation: p.orientation,
+          players: jin.value.split(/[\s,]+/).filter(Boolean)
+        }).then(function () {
+          jin.style.borderColor = "#6ee7a8";
+          setTimeout(function () { jin.style.borderColor = ""; }, 900);
+        }).catch(function (e) { alert(e.message); });
+      };
+
       t.querySelector("button").onclick = function () {
         if (!confirm('Remove "' + p.title + '" from the site?\n\n' +
           "It comes off the store, the archive and the sports page. The " +

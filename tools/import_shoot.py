@@ -82,6 +82,14 @@ SHOOTS = [
         "only": [10, 11, 12, 13],
     },
     {
+        "folder": "DCDVSOC_TOURNIMENTMATCH1_FINALS",
+        "game": "DCDS vs Cass Tech — Varsity Soccer",
+        "slug": "casstech",
+        "title": "DCDS vs Cass Tech",
+        "tags": ["sports", "soccer", "people"],
+        "location": "Michigan",
+    },
+    {
         "folder": "DCD_JVFOT_PRC FINALS/Owen",
         "game": "DCDS JV Football — Practice",   # joins the existing group
         "slug": "practice",

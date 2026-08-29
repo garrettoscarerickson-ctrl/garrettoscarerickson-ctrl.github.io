@@ -2785,3 +2785,52 @@ body.is-signed-in .nav__mine::before { opacity: 1; }
   -webkit-user-select: none;
   user-select: none;
 }
+
+/* ---------- find a player ---------- */
+
+.players {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: clamp(1rem, 2.5vh, 1.5rem) var(--pad) 0;
+}
+
+.players__label { width: 100%; padding-bottom: 0.15rem; }
+
+.player {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--r-full);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-line);
+  color: var(--ink-dim);
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.player:hover { background: var(--glass-bg-hover); color: var(--ink); }
+
+.player.is-on {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+
+/* how many photographs that number appears in */
+.player__n {
+  font-size: 0.66rem;
+  font-weight: 500;
+  opacity: 0.65;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 560px) {
+  .player { padding: 0.45rem 0.7rem; font-size: 0.74rem; }
+}
