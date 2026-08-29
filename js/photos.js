@@ -4185,7 +4185,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "1"
+    ]
   },
   {
     "src": "images/bartoshuk-02.jpg",
@@ -4201,7 +4204,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "1"
+    ]
   },
   {
     "src": "images/bartoshuk-03.jpg",
@@ -4217,7 +4223,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "1"
+    ]
   },
   {
     "src": "images/bartoshuk-04.jpg",
@@ -4233,7 +4242,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "1"
+    ]
   },
   {
     "src": "images/bartoshuk-05.jpg",
@@ -4249,7 +4261,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "1"
+    ]
   },
   {
     "src": "images/bartoshuk-06.jpg",
@@ -4303,7 +4318,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "6"
+    ]
   },
   {
     "src": "images/bartoshuk-09.jpg",
@@ -4338,7 +4356,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "17"
+    ]
   },
   {
     "src": "images/bartoshuk-11.jpg",
@@ -4370,7 +4391,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "18"
+    ]
   },
   {
     "src": "images/bartoshuk-13.jpg",
@@ -4386,7 +4410,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "1"
+    ]
   },
   {
     "src": "images/bartoshuk-14.jpg",
@@ -4421,7 +4448,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "16"
+    ]
   },
   {
     "src": "images/bartoshuk-16.jpg",
@@ -4437,7 +4467,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "16"
+    ]
   },
   {
     "src": "images/bartoshuk-17.jpg",
@@ -4453,7 +4486,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "25"
+    ]
   },
   {
     "src": "images/bartoshuk-18.jpg",
@@ -4471,7 +4507,7 @@ window.PHOTOS = [
     "archiveOnly": true,
     "game": "DCDS Bartoshuk Tournament Match 2",
     "players": [
-      "4"
+      "44"
     ]
   },
   {
@@ -4488,7 +4524,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "6"
+    ]
   },
   {
     "src": "images/bartoshuk-20.jpg",
@@ -4523,7 +4562,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "13"
+    ]
   },
   {
     "src": "images/bartoshuk-22.jpg",
@@ -4539,7 +4581,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "1"
+    ]
   },
   {
     "src": "images/bartoshuk-23.jpg",
@@ -4641,7 +4686,11 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "6",
+      "23"
+    ]
   },
   {
     "src": "images/bartoshuk-29.jpg",
@@ -4733,7 +4782,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "13"
+    ]
   },
   {
     "src": "images/bartoshuk-34.jpg",
@@ -4903,7 +4955,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "27"
+    ]
   },
   {
     "src": "images/bartoshuk-43.jpg",
@@ -4919,7 +4974,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "16"
+    ]
   },
   {
     "src": "images/bartoshuk-44.jpg",
@@ -5222,7 +5280,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "5"
+    ]
   },
   {
     "src": "images/bartoshuk-60.jpg",
@@ -5295,7 +5356,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "27"
+    ]
   },
   {
     "src": "images/bartoshuk-64.jpg",
@@ -5311,7 +5375,10 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "27"
+    ]
   },
   {
     "src": "images/bartoshuk-65.jpg",
@@ -5327,6 +5394,9 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2"
+    "game": "DCDS Bartoshuk Tournament Match 2",
+    "players": [
+      "25"
+    ]
   }
 ];
