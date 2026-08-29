@@ -90,6 +90,14 @@ SHOOTS = [
         "location": "Michigan",
     },
     {
+        "folder": "TOURNIMENTMATCH2_FINALS",
+        "game": "DCDS Bartoshuk Tournament Match 2",
+        "slug": "bartoshuk",
+        "title": "Bartoshuk Match 2",
+        "tags": ["sports", "soccer", "people"],
+        "location": "Michigan",
+    },
+    {
         "folder": "DCD_JVFOT_PRC FINALS/Owen",
         "game": "DCDS JV Football — Practice",   # joins the existing group
         "slug": "practice",
