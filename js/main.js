@@ -570,7 +570,7 @@
 
     /* Card checkout via Stripe Payment Links. Needs an account holder who
        is 18+, so this stays off until a parent's account is set up. */
-    enabled: false,
+    enabled: true,
     currency: "USD",
     links: {
       /* Stripe Payment Link for store photographs. Create it as a $1
