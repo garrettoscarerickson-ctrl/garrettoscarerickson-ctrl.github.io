@@ -71,9 +71,15 @@ const EMAIL_TTL = 604800;
 async function signed(key: string, title: string) {
   const u = new URL(`${ENDPOINT}/${BUCKET}/${key}`);
   u.searchParams.set("X-Amz-Expires", String(EMAIL_TTL));
+  /* Inline, not attachment. The email is opened on a phone far more
+     often than a laptop, and a forced download there lands in Files
+     rather than the camera roll — which is not where someone who just
+     bought a photo of their kid goes looking. Opened inline, a long
+     press offers "Add to Photos". On a desktop it opens in a tab, where
+     right-click and Save works, so nobody is worse off than a download. */
   u.searchParams.set(
     "response-content-disposition",
-    `attachment; filename="${title.replace(/[^\w \-]/g, "")}.jpg"`,
+    `inline; filename="${title.replace(/[^\w \-]/g, "")}.jpg"`,
   );
   const req = await r2Client().sign(new Request(u, { method: "GET" }),
                             { aws: { signQuery: true } });
@@ -113,7 +119,7 @@ async function sendEmail(
         <div style="font-size:15px;font-weight:700;color:#111114;padding-bottom:8px">
           ${l.title}
         </div>
-        <a href="${l.url}" style="${btn}">Click here to download</a>
+        <a href="${l.url}" style="${btn}">Click here to open</a>
       </td>
     </tr>`).join("");
 
@@ -133,6 +139,12 @@ async function sendEmail(
           ? "Here's your photograph"
           : `Here are your ${links.length} photographs`} — full resolution,
         no watermark.
+      </p>
+      <p style="margin:0 0 22px;font-size:14px;line-height:1.6;color:#6a6a72;
+                background:#f6f6f4;border-radius:8px;padding:12px 14px">
+        <b style="color:#111114">On a phone:</b> tap a photograph, then press
+        and hold it and choose <b style="color:#111114">Add to Photos</b> to
+        save it to your camera roll.
       </p>
 
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
