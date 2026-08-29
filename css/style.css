@@ -2763,3 +2763,25 @@ body.is-signed-in .nav__mine::before { opacity: 1; }
 
 .account__hint { margin: 0.9rem 0 0; font-size: 0.92rem; }
 .account__hint b { color: var(--ink); }
+
+/* The account-page thumbnail is the watermarked preview. Long-pressing it
+   saves a watermarked file that looks like the one they bought, so block
+   the gesture entirely — the Open button is the only correct route. */
+.wm-block { position: relative; }
+
+.wm-block img {
+  pointer-events: none;
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.wm-block::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}

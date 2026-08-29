@@ -2270,9 +2270,14 @@
             /* The watermarked store preview doubles as the thumbnail:
                already public, already tiny, and it identifies the photo
                without needing a signed link just to draw a 60px image. */
+            /* The thumbnail is the WATERMARKED preview, so long-pressing
+               it saves the wrong file — and it looks exactly like the one
+               they paid for. Someone will try. Make it unsaveable so the
+               only route to a photograph is the Open button. */
             var thumb = d.object_key
-              ? '<span class="delivery__thumb"><img src="images/shop/' +
-                esc(d.object_key) + '" alt="" loading="lazy"></span>'
+              ? '<span class="delivery__thumb wm-block"><img src="images/shop/' +
+                esc(d.object_key) + '" alt="" loading="lazy" draggable="false">' +
+                "</span>"
               : "";
             return '<li class="delivery">' + thumb +
               '<div class="delivery__meta"><b>' + esc(d.title || "Your photographs") + "</b>" +
