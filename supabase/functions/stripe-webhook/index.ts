@@ -80,42 +80,95 @@ async function signed(key: string, title: string) {
   return req.url;
 }
 
-async function sendEmail(to: string, name: string, links: Array<{ title: string; url: string }>) {
-  const key = Deno.env.get("RESEND_API_KEY");
+async function sendEmail(
+  to: string,
+  name: string,
+  links: Array<{ title: string; url: string; key: string }>,
+) {
+  const apiKey = Deno.env.get("RESEND_API_KEY");
   const from = Deno.env.get("RESEND_FROM") || "onboarding@resend.dev";
-  if (!key) {
+  if (!apiKey) {
     console.error("no RESEND_API_KEY — files are on the account page only");
     return;
   }
 
-  const rows = links.map((l) =>
-    `<p style="margin:0 0 10px"><a href="${l.url}" style="color:#111">${l.title}</a></p>`
-  ).join("");
+  const btn = "display:inline-block;background:#111114;color:#ffffff;" +
+    "text-decoration:none;padding:12px 22px;border-radius:999px;" +
+    "font-weight:700;font-size:13px;letter-spacing:.08em;" +
+    "text-transform:uppercase;font-family:Helvetica,Arial,sans-serif";
+
+  /* Tables, not flexbox — Outlook renders almost no modern CSS, and an
+     email that collapses there is an email the buyer thinks is broken.
+     The thumbnail is the watermarked store preview, which is already
+     public; a signed link would expire and leave a broken image. */
+  const rows = links.map((l) => `
+    <tr>
+      <td width="88" style="padding:10px 14px 10px 0;vertical-align:middle">
+        <img src="https://garrettphoto.store/images/shop/${l.key}"
+             width="72" height="72" alt=""
+             style="width:72px;height:72px;object-fit:cover;border-radius:8px;
+                    display:block;border:1px solid #e5e5e5">
+      </td>
+      <td style="padding:10px 0;vertical-align:middle;font-family:Helvetica,Arial,sans-serif">
+        <div style="font-size:15px;font-weight:700;color:#111114;padding-bottom:8px">
+          ${l.title}
+        </div>
+        <a href="${l.url}" style="${btn}">Click here to download</a>
+      </td>
+    </tr>`).join("");
 
   const html = `
-    <div style="font-family:Helvetica,Arial,sans-serif;max-width:520px;line-height:1.6;color:#111">
-      <h2 style="font-weight:700">Your photographs${name ? ", " + name : ""}</h2>
-      <p>Thanks — here are your files. Click any one to download it.</p>
-      ${rows}
-      <p style="color:#666;font-size:14px">These links work for 7 days. After
-      that, get them any time at
-      <a href="https://garrettphoto.store/account.html">garrettphoto.store/account</a>
-      — sign in with this email address and they'll be waiting.</p>
-      <p style="color:#666;font-size:14px">Personal use only. Please don't use
-      them commercially without asking me first.</p>
-      <p style="color:#666;font-size:14px">— Garrett</p>
-    </div>`;
+  <div style="background:#f6f6f4;padding:28px 12px;font-family:Helvetica,Arial,sans-serif">
+    <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:14px;
+                padding:30px 28px;color:#111114">
+
+      <div style="font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+                  color:#7a7a84;padding-bottom:14px">Garrett Erickson</div>
+
+      <h1 style="margin:0 0 8px;font-size:26px;line-height:1.2">
+        Your photographs${name ? ", " + name.split(" ")[0] : ""}
+      </h1>
+      <p style="margin:0 0 22px;font-size:15px;line-height:1.6;color:#3a3a42">
+        Thanks for your order. ${links.length === 1
+          ? "Here's your photograph"
+          : `Here are your ${links.length} photographs`} — full resolution,
+        no watermark.
+      </p>
+
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+        ${rows}
+      </table>
+
+      <div style="border-top:1px solid #e5e5e5;margin-top:24px;padding-top:20px">
+        <a href="https://garrettphoto.store/account.html" style="${btn}">
+          Get them any time
+        </a>
+        <p style="margin:14px 0 0;font-size:13px;line-height:1.6;color:#6a6a72">
+          The download buttons above work for 7 days. After that, sign in at
+          <a href="https://garrettphoto.store/account.html"
+             style="color:#111114">garrettphoto.store</a>
+          with this email address and they'll be waiting — permanently.
+        </p>
+        <p style="margin:12px 0 0;font-size:13px;line-height:1.6;color:#6a6a72">
+          Personal use only. Please ask before using them commercially.
+        </p>
+        <p style="margin:16px 0 0;font-size:13px;color:#6a6a72">— Garrett</p>
+      </div>
+    </div>
+  </div>`;
 
   const r = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${key}`,
+      "Authorization": `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
       from: `Garrett Erickson <${from}>`,
       to: [to],
-      subject: `Your photographs (${links.length})`,
+      subject: links.length === 1
+        ? "Your photograph is ready to download"
+        : `Your ${links.length} photographs are ready to download`,
       html,
     }),
   });
@@ -226,7 +279,7 @@ Deno.serve(async (req) => {
     const links = [];
     for (const it of items) {
       const key = it.src.split("/").pop()!;
-      links.push({ title: it.title, url: await signed(key, it.title) });
+      links.push({ title: it.title, url: await signed(key, it.title), key: key });
     }
     if (links.length && to) await sendEmail(to, order.name || "", links);
   } catch (e) {
