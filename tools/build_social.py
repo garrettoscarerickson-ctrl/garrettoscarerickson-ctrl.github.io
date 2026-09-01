@@ -15,6 +15,7 @@ for the same scroll — and the photographs are mostly portrait anyway.
 
 import argparse
 import base64
+import datetime
 import json
 import os
 import subprocess
@@ -126,7 +127,7 @@ CSS_B = """
 HERO = 680
 
 
-def build(variant, photo, out, pos=None):
+def build(variant, photo, out, pos=None, year=None):
     cfg = shop()
     fonts = "".join(
         '@font-face{font-family:"%s";src:url(%s) format("woff2");font-weight:%s}\n'
@@ -135,6 +136,7 @@ def build(variant, photo, out, pos=None):
                            ("Archivo", "archivo.woff2", "400 700")])
 
     uri = photo_uri(photo)
+    year = year or datetime.date.today().year
     head = "Garrett Erickson · Sports Photography"
     store = ("""<div class="store"><div class="store__big">$%s</div><div>
       <div class="store__t">Single photos from any game</div>
@@ -148,12 +150,12 @@ def build(variant, photo, out, pos=None):
 <div class="post"><div class="bg"></div><div class="veil"></div>
   <div class="wrap">
     <div class="kicker">%s</div>
-    <div class="title">Rates</div>
+    <div class="title">%s Rates</div>
     <div class="rows">%s</div>
     %s
     %s
   </div>
-</div>""" % (head, rows_html(cfg), store, foot)
+</div>""" % (head, year, rows_html(cfg), store, foot)
     else:
         css = BASE_CSS + CSS_B % {"photo": uri, "hero": HERO, "rest": H - HERO,
                                   "pos": pos or "34%"}
@@ -161,14 +163,14 @@ def build(variant, photo, out, pos=None):
 <div class="post">
   <div class="hero"><div class="hero__t">
     <div class="kicker">%s</div>
-    <div class="title">Rates</div>
+    <div class="title">%s Rates</div>
   </div></div>
   <div class="wrap">
     <div class="rows">%s</div>
     %s
     %s
   </div>
-</div>""" % (head, rows_html(cfg), store, foot)
+</div>""" % (head, year, rows_html(cfg), store, foot)
 
     html = ('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>\n'
             + fonts + css + "</style></head><body>" + body + "</body></html>")
@@ -197,6 +199,7 @@ def main():
     ap.add_argument("--variant", choices=["a", "b"], default="a")
     ap.add_argument("--photo", default="casstech-21")
     ap.add_argument("--pos", help="vertical crop focus, e.g. 34%")
+    ap.add_argument("--year", type=int, help="heading year (default: this one)")
     ap.add_argument("--all", action="store_true")
     a = ap.parse_args()
 
@@ -205,10 +208,10 @@ def main():
         # nothing else. 46% puts the strike in the open part of the wash —
         # the ball sits at the boot, and a higher crop buries it under the
         # type, which is the one thing an action shot cannot afford.
-        build("a", "casstech-21", os.path.join(SOCIAL, "rates-a.png"), "46%")
-        build("b", "casstech-21", os.path.join(SOCIAL, "rates-b.png"), "46%")
+        build("a", "casstech-21", os.path.join(SOCIAL, "rates-a.png"), "46%", a.year)
+        build("b", "casstech-21", os.path.join(SOCIAL, "rates-b.png"), "46%", a.year)
     else:
-        build(a.variant, a.photo, os.path.join(SOCIAL, "rates-%s.png" % a.variant), a.pos)
+        build(a.variant, a.photo, os.path.join(SOCIAL, "rates-%s.png" % a.variant), a.pos, a.year)
 
 
 if __name__ == "__main__":
