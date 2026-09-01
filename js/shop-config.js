@@ -9,7 +9,7 @@ window.SHOP_CONFIG = {
   "tiers": [
     {
       "name": "Individual",
-      "price": "$15",
+      "price": "$20",
       "unit": "per session",
       "lead": "One athlete, one session.",
       "items": [
