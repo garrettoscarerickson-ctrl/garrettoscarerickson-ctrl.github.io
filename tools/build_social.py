@@ -9,7 +9,7 @@ Sized 1080x1350: Instagram's 4:5 feed post. Square works, but 4:5 is the
 tallest a feed post is allowed to be, so it occupies more of the screen
 for the same scroll — and the photographs are mostly portrait anyway.
 
-    python3 tools/build_social.py --variant a --photo bartoshuk-01
+    python3 tools/build_social.py --variant b --photo casstech-21 --pos 46%
     python3 tools/build_social.py --all
 """
 
@@ -92,7 +92,7 @@ body{background:#0b0b0e}
 # open at the top where the action is and goes solid under the type. A
 # uniform scrim would read as a grey filter over a good photograph.
 CSS_A = """
-.bg{position:absolute;inset:0;background:url(%(photo)s) center 26%%/cover no-repeat}
+.bg{position:absolute;inset:0;background:url(%(photo)s) center %(pos)s/cover no-repeat}
 /* Held open through the middle band, because that is where the subject
    is. The earlier curve started closing at 22%% and put the keeper's face
    under the darkest part of the wash — the picture was there and unreadable. */
@@ -111,7 +111,7 @@ CSS_A = """
 # every price sits at full contrast, and it survives any photograph
 # dropped into it rather than only a dark one.
 CSS_B = """
-.hero{position:relative;height:%(hero)dpx;background:url(%(photo)s) center 34%%/cover no-repeat}
+.hero{position:relative;height:%(hero)dpx;background:url(%(photo)s) center %(pos)s/cover no-repeat}
 .hero:after{content:"";position:absolute;inset:0;background:
   linear-gradient(180deg,rgba(8,8,10,.42) 0%%,rgba(8,8,10,0) 34%%,
                   rgba(8,8,10,.55) 82%%,#0b0b0e 100%%)}
@@ -123,10 +123,10 @@ CSS_B = """
 .foot{margin-top:26px;padding-top:24px;border-top:1px solid rgba(255,255,255,.15)}
 """
 
-HERO = 600
+HERO = 680
 
 
-def build(variant, photo, out):
+def build(variant, photo, out, pos=None):
     cfg = shop()
     fonts = "".join(
         '@font-face{font-family:"%s";src:url(%s) format("woff2");font-weight:%s}\n'
@@ -143,7 +143,7 @@ def build(variant, photo, out):
     foot = '<div class="foot"><b>garrettphoto.store</b><span>@shot_by_ge</span></div>'
 
     if variant == "a":
-        css = BASE_CSS + CSS_A % {"photo": uri}
+        css = BASE_CSS + CSS_A % {"photo": uri, "pos": pos or "26%"}
         body = """
 <div class="post"><div class="bg"></div><div class="veil"></div>
   <div class="wrap">
@@ -155,7 +155,8 @@ def build(variant, photo, out):
   </div>
 </div>""" % (head, rows_html(cfg), store, foot)
     else:
-        css = BASE_CSS + CSS_B % {"photo": uri, "hero": HERO, "rest": H - HERO}
+        css = BASE_CSS + CSS_B % {"photo": uri, "hero": HERO, "rest": H - HERO,
+                                  "pos": pos or "34%"}
         body = """
 <div class="post">
   <div class="hero"><div class="hero__t">
@@ -194,15 +195,20 @@ def build(variant, photo, out):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--variant", choices=["a", "b"], default="a")
-    ap.add_argument("--photo", default="bartoshuk-01")
+    ap.add_argument("--photo", default="casstech-21")
+    ap.add_argument("--pos", help="vertical crop focus, e.g. 34%")
     ap.add_argument("--all", action="store_true")
     a = ap.parse_args()
 
     if a.all:
-        build("a", "bartoshuk-01", os.path.join(SOCIAL, "rates-a.png"))
-        build("b", "casstech-05", os.path.join(SOCIAL, "rates-b.png"))
+        # Same frame in both, so the choice between them is layout and
+        # nothing else. 46% puts the strike in the open part of the wash —
+        # the ball sits at the boot, and a higher crop buries it under the
+        # type, which is the one thing an action shot cannot afford.
+        build("a", "casstech-21", os.path.join(SOCIAL, "rates-a.png"), "46%")
+        build("b", "casstech-21", os.path.join(SOCIAL, "rates-b.png"), "46%")
     else:
-        build(a.variant, a.photo, os.path.join(SOCIAL, "rates-%s.png" % a.variant))
+        build(a.variant, a.photo, os.path.join(SOCIAL, "rates-%s.png" % a.variant), a.pos)
 
 
 if __name__ == "__main__":
