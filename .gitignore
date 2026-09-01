@@ -4,3 +4,4 @@ images/_originals/
 dist/
 print/*.png
 .env.local
+social/*@2x.png

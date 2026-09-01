@@ -9,7 +9,7 @@ window.SHOP_CONFIG = {
   "tiers": [
     {
       "name": "Individual",
-      "price": "$20",
+      "price": "$15",
       "unit": "per session",
       "lead": "One athlete, one session.",
       "items": [
@@ -22,7 +22,7 @@ window.SHOP_CONFIG = {
     },
     {
       "name": "Team",
-      "price": "$10–15",
+      "price": "$5–10",
       "unit": "per athlete",
       "lead": "Whole roster, one shoot.",
       "items": [
@@ -35,7 +35,7 @@ window.SHOP_CONFIG = {
     },
     {
       "name": "Event & Meets",
-      "price": "From $75",
+      "price": "From $70",
       "unit": "up to 2 hours",
       "lead": "Car meets, games, gatherings.",
       "items": [
