@@ -10,6 +10,9 @@ Drop photos in, fill in a title and tags, and Studio handles the rest:
 files the image into images/, updates data/photos.json, regenerates
 js/photos.js, and every page (filters, sports, home strips) sorts
 itself. Local-only: it binds to 127.0.0.1 and is never deployed.
+
+The Bookings tab is the one part of Studio that never touches the site:
+it is a private diary of who is booked, kept in data/bookings.json.
 """
 
 import base64
@@ -71,6 +74,76 @@ def save_shop(cfg):
               encoding="utf-8") as f:
         f.write(header + "window.SHOP_CONFIG = " +
                 json.dumps(cfg, indent=2, ensure_ascii=False) + ";\n")
+
+
+BOOKINGS = os.path.join(ROOT, "data", "bookings.json")
+
+BOOKING_STATUS = ("booked", "shot", "delivered", "cancelled")
+
+
+def load_bookings():
+    """Who is booked. Private by design — see save_bookings."""
+    try:
+        with open(BOOKINGS, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (IOError, ValueError):
+        return []
+    rows = data.get("bookings", []) if isinstance(data, dict) else data
+    return rows if isinstance(rows, list) else []
+
+
+def save_bookings(rows):
+    """These rows carry minors' names and their parents' phone numbers, so
+    unlike every other manifest here this one is never generated into js/
+    and never deployed. It is gitignored, and Publish refuses to run while
+    it is not — see api_publish."""
+    rows.sort(key=lambda b: ((b.get("date") or "9999-99-99"),
+                             (b.get("athlete") or "").lower()))
+    with open(BOOKINGS, "w", encoding="utf-8") as f:
+        json.dump({"bookings": rows}, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+
+
+def booking_id(row):
+    base = "%s-%s" % (row.get("date") or "undated",
+                      slugify(row.get("athlete") or "athlete"))
+    if row.get("number"):
+        base += "-" + str(row["number"])
+    return base
+
+
+def clean_booking(body, existing=None):
+    row = dict(existing or {})
+    row["date"] = (body.get("date") or "").strip()
+    row["athlete"] = " ".join((body.get("athlete") or "").split())
+    # Jersey numbers are worn, not calculated — keep them as typed so "05"
+    # stays "05", and match what the store's jersey filter stores.
+    row["number"] = re.sub(r"[^0-9]", "", str(body.get("number") or ""))[:3]
+    row["school"] = " ".join((body.get("school") or "").split())
+    row["sport"] = (body.get("sport") or "").strip()
+    row["tier"] = (body.get("tier") or "").strip()
+    row["contact"] = (body.get("contact") or "").strip()
+    row["note"] = (body.get("note") or "").strip()
+    row["paid"] = bool(body.get("paid"))
+    status = (body.get("status") or "booked").strip().lower()
+    row["status"] = status if status in BOOKING_STATUS else "booked"
+
+    rate = body.get("rate")
+    if rate in (None, ""):
+        row["rate"] = ""
+    else:
+        try:
+            rate = float(rate)
+        except (TypeError, ValueError):
+            raise ValueError("Rate must be a number.")
+        row["rate"] = int(rate) if rate == int(rate) else rate
+
+    if not row["athlete"]:
+        raise ValueError("Needs a name.")
+    if not re.match(r"^\d{4}-\d{2}-\d{2}$", row["date"]):
+        raise ValueError("Needs a date.")
+    row["id"] = existing.get("id") if existing else booking_id(row)
+    return row
 
 
 def regenerate_reviews_js():
@@ -231,7 +304,8 @@ class StudioHandler(SimpleHTTPRequestHandler):
         if self.path == "/api/manifest":
             photos = load_photos()
             self.send_json({"photos": photos, "tags": all_tags(photos),
-                            "shop": load_shop()})
+                            "shop": load_shop(),
+                            "bookings": load_bookings()})
             return
         super().do_GET()
 
@@ -245,6 +319,8 @@ class StudioHandler(SimpleHTTPRequestHandler):
                 self.api_remove()
             elif self.path == "/api/shop":
                 self.api_shop()
+            elif self.path == "/api/booking":
+                self.api_booking()
             elif self.path == "/api/game":
                 self.api_game()
             elif self.path == "/api/publish":
@@ -345,6 +421,30 @@ class StudioHandler(SimpleHTTPRequestHandler):
         save_shop(cfg)
         self.send_json({"ok": True, "shop": cfg})
 
+    def api_booking(self):
+        """Add, edit or drop one booking. Nothing here reaches the site."""
+        body = self.read_body()
+        rows = load_bookings()
+        bid = (body.get("id") or "").strip()
+
+        if body.get("action") == "delete":
+            keep = [r for r in rows if r.get("id") != bid]
+            if len(keep) == len(rows):
+                raise ValueError("Booking not found.")
+            save_bookings(keep)
+            self.send_json({"ok": True, "bookings": keep})
+            return
+
+        existing = next((r for r in rows if r.get("id") == bid), None)
+        row = clean_booking(body, existing)
+        if existing:
+            existing.clear()
+            existing.update(row)
+        else:
+            rows.append(row)
+        save_bookings(rows)
+        self.send_json({"ok": True, "booking": row, "bookings": rows})
+
     def api_game(self):
         """Rename a group, or clear it so its photographs leave the store."""
         body = self.read_body()
@@ -389,6 +489,22 @@ class StudioHandler(SimpleHTTPRequestHandler):
             self.send_json({"ok": False, "log":
                             "Not a git repository yet - run deploy.sh first."})
             return
+        # Publish is `git add -A`, so anything sitting in the working tree
+        # goes public on the next click. The bookings file holds athletes'
+        # names and their families' phone numbers; refuse rather than push
+        # it. check-ignore also returns non-zero for an already-tracked
+        # file, which is the case that actually needs catching.
+        if os.path.exists(BOOKINGS):
+            code, _ = run("git", "check-ignore", "-q", "data/bookings.json")
+            if code != 0:
+                self.send_json({"ok": False, "log":
+                                "Stopped: data/bookings.json is not ignored by "
+                                "git. It holds athletes' names and contact "
+                                "details and must not go to a public repo. Add "
+                                "data/bookings.json to .gitignore, then "
+                                "publish again."})
+                return
+
         run("git", "add", "-A")
         code, commit_out = run("git", "commit", "-m",
                                "Update photos via Studio")
@@ -512,6 +628,49 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim)}
   white-space:pre-wrap;color:var(--dim);margin-top:.75rem}
 .status.ok{color:var(--ok)}.status.bad{color:var(--bad)}
 .lib-meta{display:flex;justify-content:space-between;align-items:baseline;gap:1rem}
+/* ---- bookings ---- */
+.bkform{border:1px solid var(--line);border-radius:14px;padding:1.15rem;
+        max-width:52rem;display:grid;gap:.7rem;
+        grid-template-columns:9rem 4.5rem 1fr 1fr}
+.bkform label{display:flex;flex-direction:column;gap:.3rem}
+.bkform input,.bkform select{background:#111;border:1px solid var(--line);
+  border-radius:8px;color:var(--ink);font:inherit;font-size:.9rem;
+  padding:.45rem .6rem;width:100%}
+.bkform .wide{grid-column:1/-1}
+.bkform .actions{grid-column:1/-1;display:flex;gap:.75rem;align-items:center}
+.bk{border:1px solid var(--line);border-radius:14px;padding:.85rem 1.1rem;
+    margin-bottom:.65rem;display:grid;gap:.9rem;align-items:center;
+    grid-template-columns:6.5rem 2.6rem 1fr auto}
+.bk.is-next{border-color:var(--ink);background:var(--raise)}
+.bk.is-done{opacity:.45}
+.bk__when b{display:block;font-size:.9rem;letter-spacing:.02em}
+.bk__when span{display:block;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-top:.15rem}
+.bk__num{width:2.6rem;height:2.6rem;border-radius:50%;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:1.05rem;
+  font-weight:600}
+.bk.is-next .bk__num{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.bk__who b{display:block;font-size:1rem}
+.bk__who span{display:block;font-family:var(--mono);font-size:.65rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:.2rem}
+.bk__side{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;
+  justify-content:flex-end}
+.bk__side select{width:auto;padding:.35rem .4rem;font-size:.8rem;border-radius:8px;
+  background:#111;border:1px solid var(--line)}
+.bk__paid{display:flex;align-items:center;gap:.35rem;font-family:var(--mono);
+  font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);
+  cursor:pointer;white-space:nowrap}
+.bk__paid input{accent-color:var(--ok)}
+.bk__x{background:none;border:0;color:var(--dim);cursor:pointer;font-size:1rem;
+  line-height:1;padding:.25rem .4rem}
+.bk__x:hover{color:var(--bad)}
+.bk__note{grid-column:1/-1;font-size:.85rem;color:var(--dim);line-height:1.5;
+  border-top:1px solid var(--soft);padding-top:.6rem;margin-top:-.2rem}
+@media (max-width:640px){
+  .bkform{grid-template-columns:1fr 1fr}
+  .bk{grid-template-columns:1fr auto}
+  .bk__when,.bk__num{grid-column:auto}
+}
 #publish-wrap{margin-top:3rem;border-top:1px solid var(--line);padding-top:1.5rem;
   display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
 </style>
@@ -529,6 +688,7 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim)}
 <div class="tabs mono" id="tabs">
   <button class="tab is-on" data-panel="panel-photos">Photos</button>
   <button class="tab" data-panel="panel-store">Store</button>
+  <button class="tab" data-panel="panel-bookings">Bookings</button>
 </div>
 
 <section id="panel-photos">
@@ -565,6 +725,41 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim)}
     by spaces (<b>7 12</b> for two players) and they become filters buyers can
     search by. Leave it blank if no number is visible.</p>
   <div id="sh-games"></div>
+</section>
+
+<section id="panel-bookings" hidden>
+  <h2>Add a booking</h2>
+  <p class="mono hint">Private. This never goes on the site and never leaves
+    this machine &mdash; Publish refuses to run if the file is not gitignored.
+    The jersey number is the same one you type under a photograph in the Store
+    tab, so once you have shot the game the buyer can filter to it.</p>
+  <div class="bkform">
+    <label><span class="mono">Date</span><input type="date" id="bk-date"></label>
+    <label><span class="mono">Number</span><input type="text" id="bk-number"
+      inputmode="numeric" placeholder="5"></label>
+    <label><span class="mono">Athlete</span><input type="text" id="bk-athlete"
+      placeholder="First Last"></label>
+    <label><span class="mono">School / team</span><input type="text" id="bk-school"
+      placeholder="DCDS"></label>
+    <label><span class="mono">Sport</span><input type="text" id="bk-sport"
+      placeholder="Football"></label>
+    <label><span class="mono">Package</span><select id="bk-tier"></select></label>
+    <label><span class="mono">Rate</span><input type="number" id="bk-rate"
+      min="0" step="1" placeholder="20"></label>
+    <label><span class="mono">Contact</span><input type="text" id="bk-contact"
+      placeholder="Phone, email or @handle"></label>
+    <label class="wide"><span class="mono">Note</span><input type="text"
+      id="bk-note" placeholder="Where to meet, who to ask for, anything owed"></label>
+    <div class="actions">
+      <button class="primary" id="bk-save">Save booking</button>
+      <span class="status" id="bk-status"></span>
+    </div>
+  </div>
+
+  <h2>Booked <span class="mono" id="bk-count"></span></h2>
+  <div id="bk-upcoming"></div>
+  <h2>Done <span class="mono" id="bk-donecount"></span></h2>
+  <div id="bk-past"></div>
 </section>
 
 <div id="publish-wrap">
@@ -756,6 +951,7 @@ function loadLibrary() {
   fetch("/api/manifest").then(function (r) { return r.json(); }).then(function (data) {
     KNOWN_TAGS = data.tags;
     renderShop(data);
+    renderBookings(data.bookings || []);
     renderGames(data.photos);
     var lib = document.getElementById("library");
     lib.innerHTML = "";
@@ -821,6 +1017,195 @@ document.getElementById("publish").onclick = function () {
   });
 };
 
+/* ---------- bookings ----------
+   A private list of who is booked. Kept beside the photographs because
+   the jersey number written down here is the one typed under the frames
+   afterwards, and because the shoot and the delivery are the same job. */
+
+var BOOKINGS = [];
+
+/* "2026-09-11" is a calendar day, not an instant. new Date() on that
+   string parses it as UTC midnight, which is the evening before in
+   Michigan — a Friday booking would read Thursday. Build it locally. */
+function dayOf(iso) {
+  var p = String(iso || "").split("-");
+  return new Date(+p[0], +p[1] - 1, +p[2]);
+}
+
+function todayStart() {
+  var n = new Date();
+  return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+}
+
+function daysAway(iso) {
+  return Math.round((dayOf(iso) - todayStart()) / 86400000);
+}
+
+function whenText(iso) {
+  var d = daysAway(iso);
+  if (d === 0) return "today";
+  if (d === 1) return "tomorrow";
+  if (d === -1) return "yesterday";
+  if (d > 1 && d < 7) return "in " + d + " days";
+  if (d < 0) return Math.abs(d) + " days ago";
+  return "in " + d + " days";
+}
+
+function dateText(iso) {
+  return dayOf(iso).toLocaleDateString(undefined,
+    { weekday: "short", month: "short", day: "numeric" });
+}
+
+function tierOptions(sel, current) {
+  sel.innerHTML = '<option value=""></option>';
+  ((SHOP && SHOP.tiers) || []).forEach(function (t) {
+    var o = document.createElement("option");
+    o.value = t.name; o.textContent = t.name + " · " + t.price;
+    sel.appendChild(o);
+  });
+  sel.value = current || "";
+}
+
+/* Picking a package fills the rate with that tier's price, so the common
+   case is two clicks. A range like "$5-10" fills in its lower number and
+   waits to be corrected rather than guessing which end applies. */
+function rateFromTier(name) {
+  var t = ((SHOP && SHOP.tiers) || []).filter(function (x) {
+    return x.name === name;
+  })[0];
+  if (!t) return "";
+  var m = String(t.price).match(/\d+(\.\d+)?/);
+  return m ? m[0] : "";
+}
+
+function bookingRow(b) {
+  var row = el("div", "bk");
+  var away = daysAway(b.date);
+  var done = b.status === "delivered" || b.status === "cancelled";
+  if (done) row.classList.add("is-done");
+
+  var when = el("div", "bk__when");
+  when.innerHTML = "<b>" + dateText(b.date) + "</b><span>" +
+                   (done ? b.status : whenText(b.date)) + "</span>";
+  row.appendChild(when);
+
+  row.appendChild(el("div", "bk__num", b.number ? "#" + b.number : "—"));
+
+  var who = el("div", "bk__who");
+  var sub = [b.school, b.sport, b.tier,
+             (b.rate === "" || b.rate == null) ? "" : "$" + b.rate]
+            .filter(Boolean).join(" · ");
+  who.innerHTML = "<b>" + esc(b.athlete) + "</b>" +
+                  (sub ? "<span>" + esc(sub) + "</span>" : "") +
+                  (b.contact ? "<span>" + esc(b.contact) + "</span>" : "");
+  row.appendChild(who);
+
+  var side = el("div", "bk__side");
+
+  var paid = el("label", "bk__paid");
+  paid.innerHTML = '<input type="checkbox"' + (b.paid ? " checked" : "") + ">paid";
+  paid.querySelector("input").onchange = function () {
+    saveBooking(Object.assign({}, b, { paid: this.checked }));
+  };
+  side.appendChild(paid);
+
+  var st = document.createElement("select");
+  ["booked", "shot", "delivered", "cancelled"].forEach(function (v) {
+    var o = document.createElement("option");
+    o.value = v; o.textContent = v;
+    st.appendChild(o);
+  });
+  st.value = b.status || "booked";
+  st.onchange = function () {
+    saveBooking(Object.assign({}, b, { status: this.value }));
+  };
+  side.appendChild(st);
+
+  var x = el("button", "bk__x", "&times;");
+  x.type = "button";
+  x.title = "Delete this booking";
+  x.onclick = function () {
+    if (!confirm("Delete the booking for " + b.athlete + "?")) return;
+    api("/api/booking", { action: "delete", id: b.id }).then(afterBooking);
+  };
+  side.appendChild(x);
+  row.appendChild(side);
+
+  if (b.note) row.appendChild(el("div", "bk__note", esc(b.note)));
+
+  /* The next shoot is the one thing worth spotting from across the room. */
+  if (!done && away >= 0 && away <= 2) row.classList.add("is-next");
+  return row;
+}
+
+function esc(t) {
+  return String(t == null ? "" : t)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function renderBookings(rows) {
+  BOOKINGS = rows || [];
+  tierOptions(document.getElementById("bk-tier"),
+              document.getElementById("bk-tier").value);
+
+  var up = document.getElementById("bk-upcoming");
+  var past = document.getElementById("bk-past");
+  up.innerHTML = ""; past.innerHTML = "";
+
+  var open = BOOKINGS.filter(function (b) {
+    return b.status !== "delivered" && b.status !== "cancelled";
+  });
+  var done = BOOKINGS.filter(function (b) {
+    return b.status === "delivered" || b.status === "cancelled";
+  }).reverse();
+
+  open.forEach(function (b) { up.appendChild(bookingRow(b)); });
+  done.forEach(function (b) { past.appendChild(bookingRow(b)); });
+
+  if (!open.length) {
+    up.innerHTML = '<p class="mono hint">Nothing booked yet.</p>';
+  }
+  var owed = open.filter(function (b) { return !b.paid && b.rate; })
+                 .reduce(function (n, b) { return n + Number(b.rate || 0); }, 0);
+  document.getElementById("bk-count").textContent =
+    "— " + open.length + (open.length === 1 ? " booking" : " bookings") +
+    (owed ? " · $" + owed + " outstanding" : "");
+  document.getElementById("bk-donecount").textContent =
+    done.length ? "— " + done.length : "— none yet";
+}
+
+function afterBooking(res) {
+  var s = document.getElementById("bk-status");
+  if (res.error) {
+    s.textContent = res.error; s.className = "status bad";
+    return;
+  }
+  renderBookings(res.bookings || []);
+  s.textContent = "Saved."; s.className = "status ok";
+}
+
+function saveBooking(b) {
+  return api("/api/booking", b).then(afterBooking);
+}
+
+document.getElementById("bk-tier").onchange = function () {
+  var r = document.getElementById("bk-rate");
+  if (!r.value) r.value = rateFromTier(this.value);
+};
+
+document.getElementById("bk-save").onclick = function () {
+  var g = function (id) { return document.getElementById(id).value.trim(); };
+  saveBooking({
+    date: g("bk-date"), athlete: g("bk-athlete"), number: g("bk-number"),
+    school: g("bk-school"), sport: g("bk-sport"), tier: g("bk-tier"),
+    rate: g("bk-rate"), contact: g("bk-contact"), note: g("bk-note"),
+    status: "booked"
+  }).then(function () {
+    ["bk-athlete", "bk-number", "bk-rate", "bk-contact", "bk-note"]
+      .forEach(function (id) { document.getElementById(id).value = ""; });
+  });
+};
+
 /* ---------- tabs ---------- */
 document.getElementById("tabs").addEventListener("click", function (e) {
   var b = e.target.closest(".tab");
@@ -828,7 +1213,7 @@ document.getElementById("tabs").addEventListener("click", function (e) {
   document.querySelectorAll(".tab").forEach(function (t) {
     t.classList.toggle("is-on", t === b);
   });
-  ["panel-photos", "panel-store"].forEach(function (id) {
+  ["panel-photos", "panel-store", "panel-bookings"].forEach(function (id) {
     document.getElementById(id).hidden = (id !== b.dataset.panel);
   });
 });

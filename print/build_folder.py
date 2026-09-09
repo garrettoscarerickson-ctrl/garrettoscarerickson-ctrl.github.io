@@ -2,8 +2,12 @@
 """Build print/folder-sheets.html — three letter sheets for a pocket folder.
 
   1. Book again, save more   (the returning-client discount)
-  2. How to get your photos  (ordering from the store)
+  2. How to get your photos  (buying from the store)
   3. Rates and booking       (prices, add-ons, contact)
+
+Sheet 3 is generated from data/shop.json, the same file the site and
+Studio read. The printed rates drifted a long way out of date once
+already, so there is deliberately no second copy of the numbers here.
 
 Printed white-on-paper rather than in the site's black. Two reasons, both
 learned the hard way on the business cards: type on a heavy black ground
@@ -15,7 +19,10 @@ architectural look, reads cleanly, and costs almost no ink.
     then render the PDF with the command at the bottom of this file.
 """
 import base64
+import html
 import io
+import json
+import math
 import os
 
 import segno
@@ -28,6 +35,57 @@ CARD_URL = "https://garrettphoto.store/card"
 PHONE = "248-225-4437"
 EMAIL = "Garrettoscarerickson@gmail.com"
 INSTA = "@shot_by_ge"
+
+ACCOUNT_URL = "garrettphoto.store/account"
+
+# Stripe's US card rate, matching the arithmetic in js/main.js. The fee is
+# passed to the buyer, so the sheet has to quote what they actually pay.
+STRIPE_PCT = 0.029
+STRIPE_FLAT = 30
+
+
+def shop():
+    """Rates, add-ons and the per-photo price, read from the manifest."""
+    with io.open(os.path.join(ROOT, "data", "shop.json"), encoding="utf-8") as f:
+        return json.load(f)
+
+
+def esc(t):
+    return html.escape(str(t))
+
+
+def buyer_pays(dollars):
+    """What a card order of this size costs the buyer, to the cent."""
+    net = int(round(dollars * 100))
+    return math.ceil((net + STRIPE_FLAT) / (1 - STRIPE_PCT)) / 100.0
+
+
+def money(v):
+    return ("$%.2f" % v).replace(".00", "")
+
+
+def rates_html(cfg):
+    out = []
+    for t in cfg.get("tiers", []):
+        cls = "rate rate--best" if t.get("featured") else "rate"
+        items = "".join("<span>%s</span>" % esc(i) for i in t.get("items", []))
+        out.append(
+            '<div class="%s">\n'
+            '      <span class="rate__top">\n'
+            '        <span class="rate__name">%s</span>\n'
+            '        <span><span class="rate__price">%s</span>\n'
+            '        <span class="rate__unit">%s</span></span>\n'
+            '      </span>\n'
+            '      <span class="rate__list">%s</span>\n'
+            '    </div>'
+            % (cls, esc(t.get("name", "")), esc(t.get("price", "")),
+               esc(t.get("unit", "")), items))
+    return "\n    ".join(out)
+
+
+def addons_html(cfg):
+    return "<br>\n    ".join(
+        "%s <i>%s</i>" % (esc(a), esc(b)) for a, b in cfg.get("addOns", []))
 
 
 def font_uri(rel):
@@ -236,8 +294,9 @@ SHEET1 = """
 SHEET2 = """
   <div class="head">
     <h1>How to get<br>your photos</h1>
-    <p>Every photo I shoot goes up on my site the same week. Finding yours
-       takes about a minute, and there is nothing to download or sign up for.</p>
+    <p>Every photo I shoot goes up on my site the same week. Buying yours
+       takes about a minute — you pay on the site and the full-resolution
+       files land in your email straight away.</p>
   </div>
 
   <div class="steps">
@@ -246,27 +305,32 @@ SHEET2 = """
       <span>Scan the code below, or type __SITE__/store into any browser.</span>
     </span></div>
     <div class="step"><span class="step__n">2</span><span class="step__t">
-      <b>Find your game and tap your photos</b>
-      <span>Open your game, then tap as many photos as you want. They cost
-      $1 each, the total updates as you go, and you can pick from more than
-      one game before checking out.</span>
+      <b>Open your game, then tap your number</b>
+      <span>Each game lists the jersey numbers in it. Tap yours and the
+      grid narrows to your athlete instead of the whole match.</span>
     </span></div>
     <div class="step"><span class="step__n">3</span><span class="step__t">
-      <b>Send the order in one tap</b>
-      <span>Type your name and email and press send. No account, no card
-      details, and no email app opens.</span>
+      <b>Tap the photographs you want</b>
+      <span>__PRICE__ each. The total updates as you go, and you can pick
+      from more than one game before checking out.</span>
     </span></div>
     <div class="step"><span class="step__n">4</span><span class="step__t">
-      <b>Keep your chat code</b>
-      <span>You get a short code on screen. I message you there to sort out
-      payment. Closed the window? Reopen it at __SITE__/chat.</span>
+      <b>Pay by card on the site</b>
+      <span>Name and email, then card. Card processing is added on top and
+      the exact total is shown before you pay &mdash; __PRICE__ comes to
+      __PRICE_TOTAL__. No account needed to buy.</span>
     </span></div>
     <div class="step"><span class="step__n">5</span><span class="step__t">
-      <b>Get the clean files</b>
-      <span>Photos on the site carry my watermark. Once you have paid I send
-      the full-resolution originals with no watermark on them.</span>
+      <b>Your photographs arrive by email</b>
+      <span>Full resolution, no watermark, within about a minute. On a
+      phone, open one and press and hold to add it to your camera roll.</span>
     </span></div>
   </div>
+
+  <div class="note">Lost the email? Nothing is gone. Sign in at
+    <b>__ACCOUNT__</b> with the address you bought under &mdash; no
+    password, just a link emailed to you &mdash; and every photograph you
+    have ever bought is waiting there to download again.</div>
 
   <div class="qr-row">
     <span class="qr">__QR_STORE__</span>
@@ -283,51 +347,11 @@ SHEET3 = """
   </div>
 
   <div class="rates">
-    <div class="rate rate--best">
-      <span class="rate__top">
-        <span class="rate__name">Individual</span>
-        <span><span class="rate__price">$20</span>
-        <span class="rate__unit">per session</span></span>
-      </span>
-      <span class="rate__list">
-        <span>10+ edited photographs</span>
-        <span>Guaranteed 24-hour delivery</span>
-        <span>Full-resolution files</span>
-        <span>Personal and social use</span>
-      </span>
-    </div>
-    <div class="rate">
-      <span class="rate__top">
-        <span class="rate__name">Team</span>
-        <span><span class="rate__price">$10&ndash;15</span>
-        <span class="rate__unit">per athlete</span></span>
-      </span>
-      <span class="rate__list">
-        <span>30+ edited photographs</span>
-        <span>One team photograph</span>
-        <span>Action and individual frames</span>
-        <span>Per-athlete galleries</span>
-      </span>
-    </div>
-    <div class="rate">
-      <span class="rate__top">
-        <span class="rate__name">Events &amp; Meets</span>
-        <span><span class="rate__price">From $75</span>
-        <span class="rate__unit">up to 2 hours</span></span>
-      </span>
-      <span class="rate__list">
-        <span>40+ edited photographs</span>
-        <span>48-hour delivery</span>
-        <span>Extra hours at $30</span>
-        <span>Commercial use on request</span>
-      </span>
-    </div>
+    __RATES__
   </div>
 
   <div class="addons"><b>Add-ons</b>
-    Same-day rush delivery <i>+$15</i><br>
-    Additional edited photograph <i>$2 each</i><br>
-    Travel beyond 30 miles <i>$0.30 / mile</i>
+    __ADDONS__
   </div>
 
   <div class="book">
@@ -346,12 +370,20 @@ SHEET3 = """
 
 
 def main():
+    cfg = shop()
+    price = cfg.get("photoPrice", 1)
+
     css = (CSS
            .replace("__OSW__", font_uri("fonts/oswald-var.woff2"))
            .replace("__ARC__", font_uri("fonts/archivo-var.woff2")))
 
     def fill(t):
-        return (t.replace("__QR_STORE__", qr_svg(STORE_URL))
+        return (t.replace("__RATES__", rates_html(cfg))
+                 .replace("__ADDONS__", addons_html(cfg))
+                 .replace("__PRICE_TOTAL__", money(buyer_pays(price)))
+                 .replace("__PRICE__", money(price))
+                 .replace("__ACCOUNT__", ACCOUNT_URL)
+                 .replace("__QR_STORE__", qr_svg(STORE_URL))
                  .replace("__QR_CARD__", qr_svg(CARD_URL))
                  .replace("__PHONE__", PHONE)
                  .replace("__EMAIL__", EMAIL)
@@ -371,6 +403,9 @@ def main():
     with open(out, "w") as f:
         f.write(html)
     print("wrote", out)
+    print("rates <-", os.path.join("data", "shop.json"),
+          "|", ", ".join("%s %s" % (t["name"], t["price"])
+                         for t in cfg.get("tiers", [])))
     print("QR ->", STORE_URL)
     print("QR ->", CARD_URL)
 

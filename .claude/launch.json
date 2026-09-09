@@ -4,7 +4,7 @@
     {
       "name": "portfolio",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4173", "--directory", "/Users/garre/photography-portfolio"],
+      "runtimeArgs": ["/Users/garre/photography-portfolio/studio.py"],
       "port": 4173
     }
   ]
