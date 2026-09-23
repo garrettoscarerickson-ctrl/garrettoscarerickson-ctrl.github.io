@@ -98,7 +98,65 @@ SHOOTS = [
         "location": "Michigan",
     },
     {
-        "folder": "DCD_JVFOT_PRC FINALS/Owen",
+        "folder": "DCDSJVFOT_VSDCHS_FINALS",
+        "game": "DCDS JV Football vs DCHS",
+        "slug": "jvfot",
+        "title": "JV Football vs DCHS",
+        "tags": ["sports", "football", "people"],
+        "location": "Michigan",
+    },
+    {
+        "folder": "DCDSVARFOT_VSRED_FINALS",
+        "game": "DCDS Varsity Football vs Redford",
+        "slug": "varfot",
+        "title": "Varsity Football vs Redford",
+        "tags": ["sports", "football", "people"],
+        "location": "Michigan",
+    },
+    {
+        "folder": "DCDSVAR_FOTVSHOLT_FINALS",
+        "game": "DCDS Varsity Football vs Holt",
+        "slug": "holt",
+        "title": "Varsity Football vs Holt",
+        "tags": ["sports", "football", "people"],
+        "location": "Michigan",
+    },
+    {
+        "folder": "DCDSVARSOC_VSCRANB_FINALS",
+        "game": "DCDS Varsity Soccer vs Cranbrook",
+        "slug": "cranb",
+        "title": "Varsity Soccer vs Cranbrook",
+        "tags": ["sports", "soccer", "people"],
+        "location": "Michigan",
+    },
+    {
+        "folder": "Hunter Tennis_Finals",
+        "game": "Hunter — Tennis",
+        "slug": "hunterten",
+        "title": "Hunter — Tennis",
+        "tags": ["sports", "tennis", "people"],
+        "location": "Michigan",
+    },
+    {
+        "folder": "Landon#8",
+        "game": "Landon #8 — Varsity Football",
+        "slug": "landon",
+        "title": "Landon #8",
+        "tags": ["sports", "football", "people"],
+        "location": "Michigan",
+    },
+    {
+        "folder": "QBCarsen",
+        "game": "Carsen — Varsity Football",
+        "slug": "carsen",
+        "title": "Carsen — Quarterback",
+        "tags": ["sports", "football", "people"],
+        "location": "Michigan",
+    },
+    {
+        # Whole folder now, not just Owen's selects — the other three
+        # players and the root frames were never brought in.
+        "folder": "DCD_JVFOT_PRC FINALS",
         "game": "DCDS JV Football — Practice",   # joins the existing group
         "slug": "practice",
         "title": "Practice",
@@ -108,13 +166,21 @@ SHOOTS = [
 ]
 
 
+SKIP_DIRS = ("watermarked", "preview", "previews")
+SKIP_FILES = ("_player_index",)
+
+
 def files_in(folder):
     root = os.path.join(DRIVE, folder)
     out = []
-    for dp, _, fs in os.walk(root):
+    for dp, dirs, fs in os.walk(root):
+        dirs[:] = [d for d in dirs if d.lower() not in SKIP_DIRS]
         for f in sorted(fs):
-            if f.lower().endswith((".jpg", ".jpeg")) and not f.startswith("."):
-                out.append(os.path.join(dp, f))
+            if not f.lower().endswith((".jpg", ".jpeg")) or f.startswith("."):
+                continue
+            if any(k in f.lower() for k in SKIP_FILES):
+                continue
+            out.append(os.path.join(dp, f))
     return sorted(out)
 
 
