@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /account.html
+Disallow: /print/
+Disallow: /social/
+Disallow: /slideshow/
+
+Sitemap: https://garrettphoto.store/sitemap.xml

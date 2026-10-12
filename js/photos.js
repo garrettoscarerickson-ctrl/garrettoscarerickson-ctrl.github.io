@@ -2817,10 +2817,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "17"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-02.jpg",
@@ -2836,10 +2833,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "19"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-03.jpg",
@@ -2855,10 +2849,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "17"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-04.jpg",
@@ -2874,11 +2865,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "18",
-      "10"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-05.jpg",
@@ -2894,11 +2881,7 @@ window.PHOTOS = [
     "w": 2400,
     "h": 1600,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "18",
-      "10"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-06.jpg",
@@ -2914,10 +2897,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "11"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-07.jpg",
@@ -2933,10 +2913,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "9"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-08.jpg",
@@ -2952,10 +2929,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "9"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-09.jpg",
@@ -2971,10 +2945,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "9"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-10.jpg",
@@ -3022,10 +2993,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "11"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-13.jpg",
@@ -3041,10 +3009,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "18"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-14.jpg",
@@ -3060,10 +3025,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "18"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-15.jpg",
@@ -3079,10 +3041,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "11"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-16.jpg",
@@ -3098,10 +3057,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "10"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-17.jpg",
@@ -3133,10 +3089,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "8"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-19.jpg",
@@ -3152,10 +3105,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "8"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-20.jpg",
@@ -3171,10 +3121,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "18"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-21.jpg",
@@ -3190,10 +3137,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "13"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-22.jpg",
@@ -3209,10 +3153,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "13"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-23.jpg",
@@ -3228,10 +3169,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "13"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-24.jpg",
@@ -3247,10 +3185,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "11"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-25.jpg",
@@ -3266,11 +3201,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "13",
-      "15"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-26.jpg",
@@ -3286,10 +3217,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "13"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-27.jpg",
@@ -3305,10 +3233,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "13"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-28.jpg",
@@ -3324,10 +3249,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "18"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-29.jpg",
@@ -3343,10 +3265,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "11"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-30.jpg",
@@ -3362,10 +3281,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "10"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-31.jpg",
@@ -3381,10 +3297,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "17"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-32.jpg",
@@ -3400,10 +3313,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "9"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-33.jpg",
@@ -3419,10 +3329,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "15"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-34.jpg",
@@ -3438,10 +3345,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "15"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-35.jpg",
@@ -3457,10 +3361,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "10"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-36.jpg",
@@ -3476,10 +3377,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "12"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-37.jpg",
@@ -3495,10 +3393,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "12"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-38.jpg",
@@ -3514,10 +3409,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "23"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-39.jpg",
@@ -3533,10 +3425,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "23"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-40.jpg",
@@ -3552,10 +3441,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "23"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-41.jpg",
@@ -3571,10 +3457,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "23"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-42.jpg",
@@ -3590,10 +3473,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "23"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-43.jpg",
@@ -3609,10 +3489,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "32"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-44.jpg",
@@ -3628,10 +3505,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "23"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-45.jpg",
@@ -3647,10 +3521,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "13"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-46.jpg",
@@ -3666,10 +3537,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "9"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-47.jpg",
@@ -3685,10 +3553,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "10"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-48.jpg",
@@ -3704,11 +3569,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "17",
-      "13"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-49.jpg",
@@ -3724,10 +3585,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "16"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-50.jpg",
@@ -3743,10 +3601,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "6"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-51.jpg",
@@ -3762,10 +3617,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "11"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-52.jpg",
@@ -3781,10 +3633,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "6"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-53.jpg",
@@ -3800,10 +3649,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "6"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-54.jpg",
@@ -3819,10 +3665,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "6"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-55.jpg",
@@ -3838,10 +3681,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "6"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-56.jpg",
@@ -3857,10 +3697,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "5"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-57.jpg",
@@ -3876,10 +3713,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "5"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-58.jpg",
@@ -3895,11 +3729,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "5",
-      "11"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-59.jpg",
@@ -3915,11 +3745,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "17",
-      "9"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-60.jpg",
@@ -3935,10 +3761,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "11"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-61.jpg",
@@ -3954,10 +3777,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "25"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-62.jpg",
@@ -3973,10 +3793,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "8"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-63.jpg",
@@ -3992,10 +3809,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "6"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-64.jpg",
@@ -4011,10 +3825,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "27"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-65.jpg",
@@ -4030,10 +3841,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "9"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-66.jpg",
@@ -4049,10 +3857,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "23"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-67.jpg",
@@ -4068,10 +3873,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "27"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-68.jpg",
@@ -4087,10 +3889,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "25"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-69.jpg",
@@ -4106,10 +3905,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "9"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-70.jpg",
@@ -4125,10 +3921,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "9"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/casstech-71.jpg",
@@ -4160,16 +3953,7 @@ window.PHOTOS = [
     "w": 2400,
     "h": 1600,
     "archiveOnly": true,
-    "game": "DCDS vs Cass Tech — Varsity Soccer",
-    "players": [
-      "30",
-      "27",
-      "12",
-      "6",
-      "11",
-      "8",
-      "4"
-    ]
+    "game": "DCDS vs Cass Tech — Varsity Soccer"
   },
   {
     "src": "images/bartoshuk-01.jpg",
@@ -4185,10 +3969,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "1"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-02.jpg",
@@ -4204,10 +3985,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "1"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-03.jpg",
@@ -4223,10 +4001,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "1"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-04.jpg",
@@ -4242,10 +4017,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "1"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-05.jpg",
@@ -4261,10 +4033,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "1"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-06.jpg",
@@ -4280,10 +4049,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "9"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-07.jpg",
@@ -4299,10 +4065,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "4"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-08.jpg",
@@ -4318,10 +4081,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "6"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-09.jpg",
@@ -4337,10 +4097,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "30"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-10.jpg",
@@ -4356,10 +4113,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "17"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-11.jpg",
@@ -4391,10 +4145,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "18"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-13.jpg",
@@ -4410,10 +4161,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "1"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-14.jpg",
@@ -4429,10 +4177,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "1"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-15.jpg",
@@ -4448,10 +4193,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "16"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-16.jpg",
@@ -4467,10 +4209,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "16"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-17.jpg",
@@ -4486,10 +4225,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "25"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-18.jpg",
@@ -4505,10 +4241,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "44"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-19.jpg",
@@ -4524,10 +4257,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "6"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-20.jpg",
@@ -4543,10 +4273,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "4"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-21.jpg",
@@ -4562,10 +4289,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "13"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-22.jpg",
@@ -4581,10 +4305,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "1"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-23.jpg",
@@ -4632,10 +4353,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "27"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-26.jpg",
@@ -4667,10 +4385,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "4"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-28.jpg",
@@ -4686,11 +4401,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "6",
-      "23"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-29.jpg",
@@ -4706,10 +4417,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "4"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-30.jpg",
@@ -4725,10 +4433,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "25"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-31.jpg",
@@ -4744,10 +4449,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "13"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-32.jpg",
@@ -4763,10 +4465,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "9"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-33.jpg",
@@ -4782,10 +4481,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "13"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-34.jpg",
@@ -4801,10 +4497,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "6"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-35.jpg",
@@ -4820,10 +4513,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "8"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-36.jpg",
@@ -4839,10 +4529,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "5"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-37.jpg",
@@ -4858,11 +4545,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "16",
-      "13"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-38.jpg",
@@ -4878,11 +4561,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "23",
-      "21"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-39.jpg",
@@ -4898,10 +4577,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "9"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-40.jpg",
@@ -4917,10 +4593,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "23"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-41.jpg",
@@ -4936,10 +4609,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "27"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-42.jpg",
@@ -4955,10 +4625,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "27"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-43.jpg",
@@ -4974,10 +4641,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "16"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-44.jpg",
@@ -4993,10 +4657,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "17"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-45.jpg",
@@ -5012,10 +4673,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "17"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-46.jpg",
@@ -5031,10 +4689,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "5"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-47.jpg",
@@ -5050,10 +4705,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "5"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-48.jpg",
@@ -5069,10 +4721,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "5"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-49.jpg",
@@ -5088,10 +4737,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "5"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-50.jpg",
@@ -5107,10 +4753,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "5"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-51.jpg",
@@ -5126,10 +4769,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "5"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-52.jpg",
@@ -5145,11 +4785,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "5",
-      "4"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-53.jpg",
@@ -5165,11 +4801,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "5",
-      "19"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-54.jpg",
@@ -5185,10 +4817,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "23"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-55.jpg",
@@ -5204,10 +4833,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "23"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-56.jpg",
@@ -5223,10 +4849,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "23"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-57.jpg",
@@ -5242,10 +4865,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "5"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-58.jpg",
@@ -5261,10 +4881,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "5"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-59.jpg",
@@ -5280,10 +4897,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "5"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-60.jpg",
@@ -5299,10 +4913,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "5"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-61.jpg",
@@ -5318,10 +4929,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "5"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-62.jpg",
@@ -5337,10 +4945,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "8"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-63.jpg",
@@ -5356,10 +4961,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "27"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-64.jpg",
@@ -5375,10 +4977,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "27"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/bartoshuk-65.jpg",
@@ -5394,10 +4993,7 @@ window.PHOTOS = [
     "w": 1600,
     "h": 2400,
     "archiveOnly": true,
-    "game": "DCDS Bartoshuk Tournament Match 2",
-    "players": [
-      "25"
-    ]
+    "game": "DCDS Bartoshuk Tournament Match 2"
   },
   {
     "src": "images/jvfot-01.jpg",

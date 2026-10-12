@@ -65,7 +65,7 @@ fixed while wiring it up:
 
 ### Optional: the "what you booked" subtitle
 
-The About page's review form has an optional "What you booked" field
+The Home page's review form has an optional "What you booked" field
 (`Team session`, `portraits`…) that shows as a subtitle under the
 reviewer's name. Storing it needs one extra column:
 
@@ -124,7 +124,7 @@ git add -A && git commit -m "Turn on shared reviews" && git push
 ```
 
 That's it. The review drawer on every photograph, the star counts, and the
-"On individual photographs" block on the About page all start showing
+"On individual photographs" block on the Home page all start showing
 everyone's reviews. No other code changes.
 
 ## Moderating
@@ -134,280 +134,55 @@ want. The site re-reads on the next page load.
 
 ---
 
-# Turning on payments
+# Quote and removal requests
 
-Same idea — the booking panel already does the maths and collects the
-order, it just doesn't charge yet.
+Two things on the site email you: a **quote request** from the Get a
+quote form on the Home page, and a **removal request** from the button
+under any photograph in the portfolio. Both post in the background through
+**Web3Forms**, so the visitor never opens a mail app or types your
+address.
 
-1. Make a [Stripe](https://stripe.com) account and add your bank details.
-2. Create a **Payment Link** for each package (Products → Payment Links).
-3. Open `js/main.js`, find `var PAYMENT = {` near the top, and fill in:
-
-```js
-var PAYMENT = {
-  enabled: true,
-  currency: "USD",
-  links: {
-    "Individual":    "https://buy.stripe.com/...",
-    "Team":          "https://buy.stripe.com/...",
-    "Event & Meets": "https://buy.stripe.com/..."
-  }
-};
-```
-
-4. Commit and push.
-
-The "Request this booking" button becomes "Continue to payment" and sends
-people to Stripe's own checkout. Card details are handled entirely by
-Stripe and never touch this site.
-
-Because Payment Links are a fixed price each, the per-athlete total shown
-in the panel is an estimate for the customer; confirm the final amount
-with them, or make one link per common team size.
-
----
-
-## The store
-
-`store.html` sells the game photos at $1 each. Two things need switching on
-before it can actually take an order — until then the page says so plainly
-instead of pretending an order went through.
-
-### 1. Orders — one click, straight to your inbox
-
-Go to **web3forms.com**, type your email, and they mail you an access key.
-No account, no dashboard, free. Then in `js/shop-backend.js`:
+The key is already set in `js/mailer.js`. To change it, go to
+**web3forms.com**, type your email, and they mail you a new one:
 
 ```js
-orders: {
+window.MAILER = {
   mode: "web3forms",
   accessKey: "paste-your-key-here",
   endpoint: ""
-}
+};
 ```
 
-That's it. When someone hits *Send order* the order posts in the background
-and lands in your inbox — no mail app opens on their end, and they never
-type your address. The same rails carry booking requests from the About
-page, so both work the moment this key is in.
+There are no prices on the site. A quote request carries what they are
+booking, the sport, team, number of athletes, date, location and their
+notes; you reply with a price, and take payment however you like (the
+contact card at `/card` has Venmo). The Bookings tab in Studio uses the
+same booking types, so a request copies straight across.
 
-### 2. Chat — already on, nothing to do
-
-The chat runs on **ntfy.sh**, which needs no account, no key and no
-signup, so it works out of the box. Each order opens a topic named after
-its room id — 18 random hex characters, unguessable. The order email
-contains **your** link to that room; open it on any device and you are in
-the chat as Garrett.
-
-Two limits worth knowing:
-
-- **Messages last about 12 hours.** A conversation does not survive to
-  the next day. The order email is the permanent record; the chat is for
-  finishing the sale now. If you want history that keeps, switch to
-  Supabase below.
-- **Anyone with the room link can read that room**, so treat the link
-  like a key, and never type a customer's email or phone into the chat.
-
-Messages arrive over a live stream, not by polling. That matters: ntfy's
-free tier rate-limits requests per IP, and polling every few seconds
-trips it (HTTP 429) — which would throttle a real buyer, not just
-testing. One long-lived connection per open chat stays well clear, and
-messages land instantly instead of up to three seconds late.
-
-**Getting into a room from your phone:** the notification service sends
-plain text, so the chat link in the email is often *not* tappable. That
-is why every order email also carries a short **chat code**. Bookmark
-**garrettphoto.store/chat** on your phone, type the code, and you are in.
-The page remembers the last room you opened, so getting back in is one
-tap.
-
-**If order emails land in spam:** they will, at first — a notification
-from an unfamiliar sender usually does. Open one, hit *Report not spam*,
-then make it permanent: Gmail → search the sender's address → Create
-filter → **Never send it to Spam**. Do this once. A missed order is a
-lost sale, and this is the only thing that reliably prevents it. It is
-also why the emails use one siren rather than a row of them: three
-emoji plus an all-caps sender got the whole message filtered.
-
-**If a buyer closes the chat:** they get back in two ways, neither of
-which involves making an account. Their browser remembers the room, so
-returning to the store shows a "Reopen chat" bar. And the receipt shows
-a chat code they can type at garrettphoto.store/chat from any device.
-
-**Why there are no customer accounts.** A real login needs a server
-holding password hashes, and this site has no server — GitHub Pages only
-hands out files. Any login built here would keep the password somewhere
-readable, and people reuse passwords, so it would be worse than having
-none. It also would not help: chat messages expire in ~12 hours either
-way, so logging in later would just show an empty room. **If a buyer has
-gone quiet, reply to their email** — it is in every order notification,
-it never expires, and it is the one channel that always reaches them.
-
-**Notifications:** the chat itself cannot notify you — no website can
-push to your phone without an installed app. So the first time a customer
-writes in a room, the site emails you (`💬 CHAT — …`) using the same
-Web3Forms key. Once per room, so a chatty buyer can't flood you. Your
-inbox stays the thing you actually have to watch.
-
-### Optional: Supabase, if you want chat history that keeps
-
-In the Supabase SQL editor:
-
-```sql
-create table shop_messages (
-  id         bigserial primary key,
-  room       text not null,
-  who        text not null,
-  body       text not null,
-  created_at timestamptz default now()
-);
-alter table shop_messages enable row level security;
-create policy "read"  on shop_messages for select using (true);
-create policy "write" on shop_messages for insert with check (true);
-create index on shop_messages (room, created_at);
-```
-
-Then in `js/shop-backend.js`:
-
-```js
-chat: { mode: "supabase", url: "https://xxxx.supabase.co", key: "your-anon-key" }
-```
+**If these emails land in spam:** they will, at first. Open one, hit
+*Report not spam*, then make it permanent: Gmail → search the sender's
+address → Create filter → **Never send it to Spam**. It is also why the
+subject line uses one emoji rather than a row of them: three emoji plus
+an all-caps sender got the whole message filtered.
 
 ---
 
-## Store previews — how the watermark actually holds up
+# My Photos — the page for past buyers
 
-The portfolio's watermark is a CSS overlay: nothing is burned into those
-files, exactly as you wanted. **The store is different.** An overlay can be
-deleted in devtools in five seconds, and it doesn't exist at all if someone
-just opens the `.jpg` URL directly. So the store serves its own separate
-files with the mark burned into the pixels:
+The site used to sell single game photographs. The store is gone, but
+`account.html` is still up (not in the menu) so anyone who bought before
+can sign in and download their files. It needs the Supabase `download`
+Edge Function and the R2 bucket to keep working.
 
-```bash
-python3 tools/build_shop_previews.py
-```
+When past buyers have what they need:
 
-That writes `images/shop/`. Your originals in `images/` are never touched.
-Run it again after adding photos to a game (it skips ones already built;
-`--force` rebuilds everything).
+1. Delete `account.html`, `js/account.js`, `js/account-page.js` and
+   `css/account.css`, and the short sign-in redirect at the bottom of
+   `js/main.js` (marked "Delete this along with account.html").
+2. In Supabase, delete the `download` Edge Function, and the `deliveries`
+   and `orders` tables once you have exported anything you want to keep.
+3. In Cloudflare, delete the `garrettphoto` R2 bucket.
 
-What makes these hard for an AI to strip:
-
-- **It covers the whole frame.** Erasing a corner mark is easy. Rebuilding
-  every square inch of a photo is not — there's no clean area to copy from.
-- **Every tile is jittered** in position, angle, size and opacity, seeded
-  per file, so no two photos share a pattern. This matters more than it
-  sounds: the classic attack on stock-photo watermarks is to average a
-  bunch of images that share one identical mark and solve for it. There's
-  nothing here to solve for.
-- **It's drawn light *and* dark.** A single-tone mark can be pulled out by
-  thresholding in one direction; this one pushes pixels both ways.
-- **It's blended, not stamped.** The original pixel values underneath are
-  genuinely gone. Removal can't recover them, only invent replacements.
-- **Previews are 1100px at quality 72,** so the mark and the photo share
-  compression artifacts and can't be cleanly separated — and even a perfect
-  removal leaves someone with a small file that's useless for printing.
-
-**Honest limit:** none of this is 100%. A determined person with good tools
-can degrade any watermark. The point is to make it more work than paying $1.
-
-### Screenshots
-
-**Screenshots cannot be blocked on the web.** No site can do it — browsers
-don't expose that ability, and iOS Safari especially. Anyone claiming
-otherwise is selling something. What the store *does* do:
-
-- right-click → Save Image is blocked
-- drag-to-desktop is blocked
-- **iPhone long-press → Save to Photos is blocked** — the photo sits under a
-  transparent shield and is set to ignore touches, so iOS never offers the
-  save sheet
-- and if someone screenshots anyway, what they get is the watermarked
-  1100px preview, which is the whole reason the mark is burned in
-
-The real protection isn't stopping the screenshot. It's that the screenshot
-isn't worth having.
-
-
----
-
-## Accounts — so a buyer never loses their files
-
-`account.html` lets a buyer sign in and re-download everything you have
-delivered them, any time. It uses Supabase's own auth, so there is **no
-password anywhere** — they type their email, Supabase sends a one-time
-link, clicking it signs them in. Nothing on the site ever handles a
-password, which matters because people reuse them.
-
-Signing in is asked for at **checkout only**. Browsing, the archive,
-reviews and removal requests all stay open. A login in front of the
-photographs would cost more sales than it saves; it earns its place at
-checkout because it is what lets someone come back months later instead
-of hunting for a lost email.
-
-### 1. The deliveries table
-
-SQL Editor → New query → Run:
-
-```sql
-create table deliveries (
-  id          bigint generated always as identity primary key,
-  email       text not null,
-  title       text not null,
-  note        text default '',
-  url         text,
-  created_at  timestamptz not null default now()
-);
-
-alter table deliveries enable row level security;
-
--- a signed-in buyer sees only rows addressed to their own email
-create policy "read own deliveries"
-  on deliveries for select
-  using (lower(email) = lower(auth.jwt() ->> 'email'));
-
-create index on deliveries (lower(email));
-```
-
-There is no insert, update or delete policy, so nobody visiting the site
-can add or change a delivery. You add them yourself.
-
-### 2. Point the sign-in links at the real site
-
-**Authentication → URL Configuration**:
-
-- **Site URL**: `https://garrettphoto.store`
-- **Redirect URLs**: add `https://garrettphoto.store/account.html`
-  and `https://garrettphoto.store/store.html`
-
-Without this the emailed link points at `localhost:3000` and does
-nothing when a customer taps it.
-
-### Delivering someone their photos
-
-**Table Editor → deliveries → Insert row:**
-
-| column | what to put |
-|---|---|
-| `email` | the buyer's email, exactly as they typed it at checkout |
-| `title` | e.g. `JV Football — 3 photographs` |
-| `note` | optional, e.g. `Full resolution, no watermark` |
-| `url` | the download link |
-
-The email must match what they signed in with, or the row stays
-invisible to them — that match is the whole security model.
-
-For `url`, anything durable works: a Google Drive share link, or a file
-in Supabase Storage. **Avoid WeTransfer and anything else that expires**
-— the entire point of this page is that the files do not go away.
-
-### The one real limitation
-
-Supabase's built-in email service is rate-limited to a handful of
-messages per hour and is explicitly not meant for production. At a few
-orders a week you will not notice; on a busy weekend after a tournament
-you would, and buyers would just see the link never arriving.
-
-The fix, when you need it, is a free SMTP provider (Resend and Brevo
-both have free tiers) plugged into **Authentication → Emails → SMTP
-Settings**. Not worth doing until it actually bites.
+Already safe to switch off now, because nothing on the site uses them:
+the Stripe payment links and webhook, and the Supabase `rapid-function`
+(checkout) and `stripe-webhook` Edge Functions.

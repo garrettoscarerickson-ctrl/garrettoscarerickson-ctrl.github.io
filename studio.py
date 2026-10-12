@@ -8,7 +8,7 @@ Studio:   http://localhost:4173/studio
 
 Drop photos in, fill in a title and tags, and Studio handles the rest:
 files the image into images/, updates data/photos.json, regenerates
-js/photos.js, and every page (filters, sports, home strips) sorts
+js/photos.js, and every page (portfolio filters, home strips) sorts
 itself. Local-only: it binds to 127.0.0.1 and is never deployed.
 
 The Bookings tab is the one part of Studio that never touches the site:
@@ -46,34 +46,6 @@ def save_photos(photos):
         json.dump(photos, f, indent=2, ensure_ascii=False)
         f.write("\n")
     regenerate_photos_js(photos)
-
-
-SHOP = os.path.join(ROOT, "data", "shop.json")
-
-
-def load_shop():
-    try:
-        with open(SHOP, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except (IOError, ValueError):
-        return {"photoPrice": 1, "tiers": [], "addOns": [], "games": {}}
-
-
-def save_shop(cfg):
-    """Prices -> data/shop.json -> js/shop-config.js, the same
-    manifest-then-generate shape the photos already use."""
-    with open(SHOP, "w", encoding="utf-8") as f:
-        json.dump(cfg, f, indent=2, ensure_ascii=False)
-        f.write("\n")
-    header = ("/* GENERATED FILE - do not edit by hand.\n"
-              "   Source of truth: data/shop.json\n"
-              "   Change prices in Studio (Store tab), or edit the JSON and run:\n"
-              "     python3 studio.py --regen\n"
-              "*/\n\n")
-    with open(os.path.join(ROOT, "js", "shop-config.js"), "w",
-              encoding="utf-8") as f:
-        f.write(header + "window.SHOP_CONFIG = " +
-                json.dumps(cfg, indent=2, ensure_ascii=False) + ";\n")
 
 
 BOOKINGS = os.path.join(ROOT, "data", "bookings.json")
@@ -117,7 +89,7 @@ def clean_booking(body, existing=None):
     row["date"] = (body.get("date") or "").strip()
     row["athlete"] = " ".join((body.get("athlete") or "").split())
     # Jersey numbers are worn, not calculated — keep them as typed so "05"
-    # stays "05", and match what the store's jersey filter stores.
+    # stays "05".
     row["number"] = re.sub(r"[^0-9]", "", str(body.get("number") or ""))[:3]
     row["school"] = " ".join((body.get("school") or "").split())
     row["sport"] = (body.get("sport") or "").strip()
@@ -147,7 +119,7 @@ def clean_booking(body, existing=None):
 
 
 def regenerate_reviews_js():
-    """Approved reviews -> js/reviews.js for the About page."""
+    """Approved reviews -> js/reviews.js for the Home page."""
     path = os.path.join(ROOT, "data", "reviews.json")
     if not os.path.exists(path):
         return
@@ -220,21 +192,8 @@ def clean_entry(body, photos, existing=None):
     orientation = body.get("orientation") or entry.get("orientation") or "landscape"
     entry["orientation"] = "portrait" if orientation == "portrait" else "landscape"
     entry["tags"] = tags
-    # Jersey numbers, so a parent can filter a game down to their kid.
-    # Free text rather than a picker: numbers vary by sport and season,
-    # and a wrong-but-fixed list is worse than none.
-    if "players" in body:
-        nums = []
-        for n in (body.get("players") or []):
-            n = re.sub(r"[^0-9]", "", str(n))
-            if n and n not in nums:
-                nums.append(n)
-        if nums:
-            entry["players"] = sorted(nums, key=int)
-        else:
-            entry.pop("players", None)
     # placement decides where a photo lives:
-    #   archive  -> archive only, never on the home page (all Studio uploads)
+    #   archive  -> portfolio only, never on the home page (all Studio uploads)
     #   gallery  -> shown in the home gallery (subject to the 10-photo cap)
     #   panel    -> full-screen parallax section on the home page
     #   hero     -> the big opening image (only one)
@@ -304,7 +263,6 @@ class StudioHandler(SimpleHTTPRequestHandler):
         if self.path == "/api/manifest":
             photos = load_photos()
             self.send_json({"photos": photos, "tags": all_tags(photos),
-                            "shop": load_shop(),
                             "bookings": load_bookings()})
             return
         super().do_GET()
@@ -317,8 +275,6 @@ class StudioHandler(SimpleHTTPRequestHandler):
                 self.api_update()
             elif self.path == "/api/remove":
                 self.api_remove()
-            elif self.path == "/api/shop":
-                self.api_shop()
             elif self.path == "/api/booking":
                 self.api_booking()
             elif self.path == "/api/game":
@@ -338,14 +294,14 @@ class StudioHandler(SimpleHTTPRequestHandler):
         body = self.read_body()
         photos = load_photos()
         raw = decode_image(body.get("image"))
-        # Studio uploads always go to the archive only — never the home page.
+        # Studio uploads always go to the portfolio only — never the home page.
         body["placement"] = "archive"
         entry = clean_entry(body, photos)
         src = unique_src(slugify(entry["title"]), photos)
         with open(os.path.join(ROOT, src), "wb") as f:
             f.write(raw)
         entry["src"] = src
-        # record pixel dimensions so the archive can reserve exact space
+        # record pixel dimensions so the portfolio can reserve exact space
         # for each frame before the image loads (no layout shift)
         try:
             body_w = int(body.get("w") or 0)
@@ -389,37 +345,8 @@ class StudioHandler(SimpleHTTPRequestHandler):
         if os.path.exists(img):
             shutil.move(img, os.path.join(REMOVED, stamp + os.path.basename(img)))
 
-        # The store serves its own watermarked copy under images/shop/. Taking
-        # a photo out of the manifest hides it from every page but leaves that
-        # file sitting at a guessable public URL — so a takedown looked done
-        # while the picture was still downloadable. Remove it too.
-        preview = os.path.join(IMAGES, "shop", os.path.basename(body["src"]))
-        if os.path.exists(preview):
-            shutil.move(preview, os.path.join(REMOVED, stamp + "shop-" +
-                                              os.path.basename(preview)))
-
         save_photos(keep)
-        self.send_json({"ok": True, "removedPreview": os.path.exists(preview) is False})
-
-    def api_shop(self):
-        body = self.read_body()
-        cfg = load_shop()
-        if "photoPrice" in body:
-            try:
-                price = float(body["photoPrice"])
-            except (TypeError, ValueError):
-                raise ValueError("Price must be a number.")
-            if price < 0:
-                raise ValueError("Price cannot be negative.")
-            cfg["photoPrice"] = int(price) if price == int(price) else price
-        if "tiers" in body:
-            cfg["tiers"] = body["tiers"]
-        if "addOns" in body:
-            cfg["addOns"] = body["addOns"]
-        if "games" in body:
-            cfg["games"] = body["games"]
-        save_shop(cfg)
-        self.send_json({"ok": True, "shop": cfg})
+        self.send_json({"ok": True})
 
     def api_booking(self):
         """Add, edit or drop one booking. Nothing here reaches the site."""
@@ -446,7 +373,7 @@ class StudioHandler(SimpleHTTPRequestHandler):
         self.send_json({"ok": True, "booking": row, "bookings": rows})
 
     def api_game(self):
-        """Rename a group, or clear it so its photographs leave the store."""
+        """Rename a group (one game or shoot), or clear it from its photographs."""
         body = self.read_body()
         old_name = (body.get("from") or "").strip()
         new_name = (body.get("to") or "").strip()
@@ -462,19 +389,10 @@ class StudioHandler(SimpleHTTPRequestHandler):
             if new_name:
                 p["game"] = new_name
             else:
-                # dropping the game takes them off the store but leaves them
-                # in the archive - removing a photograph is a separate act
+                # clearing the game leaves the photographs in the portfolio -
+                # removing a photograph is a separate act
                 p.pop("game", None)
         save_photos(photos)
-
-        cfg = load_shop()
-        games = cfg.get("games") or {}
-        if old_name in games:
-            entry = games.pop(old_name)
-            if new_name:
-                games[new_name] = entry
-            cfg["games"] = games
-            save_shop(cfg)
 
         self.send_json({"ok": True, "moved": len(hits)})
 
@@ -554,27 +472,11 @@ header nav{display:flex;gap:1.5rem;align-items:baseline}
      font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
 .tab.is-on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .hint{max-width:46rem;line-height:1.6;margin:-.4rem 0 1rem}
-.pricebox{border:1px solid var(--line);border-radius:14px;padding:1.25rem;
-          display:flex;flex-direction:column;gap:.9rem;max-width:52rem}
-.pricerow{display:flex;justify-content:space-between;align-items:center;
-          gap:1rem;padding:.5rem 0}
-.dollar{display:inline-flex;align-items:center;gap:.25rem;color:var(--dim)}
-.pricerow input,.tierrow input{background:#111;border:1px solid var(--line);
-  border-radius:8px;color:var(--ink);font:inherit;padding:.45rem .6rem}
-.pricerow input[type=number]{width:6rem;text-align:right}
-.tierrow{display:grid;grid-template-columns:1fr 7rem 10rem;gap:.5rem;
-         align-items:center;padding:.35rem 0}
-.tierrow .mono{color:var(--dim)}
 .gcard{border:1px solid var(--line);border-radius:14px;padding:1rem 1.15rem;
        margin-bottom:.9rem}
 .ghead{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
 .ghead input{flex:1;min-width:14rem;background:#111;border:1px solid var(--line);
              border-radius:8px;color:var(--ink);font:inherit;padding:.5rem .7rem}
-.delivrow{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;
-          margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--line)}
-.delivrow input{flex:1;min-width:18rem;background:#111;border:1px solid var(--line);
-                border-radius:8px;color:var(--ink);font:inherit;padding:.45rem .6rem}
-.dstatus{color:var(--dim)}
 .gthumbs{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.9rem}
 .gthumb{position:relative;width:78px;height:78px;border-radius:8px;
         overflow:hidden;border:1px solid var(--line)}
@@ -583,12 +485,6 @@ header nav{display:flex;gap:1.5rem;align-items:baseline}
   border-radius:50%;border:0;background:rgba(0,0,0,.72);color:#f87171;
   cursor:pointer;font-size:12px;line-height:1;padding:0}
 .gthumb button:hover{background:#f87171;color:#000}
-.gthumb{height:auto;width:78px}
-.gthumb img{height:78px}
-.jersey{width:100%;box-sizing:border-box;background:#111;border:1px solid var(--line);
-        border-top:0;border-radius:0 0 8px 8px;color:var(--ink);font:inherit;
-        font-size:11px;text-align:center;padding:3px 2px}
-.jersey:focus{outline:none;border-color:var(--ink)}
 header nav a:hover{color:var(--ink)}
 h2{font-size:1rem;letter-spacing:.2em;text-transform:uppercase;
   font-weight:600;margin:3rem 0 1.2rem}
@@ -680,14 +576,13 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim)}
   <h1>Studio</h1>
   <nav class="mono">
     <a href="/" target="_blank">Site →</a>
-    <a href="/archive.html" target="_blank">Archive →</a>
-    <a href="/sports.html" target="_blank">Sports →</a>
+    <a href="/portfolio.html" target="_blank">Portfolio →</a>
   </nav>
 </header>
 
 <div class="tabs mono" id="tabs">
   <button class="tab is-on" data-panel="panel-photos">Photos</button>
-  <button class="tab" data-panel="panel-store">Store</button>
+  <button class="tab" data-panel="panel-games">Games</button>
   <button class="tab" data-panel="panel-bookings">Bookings</button>
 </div>
 
@@ -703,36 +598,18 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim)}
   <div id="library" class="cards"></div>
 </section>
 
-<section id="panel-store" hidden>
-  <h2>Prices</h2>
-  <div class="pricebox">
-    <label class="pricerow">
-      <span class="mono">Per photograph in the store</span>
-      <span class="dollar">$<input type="number" id="sh-price" min="0" step="1"></span>
-    </label>
-    <div id="sh-tiers"></div>
-    <h3 class="mono">Add-ons</h3>
-    <div id="sh-addons"></div>
-    <button class="primary" id="sh-save">Save prices</button>
-    <span class="status" id="sh-status"></span>
-  </div>
-
+<section id="panel-games" hidden>
   <h2>Groups <span class="mono" id="sh-gcount"></span></h2>
   <p class="mono hint">A group is one game or shoot. Renaming one renames it on
-    every photograph in it. Removing a photograph here takes it off the whole
-    site — store, archive and sports page.<br>
-    The box under each photograph is its jersey numbers — type them separated
-    by spaces (<b>7 12</b> for two players) and they become filters buyers can
-    search by. Leave it blank if no number is visible.</p>
+    every photograph in it, and the name shows on the portfolio. Removing a
+    photograph here takes it off the whole site.</p>
   <div id="sh-games"></div>
 </section>
 
 <section id="panel-bookings" hidden>
   <h2>Add a booking</h2>
   <p class="mono hint">Private. This never goes on the site and never leaves
-    this machine &mdash; Publish refuses to run if the file is not gitignored.
-    The jersey number is the same one you type under a photograph in the Store
-    tab, so once you have shot the game the buyer can filter to it.</p>
+    this machine &mdash; Publish refuses to run if the file is not gitignored.</p>
   <div class="bkform">
     <label><span class="mono">Date</span><input type="date" id="bk-date"></label>
     <label><span class="mono">Number</span><input type="text" id="bk-number"
@@ -743,9 +620,9 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim)}
       placeholder="DCDS"></label>
     <label><span class="mono">Sport</span><input type="text" id="bk-sport"
       placeholder="Football"></label>
-    <label><span class="mono">Package</span><select id="bk-tier"></select></label>
-    <label><span class="mono">Rate</span><input type="number" id="bk-rate"
-      min="0" step="1" placeholder="20"></label>
+    <label><span class="mono">Booking</span><select id="bk-tier"></select></label>
+    <label><span class="mono">Quoted ($)</span><input type="number" id="bk-rate"
+      min="0" step="1" placeholder="40"></label>
     <label><span class="mono">Contact</span><input type="text" id="bk-contact"
       placeholder="Phone, email or @handle"></label>
     <label class="wide"><span class="mono">Note</span><input type="text"
@@ -813,7 +690,7 @@ function tagPicker(selected) {
 }
 
 /* ---------- shared card form ----------
-   mode "add"     -> new uploads, always go to the Archive (no placement UI)
+   mode "add"     -> new uploads, always go to the Portfolio (no placement UI)
    mode "library" -> existing photos, can be placed on the home page        */
 function metaForm(photo, mode) {
   var f = el("div");
@@ -833,7 +710,7 @@ function metaForm(photo, mode) {
 
   var place = null;
   if (mode === "add") {
-    var note = el("div", "mono", "Adds to the Archive →");
+    var note = el("div", "mono", "Adds to the Portfolio →");
     note.style.marginTop = ".7rem";
     note.style.opacity = ".7";
     f.appendChild(note);
@@ -843,7 +720,7 @@ function metaForm(photo, mode) {
     lab.style.marginTop = ".6rem";
     lab.innerHTML = '<span class="mono">Placement</span>' +
       '<select data-f="placement">' +
-      '<option value="archive">Archive only</option>' +
+      '<option value="archive">Portfolio only</option>' +
       '<option value="gallery">Home — gallery</option>' +
       '<option value="panel">Home — parallax panel</option>' +
       '<option value="hero">Home — hero (replaces current)</option></select>';
@@ -933,8 +810,7 @@ function addPendingCard(file, dataUrl, orientation, pxW, pxH) {
     status.textContent = "Uploading…"; status.className = "status";
     api("/api/add", meta).then(function (res) {
       if (res.error) throw new Error(res.error);
-      status.textContent = "Added ✓ — it's live in the archive" +
-        (meta.tags.indexOf("sports") !== -1 ? " and on the Sports page" : "");
+      status.textContent = "Added ✓ — it's in the portfolio";
       status.className = "status ok";
       addBtn.remove(); cancel.textContent = "Done — clear card";
       loadLibrary();
@@ -950,7 +826,6 @@ function addPendingCard(file, dataUrl, orientation, pxW, pxH) {
 function loadLibrary() {
   fetch("/api/manifest").then(function (r) { return r.json(); }).then(function (data) {
     KNOWN_TAGS = data.tags;
-    renderShop(data);
     renderBookings(data.bookings || []);
     renderGames(data.photos);
     var lib = document.getElementById("library");
@@ -962,7 +837,7 @@ function loadLibrary() {
       var meta = el("div", "lib-meta");
       meta.appendChild(el("span", "mono", photo.src));
       if (photo.feature) meta.appendChild(el("span", "mono", "★ " + photo.feature));
-      else if (photo.archiveOnly) meta.appendChild(el("span", "mono", "archive"));
+      else if (photo.archiveOnly) meta.appendChild(el("span", "mono", "portfolio"));
       card.appendChild(meta);
       var thumb = el("img");
       thumb.src = "/" + photo.src; thumb.loading = "lazy";
@@ -990,7 +865,7 @@ function loadLibrary() {
       };
       remove.onclick = function () {
         if (!confirm('Remove "' + photo.title + '" from the site?\n' +
-          "The original and the store copy both move to images/_removed/, " +
+          "The original moves to images/_removed/, " +
           "so the picture stops being reachable on the site.")) return;
         api("/api/remove", { src: photo.src }).then(function () { loadLibrary(); });
       };
@@ -1019,8 +894,7 @@ document.getElementById("publish").onclick = function () {
 
 /* ---------- bookings ----------
    A private list of who is booked. Kept beside the photographs because
-   the jersey number written down here is the one typed under the frames
-   afterwards, and because the shoot and the delivery are the same job. */
+   the shoot and the delivery are the same job. */
 
 var BOOKINGS = [];
 
@@ -1056,26 +930,23 @@ function dateText(iso) {
     { weekday: "short", month: "short", day: "numeric" });
 }
 
+/* The same choices as "What are you booking?" on the site's quote form,
+   so a request copies straight across. A booking saved under an older
+   name keeps it. */
+var BOOKING_TYPES = ["Individual athlete session", "Team shoot",
+  "Game or tournament coverage", "Senior or recruiting photos",
+  "Car meet or other event", "Something else"];
+
 function tierOptions(sel, current) {
   sel.innerHTML = '<option value=""></option>';
-  ((SHOP && SHOP.tiers) || []).forEach(function (t) {
+  var names = BOOKING_TYPES.slice();
+  if (current && names.indexOf(current) === -1) names.push(current);
+  names.forEach(function (name) {
     var o = document.createElement("option");
-    o.value = t.name; o.textContent = t.name + " · " + t.price;
+    o.value = name; o.textContent = name;
     sel.appendChild(o);
   });
   sel.value = current || "";
-}
-
-/* Picking a package fills the rate with that tier's price, so the common
-   case is two clicks. A range like "$5-10" fills in its lower number and
-   waits to be corrected rather than guessing which end applies. */
-function rateFromTier(name) {
-  var t = ((SHOP && SHOP.tiers) || []).filter(function (x) {
-    return x.name === name;
-  })[0];
-  if (!t) return "";
-  var m = String(t.price).match(/\d+(\.\d+)?/);
-  return m ? m[0] : "";
 }
 
 function bookingRow(b) {
@@ -1188,11 +1059,6 @@ function saveBooking(b) {
   return api("/api/booking", b).then(afterBooking);
 }
 
-document.getElementById("bk-tier").onchange = function () {
-  var r = document.getElementById("bk-rate");
-  if (!r.value) r.value = rateFromTier(this.value);
-};
-
 document.getElementById("bk-save").onclick = function () {
   var g = function (id) { return document.getElementById(id).value.trim(); };
   saveBooking({
@@ -1213,66 +1079,14 @@ document.getElementById("tabs").addEventListener("click", function (e) {
   document.querySelectorAll(".tab").forEach(function (t) {
     t.classList.toggle("is-on", t === b);
   });
-  ["panel-photos", "panel-store", "panel-bookings"].forEach(function (id) {
+  ["panel-photos", "panel-games", "panel-bookings"].forEach(function (id) {
     document.getElementById(id).hidden = (id !== b.dataset.panel);
   });
 });
 
-/* ---------- store: prices ---------- */
-
-var SHOP = null;
-
 function q(v) { return String(v == null ? "" : v).replace(/"/g, "&quot;"); }
 
-function renderShop(data) {
-  SHOP = data.shop || { photoPrice: 1, tiers: [], addOns: [] };
-  document.getElementById("sh-price").value = SHOP.photoPrice;
-
-  var tw = document.getElementById("sh-tiers");
-  tw.innerHTML = "<h3 class='mono'>Booking packages</h3>";
-  (SHOP.tiers || []).forEach(function (t, i) {
-    var row = el("div", "tierrow");
-    row.innerHTML =
-      '<input value="' + q(t.name)  + '" data-k="name"  data-i="' + i + '">' +
-      '<input value="' + q(t.price) + '" data-k="price" data-i="' + i + '">' +
-      '<input value="' + q(t.unit)  + '" data-k="unit"  data-i="' + i + '">';
-    tw.appendChild(row);
-  });
-
-  var aw = document.getElementById("sh-addons");
-  aw.innerHTML = "";
-  (SHOP.addOns || []).forEach(function (a, i) {
-    var row = el("div", "tierrow");
-    row.innerHTML =
-      '<input value="' + q(a[0]) + '" data-a="0" data-i="' + i + '">' +
-      '<input value="' + q(a[1]) + '" data-a="1" data-i="' + i + '">' +
-      '<span class="mono">on the About page</span>';
-    aw.appendChild(row);
-  });
-}
-
-document.getElementById("sh-save").onclick = function () {
-  var st = document.getElementById("sh-status");
-  var tiers = JSON.parse(JSON.stringify(SHOP.tiers || []));
-  document.querySelectorAll("#sh-tiers input").forEach(function (inp) {
-    tiers[Number(inp.dataset.i)][inp.dataset.k] = inp.value.trim();
-  });
-  var addOns = (SHOP.addOns || []).map(function (a) { return a.slice(); });
-  document.querySelectorAll("#sh-addons input").forEach(function (inp) {
-    addOns[Number(inp.dataset.i)][Number(inp.dataset.a)] = inp.value.trim();
-  });
-
-  st.textContent = "Saving...";
-  api("/api/shop", {
-    photoPrice: document.getElementById("sh-price").value,
-    tiers: tiers, addOns: addOns
-  }).then(function () {
-    st.textContent = "Saved. Hit Publish to put it on the live site.";
-    loadLibrary();
-  }).catch(function (e) { st.textContent = e.message; });
-};
-
-/* ---------- store: groups ---------- */
+/* ---------- games ---------- */
 
 function renderGames(photos) {
   var order = [], groups = {};
@@ -1289,7 +1103,7 @@ function renderGames(photos) {
   wrap.innerHTML = "";
   if (!order.length) {
     wrap.innerHTML = "<p class='mono'>No groups yet. Give a photograph a game " +
-      "in the Photos tab and it shows up in the store.</p>";
+      "in the Photos tab and it shows up here.</p>";
     return;
   }
 
@@ -1311,53 +1125,16 @@ function renderGames(photos) {
         .catch(function (e) { alert(e.message); });
     };
 
-    var deliv = el("div", "delivrow");
-    var url = ((SHOP.games || {})[game] || {}).deliveryUrl || "";
-    deliv.innerHTML =
-      "<span class='mono'>Delivery folder</span>" +
-      '<input placeholder="Paste the Google Drive share link for this game" ' +
-        'value="' + q(url) + '">' +
-      "<button class='ghost'>Save link</button>" +
-      "<span class='mono dstatus'></span>";
-    card.appendChild(deliv);
-
-    var durl = deliv.querySelector("input");
-    var dstat = deliv.querySelector(".dstatus");
-    deliv.querySelector("button").onclick = function () {
-      var games = JSON.parse(JSON.stringify(SHOP.games || {}));
-      games[game] = games[game] || {};
-      games[game].deliveryUrl = durl.value.trim();
-      dstat.textContent = "Saving...";
-      api("/api/shop", { games: games })
-        .then(function (r) { SHOP.games = r.shop.games; dstat.textContent = "Saved"; })
-        .catch(function (e) { dstat.textContent = e.message; });
-    };
-
     var thumbs = el("div", "gthumbs");
     list.forEach(function (p) {
       var t = el("div", "gthumb");
       t.innerHTML = '<img src="/' + p.src + '" alt="" loading="lazy">' +
-                    "<button title='Remove'>x</button>" +
-                    '<input class="jersey" value="' +
-                      q((p.players || []).join(" ")) +
-                      '" placeholder="#" title="Jersey numbers, space separated">';
-      var jin = t.querySelector(".jersey");
-      jin.onclick = function (e) { e.stopPropagation(); };
-      jin.onchange = function () {
-        api("/api/update", {
-          src: p.src, title: p.title, tags: p.tags,
-          location: p.location, year: p.year, orientation: p.orientation,
-          players: jin.value.split(/[\s,]+/).filter(Boolean)
-        }).then(function () {
-          jin.style.borderColor = "#6ee7a8";
-          setTimeout(function () { jin.style.borderColor = ""; }, 900);
-        }).catch(function (e) { alert(e.message); });
-      };
+                    "<button title='Remove'>x</button>";
 
       t.querySelector("button").onclick = function () {
         if (!confirm('Remove "' + p.title + '" from the site?\n\n' +
-          "It comes off the store, the archive and the sports page. The " +
-          "original and the store copy both move to images/_removed/.")) return;
+          "It comes off the portfolio. The original moves to " +
+          "images/_removed/.")) return;
         api("/api/remove", { src: p.src })
           .then(function () { loadLibrary(); })
           .catch(function (e) { alert(e.message); });
@@ -1382,7 +1159,6 @@ if __name__ == "__main__":
     import sys
     regenerate_photos_js(load_photos())
     regenerate_reviews_js()
-    save_shop(load_shop())
     if "--regen" in sys.argv:
         print("js/photos.js + js/reviews.js regenerated from data/")
         sys.exit(0)

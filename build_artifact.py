@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Build dist/artifact.html — a single self-contained file of the whole
-site (all three pages, images inlined as data URIs) for sharing as a
+site (Home and Portfolio, images inlined as data URIs) for sharing as a
 Claude Artifact or sending to anyone as one file.
 
 Run: python3 build_artifact.py
@@ -11,6 +11,7 @@ Requires macOS `sips` for image downscaling.
 import base64
 import json
 import os
+import re
 import subprocess
 import tempfile
 
@@ -49,6 +50,16 @@ def build():
 
     css = read("css/style.css")
     main_js = read("js/main.js")
+    # reviews and the mailer, which the home page reads
+    support_js = "\n".join(read(p) for p in (
+        "js/reviews-store.js", "js/mailer.js", "js/reviews.js"))
+
+    # The home page's words live in index.html, not in the script, so take
+    # its <main> as-is. Links to the portfolio become in-page view switches.
+    home_main = re.search(r'<main id="about-root">.*?</main>',
+                          read("index.html"), re.S).group(0)
+    home_main = re.sub(r'href="portfolio\.html[^"]*"',
+                       'href="#" data-goto="portfolio"', home_main)
 
     # Inline the webfont as a data URI — the artifact CSP blocks external
     # files, so the ../fonts path would fall back to Helvetica otherwise.
@@ -59,7 +70,7 @@ def build():
         'url(data:font/woff2;base64,%s) format("woff2")' % font_b64)
 
     html = """<meta charset="utf-8">
-<title>Garrett Erickson — Photographs</title>
+<title>Garrett Erickson — Michigan Sports Photographer</title>
 <style>
 {css}
 [data-view][hidden] {{ display: none; }}
@@ -68,33 +79,28 @@ def build():
 <nav class="nav">
   <a class="nav__name" href="#" data-goto="home">Garrett Erickson</a>
   <div class="nav__links">
-    <a href="#" data-goto="home">Index</a>
-    <a href="#" data-goto="sports">Sports</a>
-    <a href="#" data-goto="archive">Archive</a>
+    <a href="#" data-goto="home">Home</a>
+    <a href="#" data-goto="portfolio">Portfolio</a>
   </div>
 </nav>
 
 <div data-view="home">
-  <main id="home-root"></main>
+  {home_main}
 </div>
 
-<div data-view="archive" hidden>
+<div data-view="portfolio" hidden>
   <header class="archive-head">
-    <h1>Archive</h1>
-    <span class="mono" id="archive-count"></span>
+    <h1>Portfolio</h1>
+    <span class="mono" id="portfolio-count"></span>
   </header>
   <div class="filters" id="filters" role="toolbar" aria-label="Filter photographs"></div>
-  <main class="archive-grid" id="archive-grid"></main>
-</div>
-
-<div data-view="sports" hidden>
-  <main id="sports-root"></main>
+  <main class="archive-grid" id="portfolio-grid"></main>
 </div>
 
 <footer class="footer">
-  <span class="mono">© 2026 Garrett Erickson</span>
+  <span class="mono">© 2026 Garrett Erickson · Michigan Sports Photographer</span>
   <a class="mono" href="mailto:garrettoscarerickson@gmail.com">garrettoscarerickson@gmail.com</a>
-  <span class="mono">Based in Michigan</span>
+  <span class="mono">Based in Metro Detroit, Michigan</span>
 </footer>
 
 <script>
@@ -102,10 +108,15 @@ window.PHOTOS = {photos_json};
 document.body.dataset.page = "spa";
 </script>
 <script>
+{support_js}
+</script>
+<script>
 {main_js}
 </script>
 """.format(css=css,
+           home_main=home_main,
            photos_json=json.dumps(photos),
+           support_js=support_js,
            main_js=main_js)
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)

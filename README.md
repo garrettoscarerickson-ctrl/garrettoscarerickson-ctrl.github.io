@@ -1,11 +1,31 @@
-# Garrett Erickson — Photographs
+# Garrett Erickson — Michigan Sports Photographer
 
-Black, architectural portfolio. Three pages:
+Black, architectural portfolio for garrettphoto.store. Two pages:
 
-- **index.html** — parallax feature panels alternating with gallery strips
-- **archive.html** — every photo, filterable, with a lightbox
-- **sports.html** — shows "coming soon" until any photo has the `sports`
-  tag, then it turns into a real gallery automatically
+- **index.html** (Home) — who I am, what I shoot, the **Get a quote**
+  form, reviews, questions and contact. There are no set prices: the
+  quote form emails Garrett and he replies with a price. The words search
+  engines read (who, what, where) are written straight into the HTML;
+  photos and reviews are filled in by `js/main.js`.
+- **portfolio.html** (Portfolio) — every photo, sports first, filterable,
+  with a lightbox. `portfolio.html?tag=football` opens filtered to one tag.
+
+`store.html`, `sports.html` and `archive.html` only redirect to the
+portfolio, so old links and printed QR codes still land somewhere.
+`account.html` is a leftover download page for past buyers — see SETUP.md.
+
+## Search (SEO)
+
+- Each page has its own title, description, canonical link and share
+  image; the Home page carries structured data describing the business
+  (`application/ld+json` in `index.html`).
+- `sitemap.xml` and `robots.txt` sit at the root. Add any new page to the
+  sitemap.
+- Things that matter as much as the site itself, and only you can do:
+  set up a **Google Business Profile** (sports photographer, service
+  area Metro Detroit), add the site in **Google Search Console** and
+  submit `https://garrettphoto.store/sitemap.xml`, put the link in your
+  Instagram bio, and ask schools and teams you shoot for to link to it.
 
 No build step, no dependencies. Plain HTML/CSS/JS.
 
@@ -20,17 +40,18 @@ python3 studio.py
 - **Studio: http://localhost:4173/studio**
 
 Drag photos into Studio (any size — it resizes them), give each a title
-and tags, hit **Add to site**. Every upload goes to the **Archive** — the
-home page (index) stays a curated showcase of 10 and never changes when
-you add photos. Studio files the image into `images/`, updates
+and tags, hit **Add to site**. Every upload goes to the **Portfolio** —
+the home page's selected work stays curated and never changes when you
+add photos. Studio files the image into `images/`, updates
 `data/photos.json`, regenerates `js/photos.js`, and every page sorts
 itself:
 
-- new tags become filter buttons on the Archive page, with live counts
-- a photo tagged `sports` makes the Sports page a real gallery
+- new tags become filters on the Portfolio page, with live counts
+- photos tagged `sports` lead the portfolio
 - To put a photo on the home page, edit it in the **Library** section and
   set its **Placement** — "Home — gallery / parallax panel / hero". The
-  index shows at most 10 (hero + panels + gallery); extras stay archived.
+  hero is the big opening image; for a sports site, make it a sports
+  photo.
 - Remove keeps the image file in `images/_removed/` just in case
 
 Studio is local-only (binds 127.0.0.1) and is never part of the

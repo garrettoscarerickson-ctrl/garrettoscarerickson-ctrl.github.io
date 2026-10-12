@@ -4,36 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your photographs — Garrett Erickson</title>
-  <meta name="description" content="Sign in to download the photographs you have bought.">
+  <meta name="description" content="Sign in to download the photographs you bought.">
   <meta name="robots" content="noindex">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/account.css">
 </head>
 <body data-page="account">
+
+  <!-- Not in the menu any more: this page stays up only so people who
+       bought photographs while the site had a store can download them.
+       See js/account-page.js for what to delete when it goes. -->
 
   <nav class="nav">
     <a class="nav__name" href="index.html">Garrett Erickson</a>
     <div class="nav__links">
-      <a href="index.html">About</a>
-      <a href="store.html">Store</a>
-      <a href="sports.html">Sports</a>
-      <a href="archive.html">Archive</a>
-      <a class="nav__mine" href="account.html" aria-current="page">My&nbsp;Photos</a>
+      <a href="index.html">Home</a>
+      <a href="portfolio.html">Portfolio</a>
     </div>
   </nav>
 
   <main id="account-root"></main>
 
   <footer class="footer">
-    <span class="mono">© 2026 Garrett Erickson</span>
+    <span class="mono">© 2026 Garrett Erickson · Michigan Sports Photographer</span>
     <a class="mono" href="mailto:garrettoscarerickson@gmail.com">garrettoscarerickson@gmail.com</a>
-    <span class="mono">Based in Michigan</span>
+    <span class="mono">Based in Metro Detroit, Michigan</span>
   </footer>
 
-  <script src="js/shop-config.js"></script>
   <script src="js/reviews-store.js"></script>
   <script src="js/account.js"></script>
-  <script src="js/shop-backend.js"></script>
-  <script src="js/photos.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/account-page.js"></script>
 </body>
 </html>

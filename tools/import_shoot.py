@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """Import a shoot from the Creator Pro drive, end to end.
 
-Bringing in a game used to be four separate steps, and forgetting the
-third one — watermarking — publishes the whole batch free and unmarked
-with nothing to tell you. So this does all of it in one pass:
+Bringing in a game used to be separate steps, and forgetting the
+watermark publishes the whole batch unmarked with nothing to tell you.
+So this does all of it in one pass:
 
   1. site copy      -> images/<name>.jpg     (2400px long edge)
   2. clean master   -> images/_originals/    (gitignored, never published)
-  3. watermark      -> burned into the published copy, since it is for sale
-  4. store preview  -> images/shop/<name>.jpg
-  5. manifest entry -> data/photos.json + regenerated js/photos.js
+  3. watermark      -> burned lightly into the published copy
+  4. manifest entry -> data/photos.json + regenerated js/photos.js
 
 Idempotent. A photograph already in the manifest is skipped, and nothing
 is ever watermarked twice — the clean master in _originals/ is always the
@@ -31,7 +30,7 @@ from PIL import Image, ImageFilter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
-from build_shop_previews import build_layer, process as build_preview
+from watermark import build_layer
 
 DRIVE = "/Volumes/Creator Pro"
 IMAGES = os.path.join(ROOT, "images")
@@ -40,7 +39,7 @@ DATA = os.path.join(ROOT, "data", "photos.json")
 
 LONG_EDGE = 2400        # matches every site copy already in the manifest
 SITE_QUALITY = 88
-ARCHIVE_OPACITY = 0.20  # same as tools/protect_archive.py
+ARCHIVE_OPACITY = 0.20  # light: a deterrent on the portfolio, not a paywall
 
 # What to bring in, and what it actually is — verified by looking at the
 # photographs, not by trusting the folder names. DCDVOL+JVSOC holds two
@@ -255,7 +254,6 @@ def plan():
 def run(jobs):
     photos = json.load(open(DATA))
     os.makedirs(ORIGINALS, exist_ok=True)
-    os.makedirs(os.path.join(IMAGES, "shop"), exist_ok=True)
 
     for n, j in enumerate(jobs, 1):
         im = Image.open(j["src"]).convert("RGB")
@@ -278,7 +276,6 @@ def run(jobs):
                     optimize=True, progressive=True)
 
         rel = "images/" + j["name"]
-        build_preview(rel, force=True)          # sources the clean master
 
         photos.append({
             "src": rel,
