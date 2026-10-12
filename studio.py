@@ -16,6 +16,8 @@ it is a private diary of who is booked, kept in data/bookings.json.
 """
 
 import base64
+import glob
+import hashlib
 import json
 import os
 import re
@@ -145,6 +147,42 @@ def regenerate_photos_js(photos):
     body = "window.PHOTOS = " + json.dumps(photos, indent=2, ensure_ascii=False) + ";\n"
     with open(PHOTOS_JS, "w", encoding="utf-8") as f:
         f.write(header + body)
+
+
+# Pages that load the site's own css/ and js/ files.
+PAGES = ["*.html", "card/*.html"]
+ASSET_REF = re.compile(
+    r'((?:href|src)=")((?:\.\./|/)?(?:css|js)/[\w.-]+\.(?:css|js))'
+    r'(?:\?v=[0-9a-f]+)?(")')
+
+
+def stamp_assets():
+    """Give every css/js link a fingerprint of the file it points at:
+    js/main.js?v=3f9a1c2e. GitHub Pages tells browsers to keep files for
+    ten minutes, so after a publish a visitor could get the new page with
+    yesterday's styles and script - an unstyled page with the old one
+    built underneath it. A new fingerprint is a new address, which the
+    browser has to fetch. Unchanged files keep theirs and stay cached."""
+    for pattern in PAGES:
+        for page in glob.glob(os.path.join(ROOT, pattern)):
+            here = os.path.dirname(page)
+            with open(page, encoding="utf-8") as f:
+                html = f.read()
+
+            def stamp(m):
+                ref = m.group(2)
+                path = (os.path.join(ROOT, ref[1:]) if ref.startswith("/")
+                        else os.path.normpath(os.path.join(here, ref)))
+                if not os.path.exists(path):
+                    return m.group(0)
+                with open(path, "rb") as f:
+                    v = hashlib.sha1(f.read()).hexdigest()[:8]
+                return m.group(1) + ref + "?v=" + v + m.group(3)
+
+            out = ASSET_REF.sub(stamp, html)
+            if out != html:
+                with open(page, "w", encoding="utf-8") as f:
+                    f.write(out)
 
 
 def all_tags(photos):
@@ -423,6 +461,7 @@ class StudioHandler(SimpleHTTPRequestHandler):
                                 "publish again."})
                 return
 
+        stamp_assets()
         run("git", "add", "-A")
         code, commit_out = run("git", "commit", "-m",
                                "Update photos via Studio")
@@ -1159,8 +1198,10 @@ if __name__ == "__main__":
     import sys
     regenerate_photos_js(load_photos())
     regenerate_reviews_js()
+    stamp_assets()
     if "--regen" in sys.argv:
-        print("js/photos.js + js/reviews.js regenerated from data/")
+        print("js/photos.js + js/reviews.js regenerated from data/, "
+              "css/js links fingerprinted")
         sys.exit(0)
     server = ThreadingHTTPServer(("127.0.0.1", PORT), StudioHandler)
     print("Site:   http://localhost:%d" % PORT)

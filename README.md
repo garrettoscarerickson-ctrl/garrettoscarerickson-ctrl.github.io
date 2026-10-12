@@ -75,6 +75,12 @@ That creates a public repo and turns on GitHub Pages; the script prints
 your URL (https://YOURNAME.github.io/photography-portfolio/). After
 that, the **Publish to the web** button in Studio pushes updates live.
 
+Every page links its css/ and js/ files with a fingerprint
+(`js/main.js?v=3f9a1c2e`) so browsers can't mix a new page with old,
+cached styles and script. Studio and `python3 studio.py --regen` update
+the fingerprints; if you edit css/ or js/ by hand, run `--regen` before
+pushing.
+
 **Single-file share build:** `python3 build_artifact.py` bundles the
 whole site (images inlined) into `dist/artifact.html` — one file you
 can share as a Claude Artifact or send to anyone.
