@@ -82,48 +82,31 @@
     });
   }
 
-  /* ---------- archive masonry ----------
-     Each card spans however many grid row-units its own height needs, so
-     the grid fills row-wise (left to right) while keeping natural heights. */
-
-  function layoutMasonry(grid) {
-    if (!grid) return;
-    var cs = getComputedStyle(grid);
-    var unit = parseFloat(cs.getPropertyValue("--row-unit")) || 8;
-    var gutter = parseFloat(cs.getPropertyValue("--gutter")) || 0;
-    Array.prototype.forEach.call(grid.children, function (card) {
-      if (card.classList.contains("archive-empty")) return;
-      var h = card.getBoundingClientRect().height;
-      if (!h) return;
-      card.style.gridRowEnd = "span " + Math.ceil((h + gutter) / unit);
-    });
+  /* The portfolio grid shows images/thumbs/ copies (studio.py makes
+     them); the lightbox always opens the full file. */
+  function thumbOf(photo) {
+    return /^images\//.test(photo.src)
+      ? photo.src.replace(/^images\//, "images/thumbs/") : photo.src;
   }
 
-  function watchMasonry(grid) {
-    var pending = false;
-    function relayout() {
-      if (pending) return;
-      pending = true;
-      requestAnimationFrame(function () {
-        pending = false;
-        layoutMasonry(grid);
-      });
-    }
-    relayout();
-    window.addEventListener("resize", relayout);
-    /* images and webfonts change card heights after first paint */
-    if ("ResizeObserver" in window) {
-      var ro = new ResizeObserver(relayout);
-      Array.prototype.forEach.call(grid.children, function (c) { ro.observe(c); });
-    }
-    Array.prototype.forEach.call(grid.querySelectorAll("img"), function (img) {
-      if (!img.complete) img.addEventListener("load", relayout, { once: true });
-    });
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
-    return relayout;
+  /* Portfolio tile: a small uniform square, thumbnail only. The title and
+     details live in the lightbox. */
+  function photoTile(photo, index, onClick) {
+    var card = el("button", "ph ph--tile");
+    card.type = "button";
+    card.setAttribute("aria-label", "View " + photo.title);
+    card.innerHTML =
+      '<span class="ph__img"><img loading="lazy" decoding="async" src="' +
+      thumbOf(photo) + '" alt="' + photoAlt(photo) + '"></span>';
+    var img = card.querySelector("img");
+    img.addEventListener("error", function () {
+      if (img.src.indexOf("/thumbs/") !== -1) img.src = photo.src;
+    }, { once: true });
+    card.addEventListener("click", function () { onClick(index); });
+    return card;
   }
 
-  /* A photo card <button class="ph"> used by both pages */
+  /* A photo card <button class="ph"> used by the home page */
   function photoCard(photo, index, onClick) {
     var card = el("button", "ph" +
       (photo.orientation === "portrait" ? " ph--portrait" : ""));
@@ -1010,14 +993,19 @@
 
     function renderGrid() {
       gridEl.innerHTML = "";
-      var visible = peopleLast(source.filter(function (p) {
+      var visible = source.filter(function (p) {
         if (selected.size === 0) return true;
         return p.tags.some(function (t) { return selected.has(t); });
-      }));
+      });
+      /* lead photographs keep manifest order, so the newest import (top
+         of photos.json) is the first thing on the page; the rest still
+         put people last */
       if (lead) {
         var hasLead = function (p) { return p.tags.indexOf(lead) !== -1; };
         visible = visible.filter(hasLead)
-          .concat(visible.filter(function (p) { return !hasLead(p); }));
+          .concat(peopleLast(visible.filter(function (p) { return !hasLead(p); })));
+      } else {
+        visible = peopleLast(visible);
       }
 
       applyBtn.textContent = visible.length
@@ -1031,14 +1019,12 @@
       }
 
       visible.forEach(function (photo, i) {
-        var card = photoCard(photo, i, function (idx) {
+        var card = photoTile(photo, i, function (idx) {
           openLightbox(visible, idx);
         });
-        card.style.animationDelay = (i * 0.04) + "s";
+        card.style.animationDelay = (Math.min(i, 40) * 0.015) + "s";
         gridEl.appendChild(card);
       });
-
-      watchMasonry(gridEl);
     }
 
     renderGrid();

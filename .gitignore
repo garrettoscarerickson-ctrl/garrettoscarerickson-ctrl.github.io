@@ -8,3 +8,5 @@ social/*@2x.png
 
 # private: athletes' names and family contact details, never deployed
 data/bookings.json
+print/Bookings_Call_Sheet.pdf
+print/clients/

@@ -31,6 +31,8 @@ DATA = os.path.join(ROOT, "data", "photos.json")
 PHOTOS_JS = os.path.join(ROOT, "js", "photos.js")
 IMAGES = os.path.join(ROOT, "images")
 REMOVED = os.path.join(IMAGES, "_removed")
+THUMBS = os.path.join(IMAGES, "thumbs")
+THUMB_EDGE = 600        # long edge; the portfolio grid shows these, the lightbox the full file
 PORT = 4173
 
 VALID_FEATURES = ("hero", "panel")
@@ -48,6 +50,7 @@ def save_photos(photos):
         json.dump(photos, f, indent=2, ensure_ascii=False)
         f.write("\n")
     regenerate_photos_js(photos)
+    make_thumbs(photos)
 
 
 BOOKINGS = os.path.join(ROOT, "data", "bookings.json")
@@ -147,6 +150,35 @@ def regenerate_photos_js(photos):
     body = "window.PHOTOS = " + json.dumps(photos, indent=2, ensure_ascii=False) + ";\n"
     with open(PHOTOS_JS, "w", encoding="utf-8") as f:
         f.write(header + body)
+
+
+def make_thumbs(photos):
+    """images/thumbs/<name>.jpg for every photograph, so the portfolio grid
+    loads small files. A thumbnail is rebuilt when it is missing or older
+    than its photograph, and dropped when its photograph is gone."""
+    os.makedirs(THUMBS, exist_ok=True)
+    wanted = set()
+    for p in photos:
+        src = os.path.join(ROOT, p["src"])
+        name = os.path.basename(src)
+        wanted.add(name)
+        out = os.path.join(THUMBS, name)
+        if not os.path.exists(src):
+            continue
+        if os.path.exists(out) and os.path.getmtime(out) >= os.path.getmtime(src):
+            continue
+        try:
+            from PIL import Image
+            im = Image.open(src).convert("RGB")
+            im.thumbnail((THUMB_EDGE, THUMB_EDGE), Image.LANCZOS)
+            im.save(out, "JPEG", quality=80, optimize=True, progressive=True)
+        except ImportError:
+            subprocess.run(["sips", "-Z", str(THUMB_EDGE), "-s", "format", "jpeg",
+                            "-s", "formatOptions", "80", src, "--out", out],
+                           capture_output=True)
+    for name in os.listdir(THUMBS):
+        if name.endswith(".jpg") and name not in wanted:
+            os.remove(os.path.join(THUMBS, name))
 
 
 # Pages that load the site's own css/ and js/ files.
@@ -1198,10 +1230,11 @@ if __name__ == "__main__":
     import sys
     regenerate_photos_js(load_photos())
     regenerate_reviews_js()
+    make_thumbs(load_photos())
     stamp_assets()
     if "--regen" in sys.argv:
         print("js/photos.js + js/reviews.js regenerated from data/, "
-              "css/js links fingerprinted")
+              "thumbnails up to date, css/js links fingerprinted")
         sys.exit(0)
     server = ThreadingHTTPServer(("127.0.0.1", PORT), StudioHandler)
     print("Site:   http://localhost:%d" % PORT)
