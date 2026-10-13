@@ -13,3 +13,8 @@ print/clients/
 
 # Python bytecode (Studio imports tools/home_page.py)
 __pycache__/
+
+# old Instagram rates posts (made by the retired tools/build_social.py);
+# they carry the old prices, so they stay off the site
+social/rates-a.html
+social/rates-b.html
