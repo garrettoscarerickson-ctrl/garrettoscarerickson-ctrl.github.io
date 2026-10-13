@@ -10,3 +10,6 @@ social/*@2x.png
 data/bookings.json
 print/Bookings_Call_Sheet.pdf
 print/clients/
+
+# Python bytecode (Studio imports tools/home_page.py)
+__pycache__/
