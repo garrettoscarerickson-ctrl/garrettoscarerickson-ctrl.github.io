@@ -1,0 +1,17 @@
+/* GENERATED FILE - do not edit by hand.
+   Source: data/home.json ("theme"), edited in Studio's Home tab,
+   under Colors & style. Loaded after style.css on every page. */
+
+:root {
+  --bg: #0b0b0e;
+  --bg-raise: #15151a;
+  --ink: #f2f2f0;
+  --ink-dim: #9b9ba4;
+  --accent: #ffffff;
+  --r-sm: 10px;
+  --r-md: 18px;
+  --r-lg: 26px;
+  --font-display: "Oswald", "Helvetica Neue Condensed", "Arial Narrow", sans-serif;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-ui: "Archivo", "Helvetica Neue", Arial, sans-serif;
+}

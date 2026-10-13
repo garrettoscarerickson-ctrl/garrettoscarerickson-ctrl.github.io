@@ -4,9 +4,8 @@ Black, architectural portfolio for garrettphoto.store. Two pages:
 
 - **index.html** (Home) — who I am, what I shoot, the **Get a quote**
   form, reviews, questions and contact. There are no set prices: the
-  quote form emails Garrett and he replies with a price. The words search
-  engines read (who, what, where) are written straight into the HTML;
-  photos and reviews are filled in by `js/main.js`.
+  quote form emails Garrett and he replies with a price. Built from
+  `data/home.json`, which Studio's Home page tab edits (see below).
 - **portfolio.html** (Portfolio) — every photo, sports first, filterable,
   with a lightbox. `portfolio.html?tag=football` opens filtered to one tag.
 
@@ -60,6 +59,29 @@ public site.
 Prefer hand-editing? The source of truth is `data/photos.json` — edit
 it, then run `python3 studio.py --regen`. Don't edit `js/photos.js`;
 it's generated.
+
+## Editing the home page — Studio's Home page tab
+
+Open Studio (`python3 studio.py`, then http://localhost:4173/studio) and
+click **Home page**. The real home page shows on the right; the left
+lists every section from top to bottom.
+
+- **Click anything in the preview** to edit it. Green dashed outlines
+  are photo spots: click one to pick a different photo from the library
+  (search by game, sport or title).
+- **👁** shows or hides a section; **↑ ↓** move it.
+- **Opening photo** takes several photos and fades between them.
+- **Colors, fonts & corners** changes the whole site;
+  **Google title, description & share photo** is what search results
+  and shared links show.
+- In longer text, `**bold**` makes bold and `[words](link)` makes a link.
+- Every change saves on your Mac straight away. Nothing goes online
+  until **Publish to the web**; **Undo changes since last publish** puts
+  the page back the way it is online.
+
+Under the hood: `data/home.json` is the page, and `tools/home_page.py`
+writes `index.html` and `css/theme.css` from it. Don't edit `index.html`
+by hand — it is rebuilt from `data/home.json`.
 
 ## Putting it on the internet
 

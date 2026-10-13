@@ -32,10 +32,16 @@ PHOTOS_JS = os.path.join(ROOT, "js", "photos.js")
 IMAGES = os.path.join(ROOT, "images")
 REMOVED = os.path.join(IMAGES, "_removed")
 THUMBS = os.path.join(IMAGES, "thumbs")
+HOME_JSON = os.path.join(ROOT, "data", "home.json")
 THUMB_EDGE = 600        # long edge; the portfolio grid shows these, the lightbox the full file
 PORT = 4173
 
 VALID_FEATURES = ("hero", "panel")
+
+# the home page is built from data/home.json by tools/home_page.py
+import sys as _sys
+_sys.path.insert(0, os.path.join(ROOT, "tools"))
+import home_page  # noqa: E402
 
 
 # ---------------- manifest helpers ----------------
@@ -51,6 +57,8 @@ def save_photos(photos):
         f.write("\n")
     regenerate_photos_js(photos)
     make_thumbs(photos)
+    # the home page names its photos and counts them, so rebuild it too
+    home_page.build(photos)
 
 
 BOOKINGS = os.path.join(ROOT, "data", "bookings.json")
@@ -303,6 +311,12 @@ class StudioHandler(SimpleHTTPRequestHandler):
     def log_message(self, fmt, *args):
         pass  # keep the console quiet
 
+    def end_headers(self):
+        # Studio is for editing: never let the browser show a stale copy
+        # of a page or stylesheet that was just rebuilt.
+        self.send_header("Cache-Control", "no-store")
+        super().end_headers()
+
     # -- helpers --
 
     def send_json(self, obj, status=200):
@@ -330,6 +344,17 @@ class StudioHandler(SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(page)
             return
+        if self.path == "/api/home":
+            photos = load_photos()
+            self.send_json({
+                "home": home_page.clean(home_page.load(photos), photos),
+                "photos": [{k: p.get(k) for k in ("src", "title", "game", "tags", "orientation")}
+                           for p in photos],
+                "quoteTypes": home_page.QUOTE_TYPES,
+                "fonts": sorted(home_page.FONTS),
+                "defaultTheme": home_page.DEFAULT_THEME,
+            })
+            return
         if self.path == "/api/manifest":
             photos = load_photos()
             self.send_json({"photos": photos, "tags": all_tags(photos),
@@ -345,6 +370,10 @@ class StudioHandler(SimpleHTTPRequestHandler):
                 self.api_update()
             elif self.path == "/api/remove":
                 self.api_remove()
+            elif self.path == "/api/home":
+                self.api_home()
+            elif self.path == "/api/home/revert":
+                self.api_home_revert()
             elif self.path == "/api/booking":
                 self.api_booking()
             elif self.path == "/api/game":
@@ -417,6 +446,25 @@ class StudioHandler(SimpleHTTPRequestHandler):
 
         save_photos(keep)
         self.send_json({"ok": True})
+
+    def api_home(self):
+        """Save the home page from the editor and rebuild index.html."""
+        body = self.read_body()
+        if not isinstance(body.get("home"), dict):
+            raise ValueError("Nothing to save.")
+        home = home_page.build(load_photos(), body["home"])
+        stamp_assets()
+        self.send_json({"ok": True, "home": home})
+
+    def api_home_revert(self):
+        """Put the home page back the way it was at the last publish."""
+        r = subprocess.run(["git", "show", "HEAD:data/home.json"], cwd=ROOT,
+                           capture_output=True, text=True)
+        if r.returncode != 0:
+            raise ValueError("Nothing published yet to go back to.")
+        home = home_page.build(load_photos(), json.loads(r.stdout))
+        stamp_assets()
+        self.send_json({"ok": True, "home": home})
 
     def api_booking(self):
         """Add, edit or drop one booking. Nothing here reaches the site."""
@@ -640,6 +688,95 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim)}
 }
 #publish-wrap{margin-top:3rem;border-top:1px solid var(--line);padding-top:1.5rem;
   display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+/* ---------- home page editor ---------- */
+body.is-wide{padding-bottom:2rem}
+.he{display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:1.25rem;
+    height:calc(100vh - 140px);min-height:520px}
+.he__side{position:relative;overflow-y:auto;padding-right:.4rem;display:flex;
+  flex-direction:column;gap:.9rem}
+.he__bar{position:sticky;top:0;z-index:2;background:var(--bg);padding-bottom:.6rem;
+  border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:.5rem}
+.he__bar .row{display:flex;gap:.5rem;flex-wrap:wrap}
+.he__status{font-size:.8rem;color:var(--dim);line-height:1.4}
+.he__status.ok{color:var(--ok)} .he__status.bad{color:var(--bad)}
+.he__group{margin-top:.2rem}
+.he__list{list-style:none;display:flex;flex-direction:column;gap:.3rem}
+.he__item{display:flex;align-items:center;gap:.35rem;border:1px solid var(--line);
+  border-radius:10px;padding:.35rem .4rem .35rem .7rem;background:var(--raise)}
+.he__item.is-on{border-color:#6ee7a8;box-shadow:0 0 0 1px #6ee7a8 inset}
+.he__item.is-off .he__name{opacity:.45;text-decoration:line-through}
+.he__name{flex:1;background:none;border:0;color:var(--ink);font:inherit;font-size:.9rem;
+  text-align:left;cursor:pointer;padding:.3rem 0}
+.he__icon{background:none;border:1px solid var(--line);color:var(--dim);border-radius:7px;
+  width:1.9rem;height:1.9rem;cursor:pointer;font-size:.8rem;line-height:1}
+.he__icon:hover{color:var(--ink);border-color:var(--ink)}
+.he__icon:disabled{opacity:.3;cursor:default}
+.he__form{display:flex;flex-direction:column;gap:.85rem;border:1px solid var(--line);
+  border-radius:14px;padding:1rem}
+.he__form h3{font-size:.95rem;font-weight:600}
+.he__form .note{font-size:.8rem;color:var(--dim);line-height:1.5}
+.hf{display:flex;flex-direction:column;gap:.35rem}
+.hf > .mono{display:flex;justify-content:space-between;gap:.5rem}
+.hf input[type=text],.hf textarea,.hf select{width:100%;background:#111;border:1px solid var(--line);
+  border-radius:8px;color:var(--ink);font:inherit;font-size:.9rem;padding:.5rem .6rem}
+.hf textarea{resize:vertical;min-height:4.5rem;line-height:1.5}
+.hf input:focus,.hf textarea:focus,.hf select:focus{outline:none;border-color:var(--ink)}
+.hf__row{display:flex;gap:.35rem;align-items:flex-start}
+.hf__row > :first-child{flex:1}
+.hf__obj{border:1px solid var(--soft);border-radius:10px;padding:.6rem;display:flex;
+  flex-direction:column;gap:.5rem;background:#0f0f0f}
+.hf__objhead{display:flex;justify-content:space-between;align-items:center;gap:.4rem}
+.hf__add{align-self:flex-start;background:none;border:1px dashed var(--line);color:var(--ink);
+  border-radius:8px;padding:.45rem .8rem;cursor:pointer;font:inherit;font-size:.8rem}
+.hf__add:hover{border-color:var(--ink)}
+.hf__photos{display:flex;flex-wrap:wrap;gap:.45rem}
+.hf__ph{position:relative;width:84px;height:84px;border-radius:8px;overflow:hidden;
+  border:1px solid var(--line);background:#111;cursor:pointer}
+.hf__ph img{width:100%;height:100%;object-fit:cover;display:block}
+.hf__ph .tools{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;
+  background:rgba(0,0,0,.65)}
+.hf__ph .tools button{background:none;border:0;color:#fff;cursor:pointer;font-size:.75rem;
+  padding:.2rem .35rem}
+.hf__ph .tools button:hover{color:#6ee7a8}
+.hf__ph .tools .x:hover{color:#f87171}
+.hf__new{width:84px;height:84px;border-radius:8px;border:1px dashed var(--line);background:none;
+  color:var(--dim);cursor:pointer;font:inherit;font-size:.75rem}
+.hf__new:hover{border-color:#6ee7a8;color:var(--ink)}
+.hf__colors{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.hf__color{display:flex;align-items:center;gap:.5rem;font-size:.82rem}
+.hf__color input{width:2.4rem;height:2rem;border:1px solid var(--line);border-radius:6px;
+  background:none;padding:0;cursor:pointer}
+.hf__count{font-size:.7rem}
+.hf__count.over{color:var(--bad)}
+.he__stage{display:flex;flex-direction:column;gap:.6rem;min-width:0}
+.he__devices{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}
+.he__devices .tab{padding:.4rem .9rem}
+.he__hint{font-size:.78rem;color:var(--dim);margin-left:auto}
+.he__frame-wrap{flex:1;display:flex;justify-content:center;background:#050505;
+  border:1px solid var(--line);border-radius:12px;overflow:hidden}
+#he-frame{border:0;width:100%;height:100%;background:#0b0b0e}
+.he__frame-wrap.is-phone #he-frame{width:390px;border-left:1px solid var(--line);
+  border-right:1px solid var(--line)}
+.hep{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.78);display:flex;
+  align-items:center;justify-content:center;padding:2rem}
+.hep[hidden]{display:none}
+.hep__card{background:var(--raise);border:1px solid var(--line);border-radius:14px;
+  width:min(1100px,100%);height:min(86vh,900px);display:flex;flex-direction:column}
+.hep__bar{display:flex;gap:.5rem;padding:1rem;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.hep__bar input,.hep__bar select{background:#111;border:1px solid var(--line);border-radius:8px;
+  color:var(--ink);font:inherit;padding:.5rem .7rem}
+.hep__bar input{flex:1 1 14rem;width:auto;min-width:0}
+.hep__bar select,.hep__bar button{width:auto;flex:0 0 auto}
+.hep__grid{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+  gap:4px;padding:1rem;align-content:start}
+.hep__grid button{position:relative;aspect-ratio:1;border:0;padding:0;cursor:pointer;background:#111}
+.hep__grid button img{width:100%;height:100%;object-fit:cover;display:block}
+.hep__grid button:hover{outline:3px solid #6ee7a8;outline-offset:-3px}
+.hep__grid button.is-used::after{content:"on page";position:absolute;left:4px;top:4px;
+  background:#6ee7a8;color:#000;font-size:10px;padding:2px 5px;border-radius:4px}
+.hep__more{grid-column:1/-1;justify-self:center;margin:1rem}
+@media (max-width:900px){.he{grid-template-columns:1fr;height:auto}
+  .he__frame-wrap{height:70vh}}
 </style>
 </head>
 <body>
@@ -653,6 +790,7 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim)}
 
 <div class="tabs mono" id="tabs">
   <button class="tab is-on" data-panel="panel-photos">Photos</button>
+  <button class="tab" data-panel="panel-home">Home page</button>
   <button class="tab" data-panel="panel-games">Games</button>
   <button class="tab" data-panel="panel-bookings">Bookings</button>
 </div>
@@ -708,6 +846,55 @@ button.ghost:hover{color:var(--ink);border-color:var(--dim)}
   <div id="bk-upcoming"></div>
   <h2>Done <span class="mono" id="bk-donecount"></span></h2>
   <div id="bk-past"></div>
+</section>
+
+<section id="panel-home" hidden>
+  <div class="he">
+    <aside class="he__side">
+      <div class="he__bar">
+        <div class="he__status" id="he-status">Loading…</div>
+        <div class="row">
+          <button class="primary" id="he-publish" type="button">Publish to the web</button>
+          <button class="ghost" id="he-revert" type="button">Undo changes since last publish</button>
+        </div>
+      </div>
+
+      <div class="he__group">
+        <div class="mono" style="margin-bottom:.4rem">Whole page</div>
+        <ul class="he__list" id="he-page"></ul>
+      </div>
+
+      <div class="he__group">
+        <div class="mono" style="margin-bottom:.4rem">Sections, top to bottom</div>
+        <ul class="he__list" id="he-sections"></ul>
+      </div>
+
+      <div id="he-editor"></div>
+    </aside>
+
+    <div class="he__stage">
+      <div class="he__devices mono">
+        <button class="tab is-on" type="button" data-device="desktop">Computer</button>
+        <button class="tab" type="button" data-device="phone">Phone</button>
+        <a class="tab" href="/index.html" target="_blank">Open in a new tab</a>
+        <span class="he__hint">Click any part of the page to edit it. Green outlines are photo spots.</span>
+      </div>
+      <div class="he__frame-wrap" id="he-frame-wrap">
+        <iframe id="he-frame" title="Home page preview"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="hep" id="he-picker" hidden>
+    <div class="hep__card">
+      <div class="hep__bar">
+        <input type="text" id="hep-q" placeholder="Search by game, sport, title or file name">
+        <select id="hep-tag"><option value="">Every subject</option></select>
+        <button class="ghost" id="hep-close" type="button">Cancel</button>
+      </div>
+      <div class="hep__grid" id="hep-grid"></div>
+    </div>
+  </div>
 </section>
 
 <div id="publish-wrap">
@@ -786,18 +973,10 @@ function metaForm(photo, mode) {
     note.style.opacity = ".7";
     f.appendChild(note);
   } else {
-    var current = photo.feature || (photo.archiveOnly ? "archive" : "gallery");
-    var lab = el("label");
-    lab.style.marginTop = ".6rem";
-    lab.innerHTML = '<span class="mono">Placement</span>' +
-      '<select data-f="placement">' +
-      '<option value="archive">Portfolio only</option>' +
-      '<option value="gallery">Home — gallery</option>' +
-      '<option value="panel">Home — parallax panel</option>' +
-      '<option value="hero">Home — hero (replaces current)</option></select>';
-    place = lab.querySelector("select");
-    place.value = current;
-    f.appendChild(lab);
+    var where = el("div", "mono", "Front-page photos are picked in the Home page tab");
+    where.style.marginTop = ".7rem";
+    where.style.opacity = ".7";
+    f.appendChild(where);
   }
 
   f.read = function () {
@@ -1150,9 +1329,11 @@ document.getElementById("tabs").addEventListener("click", function (e) {
   document.querySelectorAll(".tab").forEach(function (t) {
     t.classList.toggle("is-on", t === b);
   });
-  ["panel-photos", "panel-games", "panel-bookings"].forEach(function (id) {
+  ["panel-photos", "panel-home", "panel-games", "panel-bookings"].forEach(function (id) {
     document.getElementById(id).hidden = (id !== b.dataset.panel);
   });
+  document.body.classList.toggle("is-wide", b.dataset.panel === "panel-home");
+  if (b.dataset.panel === "panel-home") heInit();
 });
 
 function q(v) { return String(v == null ? "" : v).replace(/"/g, "&quot;"); }
@@ -1217,6 +1398,628 @@ function renderGames(photos) {
   });
 }
 
+/* ---------- home page editor ----------
+   data/home.json is the page. Every change is saved straight away and
+   index.html rebuilt (tools/home_page.py), then the preview reloads.
+   Nothing reaches the web until Publish. */
+
+var HE = { home: null, photos: [], by: {}, quoteTypes: [], fonts: [],
+           defaultTheme: {}, sel: null, timer: null, saving: false, again: false,
+           ready: false };
+
+var LINKS = ["#quote", "portfolio.html", "portfolio.html?tag=sports",
+  "portfolio.html?tag=football", "portfolio.html?tag=soccer", "portfolio.html?tag=tennis",
+  "portfolio.html?tag=volleyball", "portfolio.html?tag=hockey", "#about", "#faq",
+  "#contact", "#sports-photography"];
+
+var RICH = "Tip: **bold** makes text bold, and [words](link) makes a link.";
+
+var SECTIONS = {
+  intro: { name: "Name card", about: "The big name that fills the first screen.",
+    fields: [{ k: "name", label: "Your name" },
+             { k: "role", label: "Line under your name" }] },
+  hero: { name: "Opening photo",
+    about: "The full-screen photo under your name. Add more than one and they fade from one to the next.",
+    fields: [{ k: "photos", label: "Photos", type: "photos" },
+             { k: "button", label: "Button text (leave blank for no button)" },
+             { k: "buttonLink", label: "Button goes to", type: "link" },
+             { k: "left", label: "Caption, left" },
+             { k: "right", label: "Caption, right" }] },
+  marquee: { name: "Scrolling words", about: "The band of words that slides across the screen.",
+    fields: [{ k: "words", label: "Words", type: "list" }] },
+  about: { name: "About",
+    fields: [{ k: "label", label: "Section label" },
+             { k: "heading", label: "Headline", type: "textarea" },
+             { k: "paragraphs", label: "Paragraphs", type: "list", long: true, rich: true },
+             { k: "button", label: "Button text (leave blank for no button)" },
+             { k: "buttonLink", label: "Button goes to", type: "link" }] },
+  work: { name: "Selected work", about: "A few photos that open full size. Six fills the grid.",
+    fields: [{ k: "label", label: "Section label" },
+             { k: "photos", label: "Photos", type: "photos" }] },
+  services: { name: "Sports photography",
+    fields: [{ k: "label", label: "Section label" },
+             { k: "aside", label: "Small text on the right" },
+             { k: "heading", label: "Headline" },
+             { k: "cards", label: "Cards", type: "objects", item: "card",
+               blank: { title: "New card", text: "", linkText: "", link: "", quote: "" },
+               sub: [{ k: "title", label: "Title" },
+                     { k: "text", label: "Text", type: "textarea", rich: true },
+                     { k: "linkText", label: "Link text (blank for none)" },
+                     { k: "link", label: "Link goes to", type: "link" },
+                     { k: "quote", label: "If it opens the quote form, pick this booking type",
+                       type: "quotetype" }] },
+             { k: "areaLabel", label: "Label for the area line" },
+             { k: "area", label: "Where you shoot", type: "textarea", rich: true }] },
+  quote: { name: "Get a quote",
+    fields: [{ k: "label", label: "Section label" },
+             { k: "aside", label: "Small text on the right" },
+             { k: "heading", label: "Headline" },
+             { k: "intro", label: "Intro", type: "textarea", rich: true },
+             { k: "points", label: "Bullet points", type: "list", rich: true },
+             { k: "options", label: "Booking types in the form's dropdown", type: "list" },
+             { k: "button", label: "Send button text" },
+             { k: "thanks", label: "Message after someone sends it", type: "textarea" }] },
+  reviews: { name: "Reviews",
+    about: "Reviews are written by visitors. New ones wait for your approval in Supabase (see SETUP.md).",
+    fields: [{ k: "label", label: "Section label" }] },
+  faq: { name: "Questions",
+    fields: [{ k: "label", label: "Section label" },
+             { k: "aside", label: "Small text on the right" },
+             { k: "heading", label: "Headline" },
+             { k: "items", label: "Questions", type: "objects", item: "question",
+               blank: { q: "New question?", a: "" },
+               sub: [{ k: "q", label: "Question" },
+                     { k: "a", label: "Answer", type: "textarea", rich: true }] }] },
+  contact: { name: "Contact",
+    fields: [{ k: "label", label: "Section label" },
+             { k: "aside", label: "Small text on the right" },
+             { k: "email", label: "Email address" },
+             { k: "instagram", label: "Instagram name (without the @)" }] },
+  cta: { name: "Portfolio button", about: "The big link at the bottom of the page.",
+    fields: [{ k: "text", label: "Big text" },
+             { k: "link", label: "Goes to", type: "link" }] }
+};
+
+function heStatus(text, cls) {
+  var s = document.getElementById("he-status");
+  s.textContent = text;
+  s.className = "he__status" + (cls ? " " + cls : "");
+}
+
+function heInit() {
+  if (HE.ready) { heReload(); return; }
+  fetch("/api/home").then(function (r) { return r.json(); }).then(function (data) {
+    HE.home = data.home;
+    HE.photos = data.photos;
+    HE.photos.forEach(function (p) { HE.by[p.src] = p; });
+    HE.quoteTypes = data.quoteTypes;
+    HE.fonts = data.fonts;
+    HE.defaultTheme = data.defaultTheme;
+    HE.ready = true;
+    var tags = {};
+    HE.photos.forEach(function (p) { (p.tags || []).forEach(function (t) { tags[t] = 1; }); });
+    var sel = document.getElementById("hep-tag");
+    Object.keys(tags).sort().forEach(function (t) {
+      var o = document.createElement("option"); o.value = t; o.textContent = t; sel.appendChild(o);
+    });
+    heStatus("Everything here is saved on this computer. It goes on the web when you Publish.", "ok");
+    heRenderLists();
+    heSelect("hero");
+    heReload();
+  }).catch(function (e) { heStatus("Couldn't load the home page: " + e.message, "bad"); });
+}
+
+function heSection(id) {
+  return HE.home.sections.filter(function (s) { return s.id === id; })[0];
+}
+
+/* ---------- saving ---------- */
+
+function heChanged() {
+  heStatus("Saving…");
+  clearTimeout(HE.timer);
+  HE.timer = setTimeout(heSave, 450);
+}
+
+function heSave() {
+  if (HE.saving) { HE.again = true; return; }
+  HE.saving = true;
+  api("/api/home", { home: HE.home }).then(function (res) {
+    if (res.error) throw new Error(res.error);
+    heStatus("Saved on this computer. Publish to put it on the web.", "ok");
+    heReload();
+  }).catch(function (e) {
+    heStatus("Couldn't save: " + e.message, "bad");
+  }).finally(function () {
+    HE.saving = false;
+    if (HE.again) { HE.again = false; heSave(); }
+  });
+}
+
+/* ---------- left side: page settings + sections ---------- */
+
+function heRenderLists() {
+  var page = document.getElementById("he-page");
+  page.innerHTML = "";
+  [["settings", "Google title, description & share photo"],
+   ["theme", "Colors, fonts & corners (whole site)"]].forEach(function (it) {
+    var li = el("li", "he__item" + (HE.sel === it[0] ? " is-on" : ""));
+    var b = el("button", "he__name", it[1]);
+    b.type = "button";
+    b.onclick = function () { heSelect(it[0]); };
+    li.appendChild(b);
+    page.appendChild(li);
+  });
+
+  var list = document.getElementById("he-sections");
+  list.innerHTML = "";
+  var secs = HE.home.sections;
+  secs.forEach(function (s, i) {
+    var info = SECTIONS[s.type] || { name: s.type };
+    var li = el("li", "he__item" + (HE.sel === s.id ? " is-on" : "") +
+                (s.visible ? "" : " is-off"));
+    var name = el("button", "he__name", info.name);
+    name.type = "button";
+    name.onclick = function () { heSelect(s.id, true); };
+    var eye = el("button", "he__icon", s.visible ? "👁" : "—");
+    eye.type = "button";
+    eye.title = s.visible ? "Showing. Click to hide this section." : "Hidden. Click to show it.";
+    eye.onclick = function () { s.visible = !s.visible; heRenderLists(); heChanged(); };
+    var up = el("button", "he__icon", "↑");
+    up.type = "button"; up.title = "Move up"; up.disabled = i === 0;
+    up.onclick = function () { heMove(secs, i, -1); heRenderLists(); heChanged(); };
+    var down = el("button", "he__icon", "↓");
+    down.type = "button"; down.title = "Move down"; down.disabled = i === secs.length - 1;
+    down.onclick = function () { heMove(secs, i, 1); heRenderLists(); heChanged(); };
+    li.appendChild(name); li.appendChild(eye); li.appendChild(up); li.appendChild(down);
+    list.appendChild(li);
+  });
+}
+
+function heMove(arr, i, dir) {
+  var j = i + dir;
+  if (j < 0 || j >= arr.length) return;
+  var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+}
+
+function heSelect(id, scroll) {
+  HE.sel = id;
+  heRenderLists();
+  heRenderEditor();
+  heMarkPreview(scroll);
+  /* bring the settings for what was picked into view in the side panel */
+  var side = document.querySelector(".he__side");
+  var bar = document.querySelector(".he__bar");
+  side.scrollTo({ top: document.getElementById("he-editor").offsetTop - bar.offsetHeight - 12,
+                  behavior: "smooth" });
+}
+
+/* ---------- field editors ---------- */
+
+function heField(label, input, extra) {
+  var w = el("div", "hf");
+  var l = el("span", "mono");
+  l.appendChild(document.createTextNode(label));
+  if (extra) l.appendChild(extra);
+  w.appendChild(l);
+  w.appendChild(input);
+  return w;
+}
+
+function heText(obj, k, label, opts) {
+  opts = opts || {};
+  var input;
+  if (opts.type === "textarea") {
+    input = el("textarea");
+    input.rows = opts.rows || 3;
+  } else {
+    input = el("input");
+    input.type = "text";
+    if (opts.type === "link") input.setAttribute("list", "he-links");
+  }
+  input.value = obj[k] == null ? "" : obj[k];
+  var count = null;
+  if (opts.max) {
+    count = el("span", "hf__count");
+    var paint = function () {
+      count.textContent = input.value.length + " / " + opts.max;
+      count.classList.toggle("over", input.value.length > opts.max);
+    };
+    paint();
+    input.addEventListener("input", paint);
+  }
+  input.addEventListener("input", function () { obj[k] = input.value; heChanged(); });
+  var f = heField(label, input, count);
+  if (opts.rich) f.appendChild(el("span", "note", RICH));
+  return f;
+}
+
+function heSelectBox(obj, k, label, choices) {
+  var s = el("select");
+  choices.forEach(function (c) {
+    var o = document.createElement("option");
+    o.value = c[0]; o.textContent = c[1]; s.appendChild(o);
+  });
+  s.value = obj[k] == null ? "" : obj[k];
+  s.addEventListener("change", function () { obj[k] = s.value; heChanged(); });
+  return heField(label, s);
+}
+
+function heRowTools(arr, i, onChange) {
+  var box = el("div");
+  box.style.display = "flex"; box.style.gap = ".25rem";
+  [["↑", -1, "Move up"], ["↓", 1, "Move down"]].forEach(function (t) {
+    var b = el("button", "he__icon", t[0]);
+    b.type = "button"; b.title = t[2];
+    b.disabled = (t[1] < 0 && i === 0) || (t[1] > 0 && i === arr.length - 1);
+    b.onclick = function () { heMove(arr, i, t[1]); onChange(); };
+    box.appendChild(b);
+  });
+  var x = el("button", "he__icon", "✕");
+  x.type = "button"; x.title = "Remove";
+  x.onclick = function () { arr.splice(i, 1); onChange(); };
+  box.appendChild(x);
+  return box;
+}
+
+function heList(obj, k, f) {
+  var arr = obj[k] = obj[k] || [];
+  var w = el("div", "hf");
+  w.appendChild(el("span", "mono", f.label));
+  var redo = function () { heRenderEditor(); heChanged(); };
+  arr.forEach(function (v, i) {
+    var row = el("div", "hf__row");
+    var input = f.long ? el("textarea") : el("input");
+    if (f.long) input.rows = 4; else input.type = "text";
+    input.value = v;
+    input.addEventListener("input", function () { arr[i] = input.value; heChanged(); });
+    row.appendChild(input);
+    row.appendChild(heRowTools(arr, i, redo));
+    w.appendChild(row);
+  });
+  var add = el("button", "hf__add", "+ Add");
+  add.type = "button";
+  add.onclick = function () { arr.push(""); redo(); };
+  w.appendChild(add);
+  if (f.rich) w.appendChild(el("span", "note", RICH));
+  return w;
+}
+
+function heObjects(obj, k, f) {
+  var arr = obj[k] = obj[k] || [];
+  var w = el("div", "hf");
+  w.appendChild(el("span", "mono", f.label));
+  var redo = function () { heRenderEditor(); heChanged(); };
+  arr.forEach(function (item, i) {
+    var box = el("div", "hf__obj");
+    var head = el("div", "hf__objhead");
+    head.appendChild(el("span", "mono", f.item + " " + (i + 1)));
+    head.appendChild(heRowTools(arr, i, redo));
+    box.appendChild(head);
+    f.sub.forEach(function (sf) { box.appendChild(heFieldFor(item, sf)); });
+    w.appendChild(box);
+  });
+  var add = el("button", "hf__add", "+ Add " + f.item);
+  add.type = "button";
+  add.onclick = function () { arr.push(JSON.parse(JSON.stringify(f.blank))); redo(); };
+  w.appendChild(add);
+  return w;
+}
+
+function hePhotos(obj, k, label) {
+  var arr = obj[k] = obj[k] || [];
+  var w = el("div", "hf");
+  w.appendChild(el("span", "mono", label));
+  var grid = el("div", "hf__photos");
+  var redo = function () { heRenderEditor(); heChanged(); };
+  arr.forEach(function (src, i) {
+    var ph = el("div", "hf__ph");
+    ph.title = "Click to swap this photo";
+    ph.innerHTML = '<img loading="lazy" alt="" src="/' + heThumb(src) + '">';
+    ph.querySelector("img").onclick = function () {
+      hePick(function (pick) { arr[i] = pick; redo(); });
+    };
+    var tools = el("div", "tools");
+    [["←", -1], ["→", 1]].forEach(function (t) {
+      var b = el("button", "", t[0]); b.type = "button";
+      b.onclick = function (e) { e.stopPropagation(); heMove(arr, i, t[1]); redo(); };
+      tools.appendChild(b);
+    });
+    var x = el("button", "x", "✕"); x.type = "button"; x.title = "Remove";
+    x.onclick = function (e) { e.stopPropagation(); arr.splice(i, 1); redo(); };
+    tools.appendChild(x);
+    ph.appendChild(tools);
+    grid.appendChild(ph);
+  });
+  var add = el("button", "hf__new", "+ Add photo");
+  add.type = "button";
+  add.onclick = function () { hePick(function (pick) { arr.push(pick); redo(); }); };
+  grid.appendChild(add);
+  w.appendChild(grid);
+  return w;
+}
+
+function heOnePhoto(obj, k, label) {
+  var w = el("div", "hf");
+  w.appendChild(el("span", "mono", label));
+  var grid = el("div", "hf__photos");
+  var pick = function () {
+    hePick(function (src) { obj[k] = src; heRenderEditor(); heChanged(); });
+  };
+  if (obj[k]) {
+    var ph = el("div", "hf__ph");
+    ph.title = "Click to swap this photo";
+    ph.innerHTML = '<img loading="lazy" alt="" src="/' + heThumb(obj[k]) + '">';
+    ph.onclick = pick;
+    grid.appendChild(ph);
+  }
+  var b = el("button", "hf__new", obj[k] ? "Change" : "+ Pick photo");
+  b.type = "button";
+  b.onclick = pick;
+  grid.appendChild(b);
+  w.appendChild(grid);
+  return w;
+}
+
+function heFieldFor(obj, f) {
+  if (f.type === "photos") return hePhotos(obj, f.k, f.label);
+  if (f.type === "list") return heList(obj, f.k, f);
+  if (f.type === "objects") return heObjects(obj, f.k, f);
+  if (f.type === "quotetype") {
+    return heSelectBox(obj, f.k, f.label, [["", "(none)"]].concat(
+      HE.quoteTypes.map(function (t) { return [t, t]; })));
+  }
+  return heText(obj, f.k, f.label, f);
+}
+
+function heThumb(src) {
+  return /^images\//.test(src) ? src.replace(/^images\//, "images/thumbs/") : src;
+}
+
+function heRenderEditor() {
+  var box = document.getElementById("he-editor");
+  box.innerHTML = "";
+  if (!HE.sel) return;
+  var form = el("div", "he__form");
+
+  if (HE.sel === "settings") {
+    var seo = HE.home.seo;
+    form.appendChild(el("h3", "", "Google title, description & share photo"));
+    form.appendChild(el("p", "note", "What shows in Google results and when the site is " +
+      "shared in a text or on social media. Keep your main search words in both."));
+    form.appendChild(heText(seo, "title", "Title (about 60 characters)", { max: 60 }));
+    form.appendChild(heText(seo, "description", "Description (about 155 characters)",
+                            { type: "textarea", max: 155 }));
+    form.appendChild(heOnePhoto(seo, "shareImage", "Share photo (shown when the link is shared)"));
+  } else if (HE.sel === "theme") {
+    var th = HE.home.theme;
+    form.appendChild(el("h3", "", "Colors, fonts & corners"));
+    form.appendChild(el("p", "note", "These change every page of the site. Dark backgrounds " +
+      "suit the photos best."));
+    var colors = el("div", "hf__colors");
+    [["bg", "Background"], ["bgRaise", "Cards & boxes"], ["ink", "Main text"],
+     ["inkDim", "Small / grey text"], ["accent", "Accent"]].forEach(function (c) {
+      var lab = el("label", "hf__color");
+      var input = el("input"); input.type = "color"; input.value = th[c[0]];
+      input.addEventListener("input", function () { th[c[0]] = input.value; heChanged(); });
+      lab.appendChild(input); lab.appendChild(document.createTextNode(c[1]));
+      colors.appendChild(lab);
+    });
+    form.appendChild(colors);
+    var range = el("input"); range.type = "range"; range.min = 0; range.max = 40;
+    range.value = th.radius;
+    var rv = el("span", "", " " + th.radius + "px");
+    range.addEventListener("input", function () {
+      th.radius = Number(range.value); rv.textContent = " " + range.value + "px"; heChanged();
+    });
+    form.appendChild(heField("Corner roundness (0 = square)", range, rv));
+    var fontNames = { oswald: "Oswald (tall, narrow)", archivo: "Archivo", helvetica: "Helvetica",
+                      georgia: "Georgia (serif)", system: "System" };
+    var fonts = HE.fonts.map(function (f) { return [f, fontNames[f] || f]; });
+    form.appendChild(heSelectBox(th, "fontDisplay", "Font for your big name", fonts));
+    form.appendChild(heSelectBox(th, "fontBody", "Font for paragraphs", fonts));
+    form.appendChild(heSelectBox(th, "fontUi", "Font for labels and buttons", fonts));
+    var reset = el("button", "ghost", "Reset colors, fonts & corners");
+    reset.type = "button";
+    reset.onclick = function () {
+      HE.home.theme = JSON.parse(JSON.stringify(HE.defaultTheme));
+      heRenderEditor(); heChanged();
+    };
+    form.appendChild(reset);
+  } else {
+    var s = heSection(HE.sel);
+    if (!s) return;
+    var info = SECTIONS[s.type];
+    form.appendChild(el("h3", "", info.name));
+    if (info.about) form.appendChild(el("p", "note", info.about));
+    if (!s.visible) form.appendChild(el("p", "note", "This section is hidden. Click 👁 / — in the list to show it."));
+    info.fields.forEach(function (f) { form.appendChild(heFieldFor(s, f)); });
+  }
+  box.appendChild(form);
+}
+
+/* ---------- photo picker ---------- */
+
+var HE_PICK = null, HE_SHOWN = 0;
+
+function hePick(cb) {
+  HE_PICK = cb;
+  document.getElementById("he-picker").hidden = false;
+  var q = document.getElementById("hep-q");
+  q.value = "";
+  heFillPicker(true);
+  q.focus();
+}
+
+function heClosePicker() {
+  document.getElementById("he-picker").hidden = true;
+  HE_PICK = null;
+}
+
+function heUsed() {
+  var used = {};
+  HE.home.sections.forEach(function (s) {
+    (s.photos || []).forEach(function (p) { used[p] = 1; });
+  });
+  return used;
+}
+
+function heFillPicker(fresh) {
+  var grid = document.getElementById("hep-grid");
+  var q = document.getElementById("hep-q").value.trim().toLowerCase();
+  var tag = document.getElementById("hep-tag").value;
+  var hits = HE.photos.filter(function (p) {
+    if (tag && (p.tags || []).indexOf(tag) === -1) return false;
+    if (!q) return true;
+    return [p.title, p.game, p.src, (p.tags || []).join(" ")].join(" ")
+      .toLowerCase().indexOf(q) !== -1;
+  });
+  if (fresh) { grid.innerHTML = ""; HE_SHOWN = 0; grid.scrollTop = 0; }
+  var more = grid.querySelector(".hep__more");
+  if (more) more.remove();
+  var used = heUsed();
+  hits.slice(HE_SHOWN, HE_SHOWN + 240).forEach(function (p) {
+    var b = el("button", used[p.src] ? "is-used" : "");
+    b.type = "button";
+    b.title = (p.game ? p.game + " — " : "") + p.title;
+    b.innerHTML = '<img loading="lazy" alt="" src="/' + heThumb(p.src) + '">';
+    b.onclick = function () { var cb = HE_PICK; heClosePicker(); if (cb) cb(p.src); };
+    grid.appendChild(b);
+  });
+  HE_SHOWN += 240;
+  if (HE_SHOWN < hits.length) {
+    var m = el("button", "ghost hep__more", "Show more (" + (hits.length - HE_SHOWN) + " left)");
+    m.type = "button";
+    m.onclick = function () { heFillPicker(false); };
+    grid.appendChild(m);
+  }
+  if (!hits.length) grid.innerHTML = '<p class="mono">No photos match that.</p>';
+}
+
+document.getElementById("hep-q").addEventListener("input", function () { heFillPicker(true); });
+document.getElementById("hep-tag").addEventListener("change", function () { heFillPicker(true); });
+document.getElementById("hep-close").onclick = heClosePicker;
+document.getElementById("he-picker").addEventListener("click", function (e) {
+  if (e.target.id === "he-picker") heClosePicker();
+});
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" && !document.getElementById("he-picker").hidden) heClosePicker();
+});
+
+/* ---------- preview ---------- */
+
+var heFrame = document.getElementById("he-frame");
+
+function heReload() {
+  var y = 0;
+  try { y = heFrame.contentWindow.scrollY || 0; } catch (e) {}
+  heFrame.dataset.y = y;
+  heFrame.src = "/index.html?studio=" + Date.now();
+}
+
+function heMarkPreview(scroll) {
+  var d;
+  try { d = heFrame.contentDocument; } catch (e) { return; }
+  if (!d || !d.body) return;
+  d.querySelectorAll(".he-on").forEach(function (n) { n.classList.remove("he-on"); });
+  var node = HE.sel && d.querySelector('[data-section="' + HE.sel + '"]');
+  if (!node) return;
+  node.classList.add("he-on");
+  if (scroll) node.scrollIntoView({ block: "start" });
+}
+
+heFrame.addEventListener("load", function () {
+  var d = heFrame.contentDocument, w = heFrame.contentWindow;
+  if (!d || !d.body) return;
+  d.documentElement.style.scrollBehavior = "auto";
+  var st = d.createElement("style");
+  st.textContent =
+    "[data-section]{cursor:pointer}" +
+    "[data-section]:hover{outline:2px dashed #6ee7a8;outline-offset:-2px}" +
+    "[data-section].he-on{outline:2px solid #6ee7a8;outline-offset:-2px}" +
+    "[data-slot-photo]{outline:2px dashed rgba(110,231,168,.6);outline-offset:-4px}" +
+    "[data-slot-photo]:hover{outline:3px solid #6ee7a8}" +
+    ".he-tag{position:fixed;z-index:2147483647;pointer-events:none;background:#6ee7a8;" +
+    "color:#000;font:600 11px/1 system-ui,sans-serif;padding:6px 9px;border-radius:5px}";
+  d.head.appendChild(st);
+  var tag = d.createElement("div");
+  tag.className = "he-tag"; tag.hidden = true;
+  d.body.appendChild(tag);
+
+  d.addEventListener("mousemove", function (e) {
+    var slot = e.target.closest("[data-slot-photo]");
+    var sec = e.target.closest("[data-section]");
+    if (!sec) { tag.hidden = true; return; }
+    var info = SECTIONS[(heSection(sec.dataset.section) || {}).type] || {};
+    tag.textContent = slot ? "Click to change this photo" : "Edit: " + (info.name || "section");
+    tag.hidden = false;
+    tag.style.left = Math.min(e.clientX + 14, w.innerWidth - 220) + "px";
+    tag.style.top = (e.clientY + 16) + "px";
+  });
+  d.addEventListener("mouseleave", function () { tag.hidden = true; });
+
+  /* in the preview a click picks what to edit; nothing navigates away */
+  d.addEventListener("click", function (e) {
+    var a = e.target.closest("a, button, summary");
+    var sec = e.target.closest("[data-section]");
+    var slot = e.target.closest("[data-slot-photo]");
+    if (a || sec) { e.preventDefault(); e.stopPropagation(); }
+    if (!sec) return;
+    heSelect(sec.dataset.section, false);
+    if (slot) {
+      var parts = slot.dataset.slotPhoto.split(":");
+      var s = heSection(sec.dataset.section);
+      var i = Number(parts[1]);
+      hePick(function (src) {
+        s.photos = s.photos || [];
+        if (i < s.photos.length) s.photos[i] = src; else s.photos.push(src);
+        heRenderEditor(); heChanged();
+      });
+    }
+  }, true);
+
+  w.scrollTo(0, Number(heFrame.dataset.y || 0));
+  heMarkPreview(false);
+});
+
+document.querySelectorAll("[data-device]").forEach(function (b) {
+  b.addEventListener("click", function () {
+    document.querySelectorAll("[data-device]").forEach(function (x) {
+      x.classList.toggle("is-on", x === b);
+    });
+    document.getElementById("he-frame-wrap").classList.toggle("is-phone",
+      b.dataset.device === "phone");
+  });
+});
+
+document.getElementById("he-revert").onclick = function () {
+  if (!confirm("Put the home page back the way it is on the web right now?\n\n" +
+               "Every change since your last Publish is undone.")) return;
+  api("/api/home/revert", {}).then(function (res) {
+    if (res.error) throw new Error(res.error);
+    HE.home = res.home;
+    heStatus("Back to the published version.", "ok");
+    heRenderLists(); heRenderEditor(); heReload();
+  }).catch(function (e) { heStatus(e.message, "bad"); });
+};
+
+document.getElementById("he-publish").onclick = function () {
+  var wrap = document.getElementById("publish-wrap");
+  document.getElementById("publish").click();
+  wrap.scrollIntoView({ behavior: "smooth" });
+  heStatus("Publishing… see the message at the bottom of the page.");
+};
+
+(function () {
+  var dl = document.createElement("datalist");
+  dl.id = "he-links";
+  LINKS.forEach(function (l) {
+    var o = document.createElement("option"); o.value = l; dl.appendChild(o);
+  });
+  document.body.appendChild(dl);
+})();
+
+
 loadLibrary();
 </script>
 </body>
@@ -1231,9 +2034,10 @@ if __name__ == "__main__":
     regenerate_photos_js(load_photos())
     regenerate_reviews_js()
     make_thumbs(load_photos())
+    home_page.build(load_photos())
     stamp_assets()
     if "--regen" in sys.argv:
-        print("js/photos.js + js/reviews.js regenerated from data/, "
+        print("js/photos.js + js/reviews.js + index.html regenerated from data/, "
               "thumbnails up to date, css/js links fingerprinted")
         sys.exit(0)
     server = ThreadingHTTPServer(("127.0.0.1", PORT), StudioHandler)

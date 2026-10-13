@@ -187,6 +187,25 @@ a { color: inherit; text-decoration: none; }
   filter: brightness(0.82) contrast(1.04);
 }
 
+/* several opening photos crossfade; the first is showing from the start */
+.hero__img-wrap img { opacity: 0; transition: opacity 1.4s ease; }
+.hero__img-wrap img.is-active { opacity: 1; }
+
+/* an empty photo spot, only seen in Studio before a photo is picked */
+.hero__empty,
+.selected__empty {
+  display: grid;
+  place-items: center;
+  min-height: 12rem;
+  border: 1px dashed var(--hairline);
+  color: var(--ink-dim);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.hero__empty { position: absolute; inset: 0; }
+
 .hero::after {
   content: "";
   position: absolute;

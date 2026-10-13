@@ -1,0 +1,219 @@
+{
+  "seo": {
+    "title": "Michigan Sports Photographer | Garrett Erickson Photography",
+    "description": "Garrett Erickson is a Michigan sports photographer covering high school football, soccer, tennis and volleyball across Metro Detroit. Team, individual and event shoots. Get a free quote.",
+    "shareImage": "images/varsoc-02.jpg"
+  },
+  "theme": {
+    "bg": "#0b0b0e",
+    "bgRaise": "#15151a",
+    "ink": "#f2f2f0",
+    "inkDim": "#9b9ba4",
+    "accent": "#ffffff",
+    "radius": 18,
+    "fontDisplay": "oswald",
+    "fontBody": "helvetica",
+    "fontUi": "archivo"
+  },
+  "sections": [
+    {
+      "id": "intro",
+      "type": "intro",
+      "visible": true,
+      "name": "Garrett Erickson",
+      "role": "Michigan Sports Photographer"
+    },
+    {
+      "id": "hero",
+      "type": "hero",
+      "visible": true,
+      "photos": [
+        "images/new-york-skyline.jpg"
+      ],
+      "button": "Get a quote",
+      "buttonLink": "#quote",
+      "left": "Michigan sports photographer — booking now",
+      "right": "Football · Soccer · Tennis · Volleyball"
+    },
+    {
+      "id": "marquee",
+      "type": "marquee",
+      "visible": true,
+      "words": [
+        "Football",
+        "Soccer",
+        "Tennis",
+        "Volleyball",
+        "Teams",
+        "Events"
+      ]
+    },
+    {
+      "id": "about",
+      "type": "about",
+      "visible": true,
+      "label": "About",
+      "heading": "I'm Garrett Erickson, a Michigan sports photographer covering high school football, soccer, tennis and volleyball across Metro Detroit.",
+      "paragraphs": [
+        "Most of my work happens on the sideline: varsity and JV football under the lights at Detroit Country Day, soccer against Cranbrook and Cass Tech, tennis match days at Seaholm and Liggett, and volleyball in the gym. I shoot the play, the huddle and the bench, so every athlete has photographs worth keeping.",
+        "Away from the field I shoot architecture and street, including car meets along Woodward and a stretch of work made in New York. I care about light, structure, and the moment a scene resolves into something worth keeping.",
+        "I shoot whole teams and individual athletes, and I turn work around fast: individual sessions are guaranteed back within 24 hours."
+      ],
+      "button": "Get a quote",
+      "buttonLink": "#quote"
+    },
+    {
+      "id": "work",
+      "type": "work",
+      "visible": true,
+      "label": "Selected work",
+      "photos": [
+        "images/brooklyn-bridge-building.jpg",
+        "images/new-york-skyline.jpg",
+        "images/coney-island.jpg",
+        "images/harley.jpg",
+        "images/wonder-wheel.jpg",
+        "images/soccer-at-coney-island.jpg"
+      ]
+    },
+    {
+      "id": "services",
+      "type": "services",
+      "visible": true,
+      "label": "Sports photography",
+      "aside": "Metro Detroit · all of Michigan",
+      "heading": "Sports photography in Michigan",
+      "cards": [
+        {
+          "title": "Football",
+          "text": "Varsity and JV games and practices: the snap, the run after the catch, the sideline and the post-game huddle.",
+          "linkText": "See football photos →",
+          "link": "portfolio.html?tag=football",
+          "quote": ""
+        },
+        {
+          "title": "Soccer",
+          "text": "Varsity and JV soccer: headers, saves, celebrations and the team talk at half time.",
+          "linkText": "See soccer photos →",
+          "link": "portfolio.html?tag=soccer",
+          "quote": ""
+        },
+        {
+          "title": "Tennis",
+          "text": "Match days and practices, singles and doubles: the serve toss, the stretch for a wide ball, the handshake at the net.",
+          "linkText": "See tennis photos →",
+          "link": "portfolio.html?tag=tennis",
+          "quote": ""
+        },
+        {
+          "title": "Volleyball",
+          "text": "Kills, digs, serves and the whole bench on its feet.",
+          "linkText": "See volleyball photos →",
+          "link": "portfolio.html?tag=volleyball",
+          "quote": ""
+        },
+        {
+          "title": "Teams & athletes",
+          "text": "Whole-roster shoots with a team photo and a gallery for every athlete, or a one-on-one session for senior posts, recruiting profiles and social media.",
+          "linkText": "Get a quote →",
+          "link": "#quote",
+          "quote": "Team shoot"
+        },
+        {
+          "title": "Any other sport",
+          "text": "Basketball, hockey, lacrosse, baseball, softball, swimming, track and field, and cross country, plus car meets and other events. If it happens in Michigan, ask.",
+          "linkText": "Get a quote →",
+          "link": "#quote",
+          "quote": "Something else"
+        }
+      ],
+      "areaLabel": "Where I shoot",
+      "area": "Based in Metro Detroit. I regularly shoot in Detroit, Birmingham, Bloomfield Hills, Beverly Hills, Royal Oak, Troy, Southfield, Grosse Pointe and Dearborn, across Oakland, Wayne and Macomb counties, and anywhere else in Michigan on request."
+    },
+    {
+      "id": "quote",
+      "type": "quote",
+      "visible": true,
+      "label": "Get a quote",
+      "aside": "Free · no obligation",
+      "heading": "Get a quote for your shoot",
+      "intro": "There are no set prices. Every shoot is different, so tell me what you're booking and I'll email you a quote.",
+      "points": [
+        "Individual athlete sessions, guaranteed back within 24 hours",
+        "Whole-team shoots with a team photo and a gallery for every athlete",
+        "Game, tournament and event coverage anywhere in Michigan",
+        "Edited, full-resolution photos, with personal and social use included"
+      ],
+      "options": [
+        "Individual athlete session",
+        "Team shoot",
+        "Game or tournament coverage",
+        "Senior or recruiting photos",
+        "Car meet or other event",
+        "Something else"
+      ],
+      "button": "Get a quote",
+      "thanks": "Thanks. Garrett has your details and will email you a quote."
+    },
+    {
+      "id": "reviews",
+      "type": "reviews",
+      "visible": true,
+      "label": "Reviews"
+    },
+    {
+      "id": "faq",
+      "type": "faq",
+      "visible": true,
+      "label": "Questions",
+      "aside": "Booking a sports photographer",
+      "heading": "Questions about booking",
+      "items": [
+        {
+          "q": "How much does a sports photographer cost in Michigan?",
+          "a": "Every shoot is quoted to fit: the price depends on the sport, how many athletes, how long, and where. Fill in the [quote form](#quote) and I'll email you a price. Quotes are free, with no obligation."
+        },
+        {
+          "q": "How fast will I get my photos?",
+          "a": "Individual sessions are guaranteed back within 24 hours, and events within 48 hours. If you need photos the same day, say so in your quote request."
+        },
+        {
+          "q": "Which schools and areas do you cover?",
+          "a": "I'm based in Metro Detroit and have shot games at Detroit Country Day, Seaholm, Cranbrook, Liggett, Cass Tech, Divine Child, Redford and Holt. I'll travel anywhere in Michigan."
+        },
+        {
+          "q": "Do you photograph whole teams?",
+          "a": "Yes. A team shoot covers the whole roster in one session, includes a team photograph, and gives every athlete their own gallery of action and individual frames."
+        },
+        {
+          "q": "Can I post the photos on Instagram or use them for recruiting?",
+          "a": "Yes. Personal and social use is included with every session, which covers Instagram, recruiting profiles and highlight reels. Commercial use is available on request."
+        },
+        {
+          "q": "What if I want a photo of my child taken down?",
+          "a": "Open the photograph in the portfolio and press **Request removal**. You don't have to explain why, and I'll take it down."
+        },
+        {
+          "q": "How do I book?",
+          "a": "Send a request through the [quote form](#quote) and I'll reply with a price and to confirm the date. You can also email [garrettoscarerickson@gmail.com](mailto:garrettoscarerickson@gmail.com) or DM [@shot_by_ge](https://www.instagram.com/shot_by_ge) on Instagram."
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "type": "contact",
+      "visible": true,
+      "label": "Contact",
+      "aside": "Michigan · booking now",
+      "email": "garrettoscarerickson@gmail.com",
+      "instagram": "shot_by_ge"
+    },
+    {
+      "id": "cta",
+      "type": "cta",
+      "visible": true,
+      "text": "See the Portfolio",
+      "link": "portfolio.html"
+    }
+  ]
+}

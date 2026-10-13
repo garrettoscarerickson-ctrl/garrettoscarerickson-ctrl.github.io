@@ -106,28 +106,6 @@
     return card;
   }
 
-  /* A photo card <button class="ph"> used by the home page */
-  function photoCard(photo, index, onClick) {
-    var card = el("button", "ph" +
-      (photo.orientation === "portrait" ? " ph--portrait" : ""));
-    card.type = "button";
-    card.setAttribute("aria-label", "View " + photo.title);
-    /* real pixel ratio, so the grid can reserve exact space up front */
-    var ar = photo.w && photo.h ? ' style="--ar:' + photo.w + "/" + photo.h + '"' : "";
-    card.innerHTML =
-      '<figure>' +
-      '<span class="ph__img wm"' + ar + '><span class="ph__par">' +
-      '<img loading="lazy" src="' + photo.src +
-      '" alt="' + photoAlt(photo) + '"></span></span>' +
-      '<figcaption>' +
-      '<span class="ph__title">' + photo.title + "</span>" +
-      '<span class="mono">' + tagLine(photo) + "</span>" +
-      "</figcaption>" +
-      "</figure>";
-    card.addEventListener("click", function () { onClick(index); });
-    return card;
-  }
-
   /* ---------- lightbox (shared) ---------- */
 
   var lightboxSet = [];
@@ -507,88 +485,66 @@
   }
 
   /* ============================================================
-     HOME PAGE — the front door. Who I am, what I shoot, how to get
-     a quote, what people say, and how to reach me. The full body of
-     work lives on the Portfolio page.
-
-     The words people search for (who, what, where) and the quote
-     form are written straight into index.html, so they are there
-     before any script runs. What is built from data here (the hero,
-     selected work, reviews, contact) drops into its [data-slot]s.
+     HOME PAGE — written out as plain HTML by tools/home_page.py from
+     data/home.json (Studio's Home tab), so search engines read all of
+     it. This only adds behaviour: the slideshow, the lightbox on
+     Selected work, the reviews, the quote form, parallax and reveal.
      ============================================================ */
 
-  var CONTACT = {
-    email: "garrettoscarerickson@gmail.com",
-    instagram: "shot_by_ge"
-  };
+  var CONTACT = window.SITE && window.SITE.email
+    ? window.SITE
+    : { email: "garrettoscarerickson@gmail.com", instagram: "shot_by_ge" };
 
-  function buildAbout() {
-    var root = document.getElementById("about-root");
-    var hero = PHOTOS.filter(function (p) { return p.feature === "hero"; })[0] || PHOTOS[0];
-
-    function fill(name, node) {
-      var slot = root.querySelector('[data-slot="' + name + '"]');
-      if (slot) slot.replaceWith(node); else root.appendChild(node);
+  function photoBySrc(src) {
+    for (var i = 0; i < PHOTOS.length; i++) {
+      if (PHOTOS[i].src === src) return PHOTOS[i];
     }
+    return { src: src, title: "", location: "", year: "", tags: [] };
+  }
+
+  function initHome() {
+    var root = document.getElementById("about-root");
 
     /* scroll-progress bar */
     var scrollbar = el("div", "scrollbar");
     scrollbar.innerHTML = "<i></i>";
     document.body.appendChild(scrollbar);
 
-    /* hero */
-    var heroSec = el("section", "hero");
-    heroSec.innerHTML =
-      '<div class="hero__img-wrap" data-parallax>' +
-      '<img src="' + hero.src + '" alt="' + photoAlt(hero) + '" fetchpriority="high">' +
-      "</div>" +
-      '<div class="hero__content">' +
-      '<a class="quote-btn hero__cta" href="#quote">Get a quote</a>' +
-      '<div class="hero__meta">' +
-      '<span class="mono">Michigan sports photographer — booking now</span>' +
-      '<span class="mono">Football · Soccer · Tennis · Volleyball</span>' +
-      "</div></div>";
-    fill("hero", heroSec);
+    initHeroSlides(root);
 
-    fill("marquee", buildMarquee(
-      ["Football", "Soccer", "Tennis", "Volleyball", "Teams", "Events"]));
+    /* Selected work opens in the lightbox, stepping through just those */
+    var cards = root.querySelectorAll(".selected__grid [data-photo-src]");
+    var set = Array.prototype.map.call(cards, function (c) {
+      return photoBySrc(c.dataset.photoSrc);
+    });
+    Array.prototype.forEach.call(cards, function (c, i) {
+      c.addEventListener("click", function () { openLightbox(set, i); });
+    });
 
-    fill("work", buildSelectedWork());
-    fill("reviews", buildReviews());
-    fill("contact", buildContact());
+    /* the page is written with the count at build time; keep it current */
+    root.querySelectorAll("[data-photo-count]").forEach(function (n) {
+      if (PHOTOS.length) n.textContent = nPhotos(PHOTOS.length);
+    });
 
-    /* CTA into the work */
-    var cta = el("a", "cta reveal");
-    cta.href = "portfolio.html";
-    cta.innerHTML =
-      '<span class="cta__big">See the Portfolio</span>' +
-      '<span class="mono">' + nPhotos(PHOTOS.length) + ", filterable →</span>";
-    fill("cta", cta);
+    var reviews = root.querySelector("[data-reviews]");
+    if (reviews) buildReviews(reviews.closest("section"), reviews);
 
     initQuote();
     initParallax();
     initReveal();
   }
 
-  /* a short taste of the work, since the home page is not a gallery */
-  function buildSelectedWork() {
-    var sec = el("section", "selected reveal");
-    var pool = PHOTOS.filter(function (p) { return p.feature || !p.archiveOnly; });
-    if (pool.length < 6) pool = PHOTOS;
-    var picks = peopleLast(pool).slice(0, 6);
-    var grid = el("div", "selected__grid");
-    picks.forEach(function (photo) {
-      var card = photoCard(photo, picks.indexOf(photo), function (i) {
-        openLightbox(picks, i);
-      });
-      grid.appendChild(card);
-    });
-    sec.innerHTML =
-      '<div class="section__head"><span class="mono">02 — Selected work</span>' +
-      '<a class="mono selected__all" href="portfolio.html">All ' +
-      nPhotos(PHOTOS.length) + " →</a></div>";
-    sec.appendChild(grid);
-    return sec;
+  /* More than one opening photo crossfades between them. */
+  function initHeroSlides(root) {
+    var imgs = root.querySelectorAll(".hero__img-wrap img");
+    if (imgs.length < 2 || reducedMotion) return;
+    var i = 0;
+    setInterval(function () {
+      imgs[i].classList.remove("is-active");
+      i = (i + 1) % imgs.length;
+      imgs[i].loading = "eager";
+      imgs[i].classList.add("is-active");
+    }, 5000);
   }
 
   /* ---------- get a quote ----------
@@ -616,7 +572,8 @@
       });
     });
 
-    form.querySelector(".quote__again").addEventListener("click", function () {
+    var again = form.querySelector(".quote__again");
+    if (again) again.addEventListener("click", function () {
       form.classList.remove("is-sent");
     });
 
@@ -672,18 +629,20 @@
     return '<span class="stars ' + (cls || "") + '">' + out + "</span>";
   }
 
-  function buildReviews() {
+  /* sec is the Reviews section the page already has (its heading is
+     written by tools/home_page.py); body is where the reviews go. */
+  function buildReviews(sec, body) {
     var list = (window.REVIEWS || []).slice();
-    var sec = el("section", "reviews reveal");
+    var score = sec.querySelector("[data-reviews-score]");
     /* approved site reviews arrive from the database and join the list
        that is curated by hand in data/reviews.json */
     ReviewStore.forSite().then(function (rows) {
       if (!rows.length) return;
-      var box = sec.querySelector(".review-list");
-      var empty = sec.querySelector(".reviews__empty");
+      var box = body.querySelector(".review-list");
+      var empty = body.querySelector(".reviews__empty");
       if (!box) {
         box = el("div", "review-list");
-        if (empty) empty.replaceWith(box); else sec.insertBefore(box, sec.firstChild.nextSibling);
+        if (empty) empty.replaceWith(box); else body.insertBefore(box, body.firstChild);
       }
       box.insertAdjacentHTML("afterbegin", rows.map(function (r) {
         return '<article class="review">' + stars(r.rating) +
@@ -693,22 +652,17 @@
       }).join(""));
       var all = list.concat(rows);
       var a = all.reduce(function (x, r) { return x + r.rating; }, 0) / all.length;
-      var h = sec.querySelector(".section__head .mono:last-child");
-      if (h) h.textContent = a.toFixed(1) + " / 5 · " + all.length +
+      if (score) score.textContent = a.toFixed(1) + " / 5 · " + all.length +
         (all.length === 1 ? " review" : " reviews");
     });
     var avg = list.length
       ? (list.reduce(function (s, r) { return s + r.rating; }, 0) / list.length)
       : 0;
 
-    var head =
-      '<div class="section__head">' +
-      '<span class="mono">05 — Reviews</span>' +
-      (list.length
-        ? '<span class="mono">' + avg.toFixed(1) + " / 5 · " +
-          list.length + (list.length === 1 ? " review" : " reviews") + "</span>"
-        : '<span class="mono">Be the first</span>') +
-      "</div>";
+    if (score) score.textContent = list.length
+      ? avg.toFixed(1) + " / 5 · " + list.length +
+        (list.length === 1 ? " review" : " reviews")
+      : "Be the first";
 
     var cards = list.length
       ? '<div class="review-list">' + list.map(function (r) {
@@ -720,7 +674,7 @@
       : '<p class="reviews__empty mono">No reviews yet — if we\'ve worked ' +
         "together, yours would be the first.</p>";
 
-    sec.innerHTML = head + cards +
+    body.innerHTML = cards +
       '<form class="review-form" id="review-form">' +
       '<h3 class="review-form__title">Leave a review</h3>' +
       '<div class="review-form__stars" id="rf-stars" role="radiogroup" ' +
@@ -766,7 +720,7 @@
 
     /* recent per-photo reviews, pulled from whatever backend is wired up */
     var recent = el("div", "recent-reviews");
-    sec.insertBefore(recent, sec.querySelector("#review-form"));
+    body.insertBefore(recent, body.querySelector("#review-form"));
     ReviewStore.forPhotos().then(function (rows) {
       if (!rows.length) { recent.remove(); return; }
       var avg = rows.reduce(function (a, r) { return a + r.rating; }, 0) / rows.length;
@@ -824,40 +778,6 @@
       }).finally(function () { send.disabled = false; });
     });
 
-    return sec;
-  }
-
-  function buildContact() {
-    var sec = el("section", "contact reveal");
-    sec.innerHTML =
-      '<div class="section__head"><span class="mono">07 — Contact</span>' +
-      '<span class="mono">Michigan · booking now</span></div>' +
-      '<div class="contact__grid">' +
-      '<a class="contact__card" href="mailto:' + CONTACT.email + '">' +
-      '<span class="mono">Email</span>' +
-      "<strong>" + CONTACT.email + "</strong>" +
-      '<span class="contact__go">Send a message →</span></a>' +
-      '<a class="contact__card" href="https://www.instagram.com/' +
-      CONTACT.instagram + '" target="_blank" rel="noopener noreferrer">' +
-      '<span class="mono">Instagram</span>' +
-      "<strong>@" + CONTACT.instagram + "</strong>" +
-      '<span class="contact__go">See the feed →</span></a>' +
-      "</div>";
-    return sec;
-  }
-
-  /* full-width scrolling text band; content duplicated for a seamless loop */
-  function buildMarquee(words) {
-    var sec = el("section", "marquee");
-    sec.setAttribute("aria-hidden", "true");
-    var run = "";
-    for (var i = 0; i < words.length; i++) {
-      run += '<span' + (i % 2 ? ' class="on"' : "") + ">" + words[i] + "</span>" +
-        '<span>—</span>';
-    }
-    var track = el("div", "marquee__track");
-    track.innerHTML = run + run; /* two copies → -50% loop is seamless */
-    sec.appendChild(track);
     return sec;
   }
 
@@ -1059,7 +979,7 @@
      ============================================================ */
 
   function initSpa() {
-    buildAbout();
+    initHome();
     buildPortfolio();
     var views = document.querySelectorAll("[data-view]");
     var links = document.querySelectorAll("[data-goto]");
@@ -1207,7 +1127,7 @@
 
   protectImages(document);
 
-  if (page === "about") buildAbout();
+  if (page === "about") initHome();
   if (page === "portfolio") buildPortfolio();
   if (page === "spa") initSpa();
 })();
