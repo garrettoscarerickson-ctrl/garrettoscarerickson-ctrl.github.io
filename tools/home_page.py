@@ -581,6 +581,7 @@ $ld
 
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/theme.css">
+  <script src="js/pixel.js"></script>
 </head>
 <body data-page="about">
 

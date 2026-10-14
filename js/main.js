@@ -611,6 +611,7 @@
         form.reset();
         status.textContent = "";
         form.classList.add("is-sent");
+        if (window.Pixel) Pixel.lead();
       }).catch(function (err) {
         status.className = "quote__status mono is-warn";
         status.textContent = err.message + " Nothing was sent — email " +
