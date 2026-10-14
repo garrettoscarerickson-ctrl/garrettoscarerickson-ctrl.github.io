@@ -629,50 +629,80 @@
     return '<span class="stars ' + (cls || "") + '">' + out + "</span>";
   }
 
-  /* sec is the Reviews section the page already has (its heading is
-     written by tools/home_page.py); body is where the reviews go. */
+  /* sec is the Reviews section the page already has; body is where the
+     Leave a review form goes. Reviews slide past in a row above and a row
+     below the form: the ones written in Studio (in the page as JSON), any
+     in data/reviews.json, and approved ones visitors posted. */
   function buildReviews(sec, body) {
-    var list = (window.REVIEWS || []).slice();
+    var curated = [];
+    try {
+      curated = JSON.parse((sec.querySelector("[data-reviews-json]") || {}).textContent || "[]");
+    } catch (e) { curated = []; }
+    var all = curated.concat(window.REVIEWS || []);
     var score = sec.querySelector("[data-reviews-score]");
-    /* approved site reviews arrive from the database and join the list
-       that is curated by hand in data/reviews.json */
+    var ring = sec.querySelector(".reviews__ring");
+    var tracks = sec.querySelectorAll(".reviews__track");
+
+    function card(r) {
+      return '<article class="review">' + stars(r.rating) +
+        (r.text ? "<p>" + esc(r.text) + "</p>" : "") +
+        '<footer class="mono">' + esc(r.name) +
+        (r.role ? " · " + esc(r.role) : "") + "</footer></article>";
+    }
+
+    /* Four or more circle the form in two rows going opposite ways; fewer
+       sit still in one row, since a loop of one or two cards looks broken. */
+    function fill(track, list, moving) {
+      var row = track.parentNode;
+      row.hidden = !list.length;
+      track.innerHTML = list.map(card).join("");
+      track.style.animationDuration = "";
+      if (!list.length || !moving) return;
+      var one = track.innerHTML;
+      for (var n = 1; track.scrollWidth < window.innerWidth * 1.2 && n < 12; n++) {
+        track.innerHTML += one;
+      }
+      track.innerHTML += track.innerHTML;   /* two equal halves loop seamlessly */
+      track.style.animationDuration = Math.max(30, track.scrollWidth / 2 / 35) + "s";
+    }
+
+    function paintRing() {
+      if (score) {
+        score.textContent = all.length
+          ? (all.reduce(function (x, r) { return x + r.rating; }, 0) / all.length).toFixed(1) +
+            " / 5 · " + all.length + (all.length === 1 ? " review" : " reviews")
+          : "Be the first";
+      }
+      if (!ring || tracks.length < 2) return;
+      var moving = all.length >= 4 && !reducedMotion;
+      ring.classList.toggle("is-empty", !all.length);
+      ring.classList.toggle("is-moving", moving);
+      fill(tracks[0], moving ? all.filter(function (_, i) { return i % 2 === 0; }) : all, moving);
+      fill(tracks[1], moving ? all.filter(function (_, i) { return i % 2 === 1; }) : [], moving);
+      var empty = body.querySelector(".reviews__empty");
+      if (empty) empty.hidden = all.length > 0;
+    }
+
+    /* approved reviews visitors posted, newest first */
     ReviewStore.forSite().then(function (rows) {
       if (!rows.length) return;
-      var box = body.querySelector(".review-list");
-      var empty = body.querySelector(".reviews__empty");
-      if (!box) {
-        box = el("div", "review-list");
-        if (empty) empty.replaceWith(box); else body.insertBefore(box, body.firstChild);
-      }
-      box.insertAdjacentHTML("afterbegin", rows.map(function (r) {
-        return '<article class="review">' + stars(r.rating) +
-          (r.text ? "<p>" + esc(r.text) + "</p>" : "") +
-          '<footer class="mono">' + esc(r.name) +
-          (r.role ? " · " + esc(r.role) : "") + "</footer></article>";
-      }).join(""));
-      var all = list.concat(rows);
-      var a = all.reduce(function (x, r) { return x + r.rating; }, 0) / all.length;
-      if (score) score.textContent = a.toFixed(1) + " / 5 · " + all.length +
-        (all.length === 1 ? " review" : " reviews");
+      all = rows.concat(all);
+      paintRing();
     });
-    var avg = list.length
-      ? (list.reduce(function (s, r) { return s + r.rating; }, 0) / list.length)
-      : 0;
+    /* reviews left on single photographs join the circle, naming the photo */
+    ReviewStore.forPhotos().then(function (rows) {
+      if (!rows.length) return;
+      var byTitle = {};
+      PHOTOS.forEach(function (p) { byTitle[p.src] = p.title; });
+      all = all.concat(rows.filter(function (r) { return r.text; }).map(function (r) {
+        return { name: r.name, rating: r.rating, text: r.text,
+                 role: byTitle[r.photo] ? "on " + byTitle[r.photo] : "" };
+      }));
+      paintRing();
+    });
 
-    if (score) score.textContent = list.length
-      ? avg.toFixed(1) + " / 5 · " + list.length +
-        (list.length === 1 ? " review" : " reviews")
-      : "Be the first";
-
-    var cards = list.length
-      ? '<div class="review-list">' + list.map(function (r) {
-          return '<article class="review">' + stars(r.rating) +
-            "<p>" + r.text + "</p>" +
-            '<footer class="mono">' + r.name +
-            (r.role ? " · " + r.role : "") + "</footer></article>";
-        }).join("") + "</div>"
-      : '<p class="reviews__empty mono">No reviews yet — if we\'ve worked ' +
-        "together, yours would be the first.</p>";
+    var cards = '<p class="reviews__empty mono">No reviews yet — if we\'ve worked ' +
+      "together, yours would be the first.</p>";
 
     body.innerHTML = cards +
       '<form class="review-form" id="review-form">' +
@@ -718,27 +748,7 @@
     });
     box.addEventListener("mouseleave", function () { paint(chosen); });
 
-    /* recent per-photo reviews, pulled from whatever backend is wired up */
-    var recent = el("div", "recent-reviews");
-    body.insertBefore(recent, body.querySelector("#review-form"));
-    ReviewStore.forPhotos().then(function (rows) {
-      if (!rows.length) { recent.remove(); return; }
-      var avg = rows.reduce(function (a, r) { return a + r.rating; }, 0) / rows.length;
-      var byTitle = {};
-      PHOTOS.forEach(function (p) { byTitle[p.src] = p.title; });
-      recent.innerHTML =
-        '<div class="recent-reviews__head">' +
-        '<span class="mono">On individual photographs</span>' +
-        '<span class="mono">' + avg.toFixed(1) + " / 5 · " + rows.length +
-        (rows.length === 1 ? " review" : " reviews") + "</span></div>" +
-        '<div class="review-list">' + rows.slice(0, 3).map(function (r) {
-          return '<article class="review">' + stars(r.rating) +
-            (r.text ? "<p>" + esc(r.text) + "</p>" : "") +
-            '<footer class="mono">' + esc(r.name) +
-            (byTitle[r.photo] ? " · " + esc(byTitle[r.photo]) : "") +
-            "</footer></article>";
-        }).join("") + "</div>";
-    });
+    paintRing();
 
     var note = sec.querySelector("#rf-note");
     var send = sec.querySelector(".review-form__send");

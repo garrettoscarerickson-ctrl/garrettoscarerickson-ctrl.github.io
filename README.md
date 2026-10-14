@@ -71,6 +71,13 @@ lists every section from top to bottom.
   (search by game, sport or title).
 - **👁** shows or hides a section; **↑ ↓** move it.
 - **Opening photo** takes several photos and fades between them.
+- **About** can have a photo on the left; click the dashed "Add a photo"
+  spot in the preview (it only shows in Studio while empty).
+- **Reviews** has a list for praise people have actually given you (a
+  parent's text, a coach's DM — ask first). Reviews circle the Leave a
+  review form; four or more slide past in two rows. Approved reviews
+  visitors post join them. Never add made-up reviews: it misleads
+  clients and breaks the FTC's fake-review rule.
 - **Colors, fonts & corners** changes the whole site;
   **Google title, description & share photo** is what search results
   and shared links show.

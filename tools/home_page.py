@@ -95,7 +95,7 @@ def default_home(photos):
                  "I shoot whole teams and individual athletes, and I turn work around fast: "
                  "individual sessions are guaranteed back within 24 hours.",
              ],
-             "button": "Get a quote", "buttonLink": "#quote"},
+             "button": "Get a quote", "buttonLink": "#quote", "photo": ""},
             {"id": "work", "type": "work", "visible": True, "label": "Selected work",
              "photos": _current_work(photos)},
             {"id": "services", "type": "services", "visible": True,
@@ -137,7 +137,8 @@ def default_home(photos):
              "options": list(QUOTE_TYPES),
              "button": "Get a quote",
              "thanks": "Thanks. Garrett has your details and will email you a quote."},
-            {"id": "reviews", "type": "reviews", "visible": True, "label": "Reviews"},
+            {"id": "reviews", "type": "reviews", "visible": True, "label": "Reviews",
+             "items": []},
             {"id": "faq", "type": "faq", "visible": True, "label": "Questions",
              "aside": "Booking a sports photographer", "heading": "Questions about booking",
              "items": [
@@ -239,12 +240,27 @@ def clean(home, photos):
                 d[k] = v if isinstance(v, list) else d[k]
         if "photos" in d:
             d["photos"] = [p for p in d["photos"] if isinstance(p, str) and p in known]
+        if "photo" in d and d["photo"] not in known:
+            d["photo"] = ""
         for k in ("paragraphs", "words", "points", "options"):
             if k in d:
                 d[k] = [str(x) for x in d[k] if str(x).strip()]
         if t == "services":
             d["cards"] = [{k: str(c.get(k, "") or "") for k in ("title", "text", "linkText", "link", "quote")}
                           for c in d["cards"] if isinstance(c, dict)]
+        if t == "reviews":
+            items = []
+            for r in d["items"]:
+                if not isinstance(r, dict) or not str(r.get("text", "")).strip():
+                    continue
+                try:
+                    rating = max(1, min(5, int(r.get("rating", 5))))
+                except (TypeError, ValueError):
+                    rating = 5
+                items.append({"name": str(r.get("name", "") or "").strip(),
+                              "role": str(r.get("role", "") or "").strip(),
+                              "rating": rating, "text": str(r.get("text", "")).strip()})
+            d["items"] = items
         if t == "faq":
             d["items"] = [{"q": str(i.get("q", "") or ""), "a": str(i.get("a", "") or "")}
                           for i in d["items"] if isinstance(i, dict)]
@@ -350,10 +366,19 @@ def r_about(s, ctx):
     paras = "".join("<p>%s</p>" % rich(p) for p in s["paragraphs"])
     btn = ('<a class="quote-btn about__cta" href="%s">%s</a>' % (esc(href(s["buttonLink"])), esc(s["button"]))
            if s["button"].strip() else "")
+    # The empty spot is hidden on the live site; Studio shows it so there
+    # is something to click to add a photo.
+    if s["photo"]:
+        photo = ('<figure class="about__photo" data-slot-photo="about:photo">'
+                 '<img src="%s" alt="%s" loading="lazy"></figure>'
+                 % (esc(s["photo"]), esc(alt_of(ctx["by_src"].get(s["photo"])))))
+    else:
+        photo = ('<figure class="about__photo about__photo--empty" data-slot-photo="about:photo">'
+                 '<span>Add a photo</span></figure>')
     return ('<section class="about reveal" id="about" data-section="about">'
-            '<span class="mono about__eyebrow">%s — %s</span><div class="about__body">'
-            '<h2 class="about__lead">%s</h2>%s%s</div></section>'
-            % (ctx["num"], esc(s["label"]), esc(s["heading"]), paras, btn))
+            '<div class="about__side"><span class="mono about__eyebrow">%s — %s</span>%s</div>'
+            '<div class="about__body"><h2 class="about__lead">%s</h2>%s%s</div></section>'
+            % (ctx["num"], esc(s["label"]), photo, esc(s["heading"]), paras, btn))
 
 
 def r_work(s, ctx):
@@ -466,10 +491,29 @@ def r_quote(s, ctx):
                points, form))
 
 
+def review_card(r):
+    stars = "".join('<span class="star%s">★</span>' % (" is-on" if i <= r["rating"] else "")
+                    for i in range(1, 6))
+    who = esc(r["name"]) + (" · " + esc(r["role"]) if r["role"] else "")
+    return ('<article class="review"><span class="stars" aria-label="%d out of 5">%s</span>'
+            '<p>%s</p><footer class="mono">%s</footer></article>'
+            % (r["rating"], stars, esc(r["text"]), who))
+
+
 def r_reviews(s, ctx):
+    """Reviews slide past in rows above and below the Leave a review form.
+    The ones written here are in the page for search engines; js/main.js
+    adds the ones visitors post and sets the rows moving."""
+    items = s["items"]
+    data = json.dumps(items, ensure_ascii=False).replace("</", "<\\/")
     return ('<section class="reviews reveal" id="reviews" data-section="reviews">%s'
-            '<div data-reviews></div></section>'
-            % head_html(s["label"], ctx["num"], "Be the first", ' data-reviews-score'))
+            '<div class="reviews__ring%s">'
+            '<div class="reviews__row" data-row="0"><div class="reviews__track">%s</div></div>'
+            '<div class="reviews__center" data-reviews></div>'
+            '<div class="reviews__row" data-row="1" hidden><div class="reviews__track"></div></div>'
+            '</div><script type="application/json" data-reviews-json>%s</script></section>'
+            % (head_html(s["label"], ctx["num"], "Be the first", ' data-reviews-score'),
+               "" if items else " is-empty", "".join(review_card(r) for r in items), data))
 
 
 def r_faq(s, ctx):

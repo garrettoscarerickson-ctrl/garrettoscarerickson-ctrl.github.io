@@ -60,7 +60,8 @@
         "I shoot whole teams and individual athletes, and I turn work around fast: individual sessions are guaranteed back within 24 hours."
       ],
       "button": "Get a quote",
-      "buttonLink": "#quote"
+      "buttonLink": "#quote",
+      "photo": ""
     },
     {
       "id": "work",
@@ -159,7 +160,8 @@
       "id": "reviews",
       "type": "reviews",
       "visible": true,
-      "label": "Reviews"
+      "label": "Reviews",
+      "items": []
     },
     {
       "id": "faq",

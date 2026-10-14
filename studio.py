@@ -1428,7 +1428,8 @@ var SECTIONS = {
   marquee: { name: "Scrolling words", about: "The band of words that slides across the screen.",
     fields: [{ k: "words", label: "Words", type: "list" }] },
   about: { name: "About",
-    fields: [{ k: "label", label: "Section label" },
+    fields: [{ k: "photo", label: "Photo on the left (optional)", type: "photo" },
+             { k: "label", label: "Section label" },
              { k: "heading", label: "Headline", type: "textarea" },
              { k: "paragraphs", label: "Paragraphs", type: "list", long: true, rich: true },
              { k: "button", label: "Button text (leave blank for no button)" },
@@ -1460,8 +1461,17 @@ var SECTIONS = {
              { k: "button", label: "Send button text" },
              { k: "thanks", label: "Message after someone sends it", type: "textarea" }] },
   reviews: { name: "Reviews",
-    about: "Reviews are written by visitors. New ones wait for your approval in Supabase (see SETUP.md).",
-    fields: [{ k: "label", label: "Section label" }] },
+    about: "Reviews circle the Leave a review form: four or more slide past in two rows. " +
+           "Add praise people have actually given you (a parent's text, a coach's DM), " +
+           "with their OK. Made-up reviews break the FTC's fake-review rule. Reviews " +
+           "visitors post join in once you approve them in Supabase (see SETUP.md).",
+    fields: [{ k: "label", label: "Section label" },
+             { k: "items", label: "Reviews you've received", type: "objects", item: "review",
+               blank: { name: "", role: "", rating: 5, text: "" },
+               sub: [{ k: "name", label: "Their name (first name and last initial is fine)" },
+                     { k: "role", label: "Who they are (e.g. Parent, DCDS football)" },
+                     { k: "rating", label: "Stars", type: "rating" },
+                     { k: "text", label: "What they said", type: "textarea" }] }] },
   faq: { name: "Questions",
     fields: [{ k: "label", label: "Section label" },
              { k: "aside", label: "Small text on the right" },
@@ -1640,7 +1650,7 @@ function heSelectBox(obj, k, label, choices) {
     var o = document.createElement("option");
     o.value = c[0]; o.textContent = c[1]; s.appendChild(o);
   });
-  s.value = obj[k] == null ? "" : obj[k];
+  s.value = obj[k] == null ? "" : String(obj[k]);
   s.addEventListener("change", function () { obj[k] = s.value; heChanged(); });
   return heField(label, s);
 }
@@ -1739,7 +1749,7 @@ function hePhotos(obj, k, label) {
   return w;
 }
 
-function heOnePhoto(obj, k, label) {
+function heOnePhoto(obj, k, label, removable) {
   var w = el("div", "hf");
   w.appendChild(el("span", "mono", label));
   var grid = el("div", "hf__photos");
@@ -1750,7 +1760,15 @@ function heOnePhoto(obj, k, label) {
     var ph = el("div", "hf__ph");
     ph.title = "Click to swap this photo";
     ph.innerHTML = '<img loading="lazy" alt="" src="/' + heThumb(obj[k]) + '">';
-    ph.onclick = pick;
+    ph.querySelector("img").onclick = pick;
+    if (removable) {
+      var tools = el("div", "tools");
+      tools.appendChild(el("span", "", ""));
+      var x = el("button", "x", "✕"); x.type = "button"; x.title = "Remove";
+      x.onclick = function (e) { e.stopPropagation(); obj[k] = ""; heRenderEditor(); heChanged(); };
+      tools.appendChild(x);
+      ph.appendChild(tools);
+    }
     grid.appendChild(ph);
   }
   var b = el("button", "hf__new", obj[k] ? "Change" : "+ Pick photo");
@@ -1763,6 +1781,12 @@ function heOnePhoto(obj, k, label) {
 
 function heFieldFor(obj, f) {
   if (f.type === "photos") return hePhotos(obj, f.k, f.label);
+  if (f.type === "photo") return heOnePhoto(obj, f.k, f.label, true);
+  if (f.type === "rating") {
+    return heSelectBox(obj, f.k, f.label, [5, 4, 3, 2, 1].map(function (n) {
+      return [String(n), "★★★★★".slice(0, n) + "  (" + n + ")"];
+    }));
+  }
   if (f.type === "list") return heList(obj, f.k, f);
   if (f.type === "objects") return heObjects(obj, f.k, f);
   if (f.type === "quotetype") {
@@ -1860,6 +1884,7 @@ function heUsed() {
   var used = {};
   HE.home.sections.forEach(function (s) {
     (s.photos || []).forEach(function (p) { used[p] = 1; });
+    if (s.photo) used[s.photo] = 1;
   });
   return used;
 }
@@ -1939,6 +1964,7 @@ heFrame.addEventListener("load", function () {
     "[data-section].he-on{outline:2px solid #6ee7a8;outline-offset:-2px}" +
     "[data-slot-photo]{outline:2px dashed rgba(110,231,168,.6);outline-offset:-4px}" +
     "[data-slot-photo]:hover{outline:3px solid #6ee7a8}" +
+    ".about__photo--empty{display:grid!important}" +
     ".he-tag{position:fixed;z-index:2147483647;pointer-events:none;background:#6ee7a8;" +
     "color:#000;font:600 11px/1 system-ui,sans-serif;padding:6px 9px;border-radius:5px}";
   d.head.appendChild(st);
@@ -1971,8 +1997,12 @@ heFrame.addEventListener("load", function () {
       var s = heSection(sec.dataset.section);
       var i = Number(parts[1]);
       hePick(function (src) {
-        s.photos = s.photos || [];
-        if (i < s.photos.length) s.photos[i] = src; else s.photos.push(src);
+        if (parts[1] === "photo") {
+          s.photo = src;          /* a single-photo spot, like About's */
+        } else {
+          s.photos = s.photos || [];
+          if (i < s.photos.length) s.photos[i] = src; else s.photos.push(src);
+        }
         heRenderEditor(); heChanged();
       });
     }
