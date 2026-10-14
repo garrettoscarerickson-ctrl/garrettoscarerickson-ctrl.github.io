@@ -17,7 +17,6 @@ window.PHOTOS = [
     ],
     "w": 1600,
     "h": 2400,
-    "archiveOnly": true,
     "game": "DCDS Varsity Football vs Cranbrook — Homecoming"
   },
   {
