@@ -295,11 +295,21 @@ def index_page(games):
 
 
 def sitemap(games):
-    urls = [SITE + "/", SITE + "/portfolio.html", SITE + "/games/"]
-    urls += ["%s/games/%s/" % (SITE, g["slug"]) for g in games]
+    """Every page, and on each game page its photographs, so they can
+    turn up in Google Images when someone searches the school or game."""
+    entries = [(u, []) for u in (SITE + "/", SITE + "/portfolio.html", SITE + "/games/")]
+    entries += [("%s/games/%s/" % (SITE, g["slug"]), [SITE + "/" + p["src"] for p in g["photos"]])
+                for g in games]
+
+    def entry(url, images):
+        imgs = "".join("    <image:image><image:loc>%s</image:loc></image:image>\n" % esc(i)
+                       for i in images)
+        return "  <url>\n    <loc>%s</loc>\n%s  </url>\n" % (url, imgs)
+
     return ('<?xml version="1.0" encoding="UTF-8"?>\n'
-            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n'
-            % "".join("  <url>\n    <loc>%s</loc>\n  </url>\n" % u for u in urls))
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
+            '        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n%s</urlset>\n'
+            % "".join(entry(u, imgs) for u, imgs in entries))
 
 
 def write(path, text):

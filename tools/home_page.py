@@ -614,6 +614,12 @@ $sections
 """)
 
 
+def plain(s):
+    """Paragraph shorthand without the markup: **bold** and [text](link)
+    become just their text."""
+    return re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s).replace("**", "")
+
+
 def structured_data(home, share):
     contact = next((s for s in home["sections"] if s["type"] == "contact"), {})
     email = contact.get("email", "")
@@ -623,12 +629,16 @@ def structured_data(home, share):
         "@type": "ProfessionalService",
         "@id": "https://garrettphoto.store/#business",
         "name": "Garrett Erickson Photography",
-        "alternateName": "Garrett Erickson — Michigan Sports Photographer",
+        "alternateName": ["Garrett Erickson — Michigan Sports Photographer",
+                          "Garrett Erickson — Metro Detroit Sports Photographer"],
         "description": home["seo"]["description"],
         "url": "https://garrettphoto.store/",
         "image": "https://garrettphoto.store/" + share,
         "address": {"@type": "PostalAddress", "addressRegion": "MI", "addressCountry": "US"},
-        "areaServed": [{"@type": "State", "name": "Michigan"}] + [
+        "areaServed": [{"@type": "State", "name": "Michigan"},
+                       {"@type": "Place", "name": "Metro Detroit"},
+                       {"@type": "AdministrativeArea", "name": "Oakland County, Michigan"},
+                       {"@type": "AdministrativeArea", "name": "Wayne County, Michigan"}] + [
             {"@type": "City", "name": c} for c in
             ("Detroit", "Birmingham", "Bloomfield Hills", "Beverly Hills", "Royal Oak",
              "Troy", "Southfield", "Grosse Pointe", "Dearborn")],
@@ -648,6 +658,14 @@ def structured_data(home, share):
               "url": "https://garrettphoto.store/",
               "name": "Garrett Erickson — Michigan Sports Photographer",
               "publisher": {"@id": "https://garrettphoto.store/#business"}}]
+    # the FAQ as questions and answers, which search engines and their AI
+    # answers read directly
+    faq = next((s for s in home["sections"] if s["type"] == "faq" and s.get("visible", True)), None)
+    if faq and faq.get("items"):
+        graph.append({"@type": "FAQPage", "@id": "https://garrettphoto.store/#faq",
+                      "mainEntity": [{"@type": "Question", "name": i["q"],
+                                      "acceptedAnswer": {"@type": "Answer", "text": plain(i["a"])}}
+                                     for i in faq["items"]]})
     text = json.dumps({"@context": "https://schema.org", "@graph": graph},
                       indent=2, ensure_ascii=False)
     # keep "</script>" in any text from closing the tag early
