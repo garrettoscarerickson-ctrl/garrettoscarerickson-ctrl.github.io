@@ -1,0 +1,65 @@
+/* Game pages (games/), built by tools/game_pages.py. Loaded after
+   style.css and theme.css; the header and photo grid reuse the
+   portfolio's .archive-head and .archive-grid. */
+
+.archive-head .mono a { color: inherit; }
+.archive-head .mono a:hover { color: var(--ink); }
+
+.game-title {
+  font-size: clamp(2rem, 5.5vw, 4.6rem) !important;
+  max-width: 18ch;
+  margin-top: 0.9rem;
+}
+
+.game-cta { margin-top: 1.75rem; }
+
+.game-more {
+  padding: 0 var(--pad) clamp(4rem, 10vh, 6rem);
+}
+
+.game-index { padding-top: clamp(2rem, 5vh, 3rem); }
+
+.game-more__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 2.5rem 0 1.25rem;
+}
+
+.game-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.game-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.game-card img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--r-sm);
+  transition: opacity 0.2s ease;
+}
+
+.game-card:hover img { opacity: 0.85; }
+
+.game-card__name {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.game-note {
+  margin-top: 2rem;
+  color: var(--ink-dim);
+  line-height: 1.7;
+}
+
+.game-note a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }

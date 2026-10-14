@@ -42,6 +42,7 @@ VALID_FEATURES = ("hero", "panel")
 import sys as _sys
 _sys.path.insert(0, os.path.join(ROOT, "tools"))
 import home_page  # noqa: E402
+import game_pages  # noqa: E402
 
 
 # ---------------- manifest helpers ----------------
@@ -59,6 +60,7 @@ def save_photos(photos):
     make_thumbs(photos)
     # the home page names its photos and counts them, so rebuild it too
     home_page.build(photos)
+    game_pages.build(photos)
 
 
 BOOKINGS = os.path.join(ROOT, "data", "bookings.json")
@@ -190,7 +192,7 @@ def make_thumbs(photos):
 
 
 # Pages that load the site's own css/ and js/ files.
-PAGES = ["*.html", "card/*.html"]
+PAGES = ["*.html", "card/*.html", "games/*.html", "games/*/*.html"]
 ASSET_REF = re.compile(
     r'((?:href|src)=")((?:\.\./|/)?(?:css|js)/[\w.-]+\.(?:css|js))'
     r'(?:\?v=[0-9a-f]+)?(")')
@@ -2065,9 +2067,10 @@ if __name__ == "__main__":
     regenerate_reviews_js()
     make_thumbs(load_photos())
     home_page.build(load_photos())
+    game_pages.build(load_photos())
     stamp_assets()
     if "--regen" in sys.argv:
-        print("js/photos.js + js/reviews.js + index.html regenerated from data/, "
+        print("js/photos.js + js/reviews.js + index.html + games/ regenerated from data/, "
               "thumbnails up to date, css/js links fingerprinted")
         sys.exit(0)
     server = ThreadingHTTPServer(("127.0.0.1", PORT), StudioHandler)
