@@ -466,6 +466,19 @@ $options
             <label class="quote__wide"><span class="mono">Phone (optional)</span>
               <input type="tel" id="q-phone" autocomplete="tel">
             </label>
+            <label class="quote__wide"><span class="mono">How did you hear about me?</span>
+              <select id="q-source">
+                <option value="">Choose one (optional)</option>
+                <option>Instagram</option>
+                <option>Google search</option>
+                <option>Google Maps</option>
+                <option>A friend or teammate</option>
+                <option>Saw me at a game</option>
+                <option>A Facebook or Instagram ad</option>
+                <option>A coach or school</option>
+                <option>Other</option>
+              </select>
+            </label>
           </div>
           <button class="quote__send" type="submit">$button</button>
           <p class="quote__status mono" id="q-status" role="status"></p>

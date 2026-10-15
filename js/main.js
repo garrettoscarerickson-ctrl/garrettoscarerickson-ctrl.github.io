@@ -592,7 +592,8 @@
       var lines = [["Booking", type]];
       [["Sport", "q-sport"], ["School / team", "q-team"],
        ["Athletes", "q-count"], ["Date", "q-date"],
-       ["Location", "q-where"], ["Phone", "q-phone"]].forEach(function (f) {
+       ["Location", "q-where"], ["Phone", "q-phone"],
+       ["Heard about me", "q-source"]].forEach(function (f) {
         var x = v(f[1]);
         if (x) lines.push([f[0], x]);
       });
