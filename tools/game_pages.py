@@ -139,6 +139,9 @@ HEAD = """<!DOCTYPE html>
 %(ld)s
   </script>
 
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/theme.css">
   <link rel="stylesheet" href="/css/games.css">

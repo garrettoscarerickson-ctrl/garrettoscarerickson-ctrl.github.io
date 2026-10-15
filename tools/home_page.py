@@ -579,6 +579,9 @@ PAGE = Template("""<!DOCTYPE html>
 $ld
   </script>
 
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/theme.css">
   <script src="js/pixel.js"></script>
@@ -656,7 +659,8 @@ def structured_data(home, share):
               "url": "https://garrettphoto.store/", "sameAs": same},
              {"@type": "WebSite", "@id": "https://garrettphoto.store/#website",
               "url": "https://garrettphoto.store/",
-              "name": "Garrett Erickson — Michigan Sports Photographer",
+              "name": "Garrett Erickson Photography",
+              "alternateName": ["Garrett Erickson — Michigan Sports Photographer", "garrettphoto.store"],
               "publisher": {"@id": "https://garrettphoto.store/#business"}}]
     # the FAQ as questions and answers, which search engines and their AI
     # answers read directly
