@@ -23,7 +23,9 @@ import os
 import re
 import shutil
 import subprocess
+import threading
 import time
+import urllib.request
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -43,6 +45,29 @@ import sys as _sys
 _sys.path.insert(0, os.path.join(ROOT, "tools"))
 import home_page  # noqa: E402
 import game_pages  # noqa: E402
+
+
+# IndexNow lets the site tell Bing (and the other engines that share it)
+# which pages changed, with no sign-in. The key file sits at the site root.
+INDEXNOW_KEY = "30eea0ca7aabfb69899b3bf774cdbbf3"
+SITE_URL = "https://garrettphoto.store"
+
+
+def ping_indexnow():
+    """Send every page in sitemap.xml to IndexNow. Publish runs this a few
+    minutes after the push, once GitHub Pages has the new version live."""
+    with open(os.path.join(ROOT, "sitemap.xml"), encoding="utf-8") as f:
+        urls = re.findall(r"<loc>([^<]+)</loc>", f.read())
+    body = json.dumps({"host": SITE_URL.split("//")[1], "key": INDEXNOW_KEY,
+                       "keyLocation": "%s/%s.txt" % (SITE_URL, INDEXNOW_KEY),
+                       "urlList": urls}).encode("utf-8")
+    req = urllib.request.Request("https://api.indexnow.org/indexnow", data=body,
+                                 headers={"Content-Type": "application/json; charset=utf-8"})
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            print("IndexNow: told Bing about %d pages (%s)" % (len(urls), r.status))
+    except Exception as e:  # a failed ping must never break publishing
+        print("IndexNow ping failed: %s" % e)
 
 
 # ---------------- manifest helpers ----------------
@@ -586,6 +611,11 @@ class StudioHandler(SimpleHTTPRequestHandler):
             return
         code, push_out = run("git", "push")
         log += "\n" + push_out
+        if code == 0 and "Everything up-to-date" not in push_out:
+            # GitHub Pages takes a minute or two to put the push live
+            threading.Timer(180, ping_indexnow).start()
+            log += ("\nBing gets told about the changes in about 3 minutes "
+                    "(leave Studio open until then).")
         self.send_json({"ok": code == 0, "log": log.strip()})
 
 
