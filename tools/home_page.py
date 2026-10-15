@@ -564,7 +564,7 @@ PAGE = Template("""<!DOCTYPE html>
   <link rel="canonical" href="https://garrettphoto.store/">
 
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Garrett Erickson Photography">
+  <meta property="og:site_name" content="Garrett Erickson - Sports and Portrait Photography">
   <meta property="og:title" content="$title">
   <meta property="og:description" content="$description">
   <meta property="og:url" content="https://garrettphoto.store/">
@@ -632,7 +632,7 @@ def structured_data(home, share):
     business = {
         "@type": "ProfessionalService",
         "@id": "https://garrettphoto.store/#business",
-        "name": "Garrett Erickson Photography",
+        "name": "Garrett Erickson - Sports and Portrait Photography",
         "alternateName": ["Garrett Erickson — Michigan Sports Photographer",
                           "Garrett Erickson — Metro Detroit Sports Photographer"],
         "description": home["seo"]["description"],
@@ -660,7 +660,7 @@ def structured_data(home, share):
               "url": "https://garrettphoto.store/", "sameAs": same},
              {"@type": "WebSite", "@id": "https://garrettphoto.store/#website",
               "url": "https://garrettphoto.store/",
-              "name": "Garrett Erickson Photography",
+              "name": "Garrett Erickson - Sports and Portrait Photography",
               "alternateName": ["Garrett Erickson — Michigan Sports Photographer", "garrettphoto.store"],
               "publisher": {"@id": "https://garrettphoto.store/#business"}}]
     # the FAQ as questions and answers, which search engines and their AI

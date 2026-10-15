@@ -157,7 +157,7 @@ HEAD = """<!DOCTYPE html>
   <link rel="canonical" href="%(url)s">
 
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Garrett Erickson Photography">
+  <meta property="og:site_name" content="Garrett Erickson - Sports and Portrait Photography">
   <meta property="og:title" content="%(title)s">
   <meta property="og:description" content="%(desc)s">
   <meta property="og:url" content="%(url)s">
