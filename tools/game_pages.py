@@ -8,6 +8,11 @@ answers no search in particular. Each team game gets its own page at
 that search, and a way to book the next one. games/index.html lists them
 all, and sitemap.xml is rewritten to include every page.
 
+A game can also carry a short write-up (the score, a standout play, the
+weather), typed in Studio's Games tab and kept in data/games.json. It goes
+under the page's heading, because a page of photos alone gives a search
+engine very little to read.
+
 Only a game whose name starts with a school in SCHOOLS gets a page. A
 private session ("Franco — Hockey") starts with an athlete's first name,
 so it never does: its page would put a kid's name into Google. A game
@@ -25,6 +30,7 @@ import shutil
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data", "photos.json")
+NOTES = os.path.join(ROOT, "data", "games.json")
 GAMES = os.path.join(ROOT, "games")
 SITEMAP = os.path.join(ROOT, "sitemap.xml")
 SITE = "https://garrettphoto.store"
@@ -81,6 +87,27 @@ def thumb_size(p):
     return round(w * scale), round(h * scale)
 
 
+def load_notes():
+    """{game name: {"about": text}} from data/games.json."""
+    try:
+        with open(NOTES, encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+
+def save_notes(notes):
+    notes = {k: v for k, v in sorted(notes.items()) if (v.get("about") or "").strip()}
+    with open(NOTES, "w", encoding="utf-8") as f:
+        json.dump(notes, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+
+
+def pages(photos):
+    """{game name: slug} for every game that gets a page."""
+    return {g["game"]: g["slug"] for g in collect(photos)[0]}
+
+
 def collect(photos):
     """The team games, in manifest order (newest first), plus the names
     of any games skipped because their school isn't in SCHOOLS."""
@@ -98,6 +125,7 @@ def collect(photos):
             order.append(game)
         groups[game].append(p)
 
+    notes = load_notes()
     games = []
     for game in order:
         ps = groups[game]
@@ -109,6 +137,7 @@ def collect(photos):
             "slug": slugify(name),
             "sport": sport_of(ps),
             "year": ps[0].get("year"),
+            "about": (notes.get(game) or {}).get("about", "").strip(),
             "photos": ps,
         })
     return games, skipped
@@ -154,6 +183,7 @@ HEAD = """<!DOCTYPE html>
     <div class="nav__links">
       <a href="/index.html">Home</a>
       <a href="/portfolio.html">Portfolio</a>
+      <a href="/games/"%(games_current)s>Games</a>
     </div>
   </nav>
 """
@@ -228,6 +258,8 @@ def game_page(g, games):
             "Erickson. Book a shoot for your athlete's next game." % (n, g["name"], ", %s" % year if year else ""))
     crumbs = [("Home", SITE + "/"), ("Game photos", SITE + "/games/"), (g["name"], url)]
 
+    about = "".join("<p>%s</p>" % esc(para.strip())
+                    for para in re.split(r"\n\s*\n", g["about"]) if para.strip())
     tiles = "".join(tile(p, "%s, %s photo %d" % (g["name"], sport, i + 1))
                     for i, p in enumerate(g["photos"]))
 
@@ -243,7 +275,7 @@ def game_page(g, games):
     <h1 class="game-title">%(name)s</h1>
     <p class="archive-head__lead">%(n)d photos from %(name)s%(year)s, shot from the
     sideline by Garrett Erickson, a Metro Detroit sports photographer. Want photos like
-    these of your athlete? <a href="/#quote">Get a free quote</a> and I'll shoot the next game.</p>
+    these of your athlete? <a href="/#quote">Get a free quote</a> and I'll shoot the next game.</p>%(about)s
     <a class="quote-btn game-cta" href="/#quote">Book the next game</a>
   </header>
 
@@ -257,9 +289,10 @@ def game_page(g, games):
     <p class="game-note"><a href="/games/">All game photos</a> · <a href="/portfolio.html">Full portfolio</a></p>
   </section>
 """ % {"school": esc(g["school"]), "sport": esc(sport), "name": esc(g["name"]), "n": n,
-       "year": ", %s" % year if year else "", "tiles": tiles, "more": more, "email": EMAIL}
+       "year": ", %s" % year if year else "", "tiles": tiles,
+       "about": '\n    <div class="game-about">%s</div>' % about if about else "", "more": more, "email": EMAIL}
 
-    head = HEAD % {"title": esc(title), "desc": esc(desc), "url": url,
+    head = HEAD % {"title": esc(title), "desc": esc(desc), "url": url, "games_current": "",
                    "image": SITE + "/" + g["photos"][0]["src"],
                    "ld": ld_json("ImageGallery", g["name"] + " photos", url, desc, crumbs)}
     return head + body + FOOT
@@ -292,6 +325,7 @@ def index_page(games):
 """ % ("".join(sections), EMAIL, EMAIL)
 
     head = HEAD % {"title": esc(title), "desc": esc(desc), "url": url,
+                   "games_current": ' aria-current="page"',
                    "image": SITE + "/" + games[0]["photos"][0]["src"],
                    "ld": ld_json("CollectionPage", "Game photos", url, desc, crumbs)}
     return head + body + FOOT

@@ -63,3 +63,13 @@
 }
 
 .game-note a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+.game-about {
+  max-width: 62ch;
+  margin-top: 1.25rem;
+  color: var(--ink);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.game-about p + p { margin-top: 0.9rem; }

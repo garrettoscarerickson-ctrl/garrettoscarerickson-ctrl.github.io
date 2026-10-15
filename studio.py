@@ -360,7 +360,9 @@ class StudioHandler(SimpleHTTPRequestHandler):
         if self.path == "/api/manifest":
             photos = load_photos()
             self.send_json({"photos": photos, "tags": all_tags(photos),
-                            "bookings": load_bookings()})
+                            "bookings": load_bookings(),
+                            "gameNotes": game_pages.load_notes(),
+                            "gamePages": game_pages.pages(photos)})
             return
         super().do_GET()
 
@@ -380,6 +382,8 @@ class StudioHandler(SimpleHTTPRequestHandler):
                 self.api_booking()
             elif self.path == "/api/game":
                 self.api_game()
+            elif self.path == "/api/game-about":
+                self.api_game_about()
             elif self.path == "/api/publish":
                 self.api_publish()
             else:
@@ -512,9 +516,33 @@ class StudioHandler(SimpleHTTPRequestHandler):
                 # clearing the game leaves the photographs in the portfolio -
                 # removing a photograph is a separate act
                 p.pop("game", None)
-        save_photos(photos)
 
+        # the game's write-up follows it to the new name
+        notes = game_pages.load_notes()
+        note = notes.pop(old_name, None)
+        if note and new_name:
+            notes[new_name] = note
+        game_pages.save_notes(notes)
+
+        save_photos(photos)
+        stamp_assets()
         self.send_json({"ok": True, "moved": len(hits)})
+
+    def api_game_about(self):
+        """Save the write-up shown on a game's page, then rebuild the pages."""
+        body = self.read_body()
+        game = (body.get("game") or "").strip()
+        about = (body.get("about") or "").strip()
+        if not game:
+            raise ValueError("Which game?")
+        if len(about) > 2000:
+            raise ValueError("Keep the write-up under 2000 characters.")
+        notes = game_pages.load_notes()
+        notes[game] = {"about": about}
+        game_pages.save_notes(notes)
+        game_pages.build(load_photos())
+        stamp_assets()
+        self.send_json({"ok": True})
 
     def api_publish(self):
         def run(*cmd):
@@ -599,6 +627,12 @@ header nav{display:flex;gap:1.5rem;align-items:baseline}
 .ghead input{flex:1;min-width:14rem;background:#111;border:1px solid var(--line);
              border-radius:8px;color:var(--ink);font:inherit;padding:.5rem .7rem}
 .gthumbs{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.9rem}
+.gabout{margin-top:.9rem;display:flex;flex-direction:column;gap:.45rem}
+.gabout label a{color:inherit;text-decoration:underline}
+.gabout textarea{width:100%;background:#111;border:1px solid var(--line);border-radius:10px;
+  color:var(--ink);padding:.6rem .75rem;font:inherit;line-height:1.5;resize:vertical}
+.gabout textarea:focus{outline:none;border-color:var(--ink)}
+.gabout__row{display:flex;gap:.75rem;align-items:center}
 .gthumb{position:relative;width:78px;height:78px;border-radius:8px;
         overflow:hidden;border:1px solid var(--line)}
 .gthumb img{width:100%;height:100%;object-fit:cover;display:block}
@@ -1079,7 +1113,7 @@ function loadLibrary() {
   fetch("/api/manifest").then(function (r) { return r.json(); }).then(function (data) {
     KNOWN_TAGS = data.tags;
     renderBookings(data.bookings || []);
-    renderGames(data.photos);
+    renderGames(data.photos, data.gameNotes || {}, data.gamePages || {});
     var lib = document.getElementById("library");
     lib.innerHTML = "";
     document.getElementById("lib-count").textContent =
@@ -1342,7 +1376,7 @@ function q(v) { return String(v == null ? "" : v).replace(/"/g, "&quot;"); }
 
 /* ---------- games ---------- */
 
-function renderGames(photos) {
+function renderGames(photos, notes, pages) {
   var order = [], groups = {};
   photos.forEach(function (p) {
     if (!p.game) return;
@@ -1369,6 +1403,29 @@ function renderGames(photos) {
       "<span class='mono'>" + list.length + " photos</span>" +
       "<button class='ghost'>Rename</button>";
     card.appendChild(head);
+
+    /* team games get a public page; a few sentences there give Google
+       something to read besides photos */
+    if (pages[game]) {
+      var about = el("div", "gabout");
+      about.innerHTML =
+        "<label class='mono'>Write-up on <a href='/games/" + pages[game] + "/' target='_blank'>" +
+        "this game's page</a> (optional)</label>" +
+        "<textarea rows='3' placeholder='A few sentences: the score, a standout play, " +
+        "the weather, what the night was like. No players&#39; full names.'></textarea>" +
+        "<div class='gabout__row'><button class='ghost'>Save write-up</button>" +
+        "<span class='mono gabout__msg'></span></div>";
+      var box = about.querySelector("textarea");
+      var msg = about.querySelector(".gabout__msg");
+      box.value = (notes[game] && notes[game].about) || "";
+      about.querySelector("button").onclick = function () {
+        msg.textContent = "Saving…";
+        api("/api/game-about", { game: game, about: box.value }).then(function (res) {
+          msg.textContent = res.error ? res.error : "Saved. Publish to put it on the site.";
+        }).catch(function (e) { msg.textContent = e.message; });
+      };
+      card.appendChild(about);
+    }
 
     var input = head.querySelector("input");
     head.querySelector("button").onclick = function () {

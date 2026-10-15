@@ -593,6 +593,7 @@ $ld
     <div class="nav__links">
       <a href="index.html" aria-current="page">Home</a>
       <a href="portfolio.html">Portfolio</a>
+      <a href="games/">Games</a>
     </div>
   </nav>
 
