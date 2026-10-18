@@ -71,8 +71,20 @@ LOYOLA = {"game": "DCDS Varsity Football vs Loyola",
 RICE = {"game": "Brother Rice vs Orchard Lake St. Mary's — Football",
         "slug": "riceolsm", "title": "Rice vs St. Mary's",
         "tags": FOOTBALL, "location": MI, "date": "2026-09-25"}
+FORD_FIELD = "Ford Field, Detroit, Michigan"
+FF = "CD,Denby,Cass,King FF Finals"
 
 GAMES = {
+    # one green folder, two PSL title games at Ford Field - a subfolder each
+    FF + "/Cass Vs King": {
+        "game": "Cass Tech vs King — PSL Championship at Ford Field",
+        "slug": "cassking", "title": "Cass Tech vs King",
+        "tags": FOOTBALL, "location": FORD_FIELD, "date": "2026-10-16"},
+    FF + "/Denby Vs Central": {
+        "game": "Denby vs Central — PSL Championship at Ford Field",
+        "slug": "denbycentral", "title": "Denby vs Central",
+        "tags": FOOTBALL, "location": FORD_FIELD, "date": "2026-10-16"},
+
     "Hoco Finals": HOCO,               # EXIF stripped; same game as Hoco Finals 2
     "Hoco Finals 2": HOCO,
     "DCDS_VSLOYOLA_FINALS": LOYOLA,
@@ -190,9 +202,12 @@ def green_photos():
                 if any(k in name.lower() for k in SKIP_FILES):
                     continue
                 if inherited or "Green" in finder_tags(full):
-                    top = os.path.relpath(full, DRIVE).split(os.sep)[0]
+                    parts = os.path.relpath(full, DRIVE).split(os.sep)
+                    top = parts[0]
                     if top == name:
                         top = "."                 # loose at the drive root
+                    elif len(parts) > 2 and "/".join(parts[:2]) in GAMES:
+                        top = "/".join(parts[:2])  # a folder holding several games
                     found.setdefault(top, []).append(full)
 
     walk(DRIVE, False)

@@ -42,6 +42,8 @@ SCHOOLS = {
     "DCDS": "Detroit Country Day",
     "Seaholm": "Seaholm",
     "Brother Rice": "Brother Rice",
+    "Cass Tech": "Detroit Cass Tech",
+    "Denby": "Detroit Denby",
 }
 
 SPORTS = ("football", "soccer", "tennis", "volleyball", "hockey",
