@@ -132,6 +132,19 @@
       "area": "Based in Metro Detroit. I regularly shoot in Detroit, Birmingham, Bloomfield Hills, Beverly Hills, Royal Oak, Troy, Southfield, Grosse Pointe and Dearborn, across Oakland, Wayne and Macomb counties, and anywhere else in Michigan on request."
     },
     {
+      "id": "availability",
+      "type": "availability",
+      "visible": true,
+      "label": "Availability",
+      "aside": "Booking now",
+      "heading": "When I'm free",
+      "lead": "Open dates are first come, first served. Pick a date that works and send it through the quote form — I'll confirm by email.",
+      "openLabel": "Available",
+      "bookedLabel": "Booked",
+      "button": "Request a date",
+      "buttonLink": "#quote"
+    },
+    {
       "id": "quote",
       "type": "quote",
       "visible": true,

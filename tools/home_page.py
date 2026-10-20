@@ -22,11 +22,13 @@ from string import Template
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HOME = os.path.join(ROOT, "data", "home.json")
+AVAIL = os.path.join(ROOT, "data", "availability.json")
 INDEX = os.path.join(ROOT, "index.html")
 THEME_CSS = os.path.join(ROOT, "css", "theme.css")
 
 # Sections that carry a "01 — About" style number, counted in page order.
-NUMBERED = ("about", "work", "services", "quote", "reviews", "faq", "contact")
+NUMBERED = ("about", "work", "services", "availability", "quote", "reviews",
+            "faq", "contact")
 
 FONTS = {
     "oswald": '"Oswald", "Helvetica Neue Condensed", "Arial Narrow", sans-serif',
@@ -126,6 +128,13 @@ def default_home(photos):
              "area": "Based in Metro Detroit. I regularly shoot in Detroit, Birmingham, Bloomfield "
                      "Hills, Beverly Hills, Royal Oak, Troy, Southfield, Grosse Pointe and Dearborn, "
                      "across Oakland, Wayne and Macomb counties, and anywhere else in Michigan on request."},
+            {"id": "availability", "type": "availability", "visible": True,
+             "label": "Availability", "aside": "Booking now",
+             "heading": "When I'm free",
+             "lead": "Open dates are first come, first served. Pick a date that "
+                     "works and send it through the quote form — I'll confirm by email.",
+             "openLabel": "Available", "bookedLabel": "Booked",
+             "button": "Request a date", "buttonLink": "#quote"},
             {"id": "quote", "type": "quote", "visible": True, "label": "Get a quote",
              "aside": "Free · no obligation", "heading": "Get a quote for your shoot",
              "intro": "There are no set prices. Every shoot is different, so tell me what you're "
@@ -559,8 +568,74 @@ def r_cta(s, ctx):
             % (esc(href(s["link"])), esc(s["text"]), ctx["count"]))
 
 
+
+def load_availability():
+    """Public availability: dates only.
+
+    data/bookings.json is deliberately NOT read here. That file carries
+    athletes' names and their parents' phone numbers, it is gitignored,
+    and Publish refuses to run while it is not. Studio copies the bare
+    dates across into this file; nothing identifying ever reaches the
+    page.
+    """
+    try:
+        with open(AVAIL, encoding="utf-8") as f:
+            d = json.load(f)
+    except (IOError, ValueError):
+        d = {}
+    def dates(key):
+        return sorted({x for x in (d.get(key) or [])
+                       if isinstance(x, str) and re.match(r"^\d{4}-\d{2}-\d{2}$", x)})
+
+    # A standing weekly pattern with per-date exceptions, rather than a
+    # list of every booked day: school nights are booked by default and
+    # stay that way without anyone maintaining a list.
+    weekly = d.get("weeklyBooked")
+    if not isinstance(weekly, list):
+        weekly = [1, 2, 3, 4, 5]
+    weekly = sorted({n for n in weekly if isinstance(n, int) and 0 <= n <= 6})
+    try:
+        months = max(1, min(6, int(d.get("months", 2))))
+    except (TypeError, ValueError):
+        months = 2
+    return {"months": months, "weeklyBooked": weekly,
+            "booked": dates("booked"), "open": dates("open"),
+            "note": str(d.get("note", "") or "")}
+
+
+def r_availability(s, ctx):
+    a = load_availability()
+    # The grid is built by main.js against the real today. Baking it in
+    # would freeze "today" at build time, and the calendar would quietly
+    # start showing last month the moment a week went by without a
+    # rebuild. The heading and legend stay in the HTML so the section
+    # still says something with scripts off.
+    blob = json.dumps({"months": a["months"], "weeklyBooked": a["weeklyBooked"],
+                       "booked": a["booked"], "open": a["open"],
+                       "openLabel": s["openLabel"], "bookedLabel": s["bookedLabel"]},
+                      separators=(",", ":")).replace("</", "<\\/")
+    note = ('<p class="avail__note mono">%s</p>' % esc(a["note"])) if a["note"] else ""
+    btn = ('<a class="quote-btn avail__cta" href="%s">%s</a>'
+           % (esc(href(s["buttonLink"])), esc(s["button"]))) if s["button"] else ""
+    return ('<section class="avail reveal" id="availability" data-section="availability">'
+            '%s<h2 class="section__title">%s</h2>'
+            '<div class="avail__grid"><div class="avail__side">'
+            '<p class="avail__lead">%s</p>'
+            '<ul class="avail__legend"><li class="avail__key is-open">%s</li>'
+            '<li class="avail__key is-booked">%s</li></ul>%s%s</div>'
+            '<div class="avail__cal" data-availability>'
+            '<p class="avail__fallback mono">Dates load in a moment — or just ask '
+            'for the date you want.</p></div></div>'
+            '<script type="application/json" data-availability-json>%s</script>'
+            '</section>'
+            % (head_html(s["label"], ctx["num"], s["aside"]), esc(s["heading"]),
+               esc(s["lead"]), esc(s["openLabel"]), esc(s["bookedLabel"]),
+               note, btn, blob))
+
+
 RENDER = {"intro": r_intro, "hero": r_hero, "marquee": r_marquee, "about": r_about,
-          "work": r_work, "services": r_services, "quote": r_quote, "reviews": r_reviews,
+          "work": r_work, "services": r_services, "availability": r_availability,
+          "quote": r_quote, "reviews": r_reviews,
           "faq": r_faq, "contact": r_contact, "cta": r_cta}
 
 

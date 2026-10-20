@@ -89,6 +89,43 @@ def save_photos(photos):
 
 
 BOOKINGS = os.path.join(ROOT, "data", "bookings.json")
+AVAILABILITY = os.path.join(ROOT, "data", "availability.json")
+
+
+def load_availability():
+    try:
+        with open(AVAILABILITY, encoding="utf-8") as f:
+            d = json.load(f)
+    except (IOError, ValueError):
+        d = {}
+    def dates(key):
+        return sorted({x for x in (d.get(key) or [])
+                       if isinstance(x, str) and re.match(r"^\d{4}-\d{2}-\d{2}$", x)})
+
+    weekly = d.get("weeklyBooked")
+    if not isinstance(weekly, list):
+        weekly = [1, 2, 3, 4, 5]
+    weekly = sorted({n for n in weekly if isinstance(n, int) and 0 <= n <= 6})
+    try:
+        months = max(1, min(6, int(d.get("months", 2))))
+    except (TypeError, ValueError):
+        months = 2
+    return {"months": months, "weeklyBooked": weekly,
+            "booked": dates("booked"), "open": dates("open"),
+            "note": str(d.get("note", "") or "")}
+
+
+def save_availability(a):
+    """Dates and a note, nothing else.
+
+    Unlike data/bookings.json this file IS published, so nothing
+    identifying may be written into it — no athlete, no school, no
+    contact. A bare date says "that day is taken" and says nothing about
+    whose day it is.
+    """
+    with open(AVAILABILITY, "w", encoding="utf-8") as f:
+        json.dump(a, f, indent=2, ensure_ascii=False)
+        f.write("\n")
 
 BOOKING_STATUS = ("booked", "shot", "delivered", "cancelled")
 
@@ -384,8 +421,12 @@ class StudioHandler(SimpleHTTPRequestHandler):
             return
         if self.path == "/api/manifest":
             photos = load_photos()
+            ledger = sorted({(b.get("date") or "") for b in load_bookings()
+                             if b.get("date") and b.get("status") != "cancelled"})
             self.send_json({"photos": photos, "tags": all_tags(photos),
                             "bookings": load_bookings(),
+                            "availability": load_availability(),
+                            "ledgerDates": ledger,
                             "gameNotes": game_pages.load_notes(),
                             "gamePages": game_pages.pages(photos)})
             return
@@ -403,6 +444,8 @@ class StudioHandler(SimpleHTTPRequestHandler):
                 self.api_home()
             elif self.path == "/api/home/revert":
                 self.api_home_revert()
+            elif self.path == "/api/availability":
+                self.api_availability()
             elif self.path == "/api/booking":
                 self.api_booking()
             elif self.path == "/api/game":
@@ -496,6 +539,31 @@ class StudioHandler(SimpleHTTPRequestHandler):
         home = home_page.build(load_photos(), json.loads(r.stdout))
         stamp_assets()
         self.send_json({"ok": True, "home": home})
+
+    def api_availability(self):
+        """Save which dates show as booked on the public calendar."""
+        body = self.read_body()
+        cur = load_availability()
+        for key in ("booked", "open"):
+            v = body.get(key)
+            if isinstance(v, list):
+                cur[key] = sorted({x for x in v if isinstance(x, str)
+                                   and re.match(r"^\d{4}-\d{2}-\d{2}$", x)})
+        w = body.get("weeklyBooked")
+        if isinstance(w, list):
+            cur["weeklyBooked"] = sorted({n for n in w
+                                          if isinstance(n, int) and 0 <= n <= 6})
+        if "note" in body:
+            cur["note"] = str(body.get("note") or "")
+        if "months" in body:
+            try:
+                cur["months"] = max(1, min(6, int(body["months"])))
+            except (TypeError, ValueError):
+                pass
+        save_availability(cur)
+        home_page.build(load_photos())   # the page carries the dates inline
+        stamp_assets()                   # build() writes bare src=, re-stamp
+        self.send_json({"ok": True, "availability": cur})
 
     def api_booking(self):
         """Add, edit or drop one booking. Nothing here reaches the site."""
@@ -645,6 +713,27 @@ header{display:flex;justify-content:space-between;align-items:baseline;
   flex-wrap:wrap;gap:1rem;padding:1.4rem 0;border-bottom:1px solid var(--line)}
 header h1{font-size:.9rem;font-weight:600;letter-spacing:.32em;text-transform:uppercase}
 header nav{display:flex;gap:1.5rem;align-items:baseline}
+.cal-bar{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin:1rem 0}
+.cal-bar label{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.cal-note-wrap{display:block;margin-bottom:1.25rem;max-width:46rem}
+.cal-note-wrap input{width:100%;margin-top:.35rem;background:#111;
+       border:1px solid var(--line);border-radius:8px;color:var(--ink);
+       font:inherit;padding:.5rem .7rem}
+.cal-months{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+       gap:1.6rem}
+.cal-m h3{margin:0 0 .6rem;font-size:.95rem}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-dow{text-align:center;font-size:.62rem;opacity:.5;padding-bottom:.25rem}
+.cal-pad{aspect-ratio:1}
+.cal-d{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;
+       justify-content:center;gap:1px;border:1px solid var(--line);border-radius:6px;
+       font-size:.78rem;cursor:pointer;background:none;color:inherit;font:inherit;
+       padding:0;line-height:1;overflow:hidden}
+.cal-d small{font-size:.46rem;letter-spacing:.04em;text-transform:uppercase;opacity:.7}
+.cal-d.is-open{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cal-d.is-booked{background:none;opacity:.6}
+.cal-d.is-past{opacity:.18;cursor:default}
+.cal-d.is-set{box-shadow:inset 0 0 0 2px #e8b84a}
 .tabs{display:flex;gap:.4rem;margin:0 0 1.5rem}
 .tab{background:none;border:1px solid var(--line);color:var(--dim);
      border-radius:999px;padding:.5rem 1.1rem;cursor:pointer;font:inherit;
@@ -858,6 +947,7 @@ body.is-wide{padding-bottom:2rem}
   <button class="tab is-on" data-panel="panel-photos">Photos</button>
   <button class="tab" data-panel="panel-home">Home page</button>
   <button class="tab" data-panel="panel-games">Games</button>
+  <button class="tab" data-panel="panel-calendar">Calendar</button>
   <button class="tab" data-panel="panel-bookings">Bookings</button>
 </div>
 
@@ -879,6 +969,29 @@ body.is-wide{padding-bottom:2rem}
     every photograph in it, and the name shows on the portfolio. Removing a
     photograph here takes it off the whole site.</p>
   <div id="sh-games"></div>
+</section>
+
+<section id="panel-calendar" hidden>
+  <h2>Availability</h2>
+  <p class="mono hint">This is the calendar on the home page. Monday to Friday
+    are booked by default and the weekend is open — click any day to flip just
+    that one. Only dates are published: never a name, a school or a number.</p>
+
+  <div class="cal-bar">
+    <label class="mono">Booked every week on
+      <span id="cal-week"></span>
+    </label>
+    <button class="btn" id="cal-pull" type="button">Mark my booked dates</button>
+    <button class="btn" id="cal-reset" type="button">Clear my changes</button>
+    <button class="btn btn--go" id="cal-save" type="button">Save calendar</button>
+    <span class="status mono" id="cal-status"></span>
+  </div>
+
+  <label class="mono cal-note-wrap">Note under the calendar
+    <input type="text" id="cal-note" placeholder="Optional line shown beside the months">
+  </label>
+
+  <div id="cal-months" class="cal-months"></div>
 </section>
 
 <section id="panel-bookings" hidden>
@@ -1143,6 +1256,7 @@ function loadLibrary() {
   fetch("/api/manifest").then(function (r) { return r.json(); }).then(function (data) {
     KNOWN_TAGS = data.tags;
     renderBookings(data.bookings || []);
+    initCalendar(data.availability, data.ledgerDates);
     renderGames(data.photos, data.gameNotes || {}, data.gamePages || {});
     var lib = document.getElementById("library");
     lib.innerHTML = "";
@@ -1196,6 +1310,159 @@ function api(path, body) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body)
   }).then(function (r) { return r.json(); });
+}
+
+/* ---------- availability calendar ---------- */
+
+/* Mirrors the resolution the page does: a weekly default, flipped per
+   date. Clicking a day that already matches the weekly default removes
+   the override instead of adding a redundant one, so the saved file
+   stays as small as the number of real exceptions. */
+var CAL = null, CAL_LEDGER = [];
+var DOW_NAME = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+var CAL_MONTHS = ["January","February","March","April","May","June","July",
+                  "August","September","October","November","December"];
+
+function calKey(y, m, d) {
+  return y + "-" + String(m + 1).padStart(2, "0") + "-" + String(d).padStart(2, "0");
+}
+
+function calBooked(k, dow) {
+  if (CAL.open.indexOf(k) > -1) return false;
+  if (CAL.booked.indexOf(k) > -1) return true;
+  return CAL.weeklyBooked.indexOf(dow) > -1;
+}
+
+function calToggle(k, dow) {
+  var def = CAL.weeklyBooked.indexOf(dow) > -1;   /* booked by default? */
+  var now = calBooked(k, dow);
+  var want = !now;
+  CAL.booked = CAL.booked.filter(function (x) { return x !== k; });
+  CAL.open = CAL.open.filter(function (x) { return x !== k; });
+  if (want !== def) (want ? CAL.booked : CAL.open).push(k);
+  renderCalendar();
+}
+
+function renderCalendar() {
+  if (!CAL) return;
+
+  var week = document.getElementById("cal-week");
+  week.innerHTML = "";
+  DOW_NAME.forEach(function (name, i) {
+    var lab = el("label", "mono");
+    lab.style.cssText = "display:inline-flex;gap:.2rem;align-items:center;margin-right:.5rem";
+    var box = el("input");
+    box.type = "checkbox";
+    box.checked = CAL.weeklyBooked.indexOf(i) > -1;
+    box.onchange = function () {
+      CAL.weeklyBooked = CAL.weeklyBooked.filter(function (n) { return n !== i; });
+      if (box.checked) CAL.weeklyBooked.push(i);
+      CAL.weeklyBooked.sort();
+      renderCalendar();
+    };
+    lab.appendChild(box);
+    lab.appendChild(document.createTextNode(name));
+    week.appendChild(lab);
+  });
+
+  var host = document.getElementById("cal-months");
+  host.innerHTML = "";
+  var now = new Date();
+  var today = calKey(now.getFullYear(), now.getMonth(), now.getDate());
+
+  for (var i = 0; i < Math.max(CAL.months, 3); i++) {
+    var when = new Date(now.getFullYear(), now.getMonth() + i, 1);
+    var y = when.getFullYear(), m = when.getMonth();
+    var box = el("div", "cal-m");
+    var h = el("h3", "", CAL_MONTHS[m] + " " + y
+               + (i >= CAL.months ? "  (not shown on the site)" : ""));
+    if (i >= CAL.months) h.style.opacity = ".45";
+    box.appendChild(h);
+
+    var grid = el("div", "cal-grid");
+    ["S","M","T","W","T","F","S"].forEach(function (d) {
+      grid.appendChild(el("span", "cal-dow mono", d));
+    });
+    var lead = new Date(y, m, 1).getDay();
+    for (var b = 0; b < lead; b++) grid.appendChild(el("span", "cal-pad"));
+
+    var last = new Date(y, m + 1, 0).getDate();
+    for (var d = 1; d <= last; d++) {
+      (function (d) {
+        var k = calKey(y, m, d), dow = new Date(y, m, d).getDay();
+        var cell = el("button", "cal-d");
+        cell.type = "button";
+        cell.appendChild(el("b", "", String(d)));
+        if (k < today) {
+          cell.className += " is-past";
+          cell.disabled = true;
+        } else {
+          var bk = calBooked(k, dow);
+          cell.className += bk ? " is-booked" : " is-open";
+          cell.appendChild(el("small", "", bk ? "Booked" : "Open"));
+          if (CAL.booked.indexOf(k) > -1 || CAL.open.indexOf(k) > -1) {
+            cell.className += " is-set";
+            cell.title = "You changed this day";
+          }
+          if (CAL_LEDGER.indexOf(k) > -1) {
+            cell.title = (cell.title ? cell.title + " — " : "") + "you have a booking this day";
+          }
+          cell.onclick = function () { calToggle(k, dow); };
+        }
+        grid.appendChild(cell);
+      })(d);
+    }
+    box.appendChild(grid);
+    host.appendChild(box);
+  }
+}
+
+function initCalendar(avail, ledger) {
+  CAL = avail;
+  CAL_LEDGER = ledger || [];
+  document.getElementById("cal-note").value = CAL.note || "";
+
+  document.getElementById("cal-pull").onclick = function () {
+    /* Only the dates come across. The ledger row behind each one carries
+       the athlete's name and a parent's phone number and stays here. */
+    var added = 0;
+    CAL_LEDGER.forEach(function (k) {
+      var p = k.split("-");
+      var dow = new Date(+p[0], +p[1] - 1, +p[2]).getDay();
+      if (calBooked(k, dow)) return;
+      CAL.open = CAL.open.filter(function (x) { return x !== k; });
+      if (CAL.weeklyBooked.indexOf(dow) === -1) CAL.booked.push(k);
+      added++;
+    });
+    document.getElementById("cal-status").textContent =
+      added ? "Marked " + added + " day" + (added === 1 ? "" : "s") + " booked"
+            : "Every booked date already shows as booked";
+    renderCalendar();
+  };
+
+  document.getElementById("cal-reset").onclick = function () {
+    CAL.booked = []; CAL.open = [];
+    document.getElementById("cal-status").textContent = "Back to the weekly pattern";
+    renderCalendar();
+  };
+
+  document.getElementById("cal-save").onclick = function () {
+    var s = document.getElementById("cal-status");
+    s.textContent = "Saving…"; s.className = "status mono";
+    api("/api/availability", {
+      weeklyBooked: CAL.weeklyBooked, booked: CAL.booked,
+      open: CAL.open, note: document.getElementById("cal-note").value
+    }).then(function (res) {
+      if (!res.ok) throw new Error(res.error || "Could not save");
+      CAL = res.availability;
+      s.textContent = "Saved — press Publish to put it live";
+      renderCalendar();
+    }).catch(function (err) {
+      s.textContent = err.message; s.className = "status is-bad mono";
+    });
+  };
+
+  renderCalendar();
 }
 
 /* ---------- publish ---------- */
@@ -1395,8 +1662,9 @@ document.getElementById("tabs").addEventListener("click", function (e) {
   document.querySelectorAll(".tab").forEach(function (t) {
     t.classList.toggle("is-on", t === b);
   });
-  ["panel-photos", "panel-home", "panel-games", "panel-bookings"].forEach(function (id) {
-    document.getElementById(id).hidden = (id !== b.dataset.panel);
+  document.querySelectorAll("#tabs .tab").forEach(function (t) {
+    var panel = document.getElementById(t.dataset.panel);
+    if (panel) panel.hidden = (t.dataset.panel !== b.dataset.panel);
   });
   document.body.classList.toggle("is-wide", b.dataset.panel === "panel-home");
   if (b.dataset.panel === "panel-home") heInit();

@@ -502,6 +502,100 @@
     return { src: src, title: "", location: "", year: "", tags: [] };
   }
 
+
+  /* ---------- availability calendar ---------- */
+
+  /* Built here rather than baked into the HTML on purpose: the page is
+     pre-rendered, so a server-side grid would freeze "today" at build
+     time and quietly start showing last month a week later. This reads
+     the real clock every load. */
+  function buildAvailability(root) {
+    var host = root.querySelector("[data-availability]");
+    var blob = root.querySelector("[data-availability-json]");
+    if (!host || !blob) return;
+
+    var cfg;
+    try { cfg = JSON.parse(blob.textContent || "{}"); }
+    catch (e) { return; }
+
+    /* A standing weekly pattern, overridden per date. Mon-Fri are booked
+       by default — school nights — so only the exceptions are listed. */
+    var weekly = {};
+    (cfg.weeklyBooked || [1, 2, 3, 4, 5]).forEach(function (n) { weekly[n] = true; });
+    var forceBooked = {}, forceOpen = {};
+    (cfg.booked || []).forEach(function (d) { forceBooked[d] = true; });
+    (cfg.open || []).forEach(function (d) { forceOpen[d] = true; });
+
+    function isBooked(k, dow) {
+      if (forceOpen[k]) return false;
+      if (forceBooked[k]) return true;
+      return !!weekly[dow];
+    }
+
+    var openLabel = cfg.openLabel || "Available";
+    var bookedLabel = cfg.bookedLabel || "Booked";
+
+    /* Local date parts, never toISOString(): that converts to UTC, and
+       east of Greenwich an evening date comes back as the next day. */
+    function key(y, m, d) {
+      return y + "-" + pad2(m + 1) + "-" + pad2(d);
+    }
+
+    var now = new Date();
+    var today = key(now.getFullYear(), now.getMonth(), now.getDate());
+    var MONTHS = ["January", "February", "March", "April", "May", "June",
+                  "July", "August", "September", "October", "November", "December"];
+    var DOW = ["S", "M", "T", "W", "T", "F", "S"];
+
+    host.innerHTML = "";
+    var count = Math.max(1, Math.min(6, cfg.months || 2));
+
+    for (var i = 0; i < count; i++) {
+      var when = new Date(now.getFullYear(), now.getMonth() + i, 1);
+      var y = when.getFullYear(), m = when.getMonth();
+
+      var month = el("div", "avail__month");
+      month.appendChild(el("h3", "avail__mname", MONTHS[m] + " " + y));
+
+      var grid = el("div", "avail__days");
+      DOW.forEach(function (d, j) {
+        var h = el("span", "avail__dow mono", d);
+        h.setAttribute("aria-hidden", "true");
+        h.dataset.i = j;
+        grid.appendChild(h);
+      });
+
+      /* getDay() on the 1st gives the blank cells before it */
+      var lead = new Date(y, m, 1).getDay();
+      for (var b = 0; b < lead; b++) grid.appendChild(el("span", "avail__pad"));
+
+      var last = new Date(y, m + 1, 0).getDate();
+      for (var d = 1; d <= last; d++) {
+        var k = key(y, m, d);
+        var cell = el("span", "avail__day");
+        cell.appendChild(el("b", "avail__num", String(d)));
+
+        if (k < today) {
+          cell.className += " is-past";
+          cell.setAttribute("aria-label", MONTHS[m] + " " + d + " — past");
+        } else if (isBooked(k, new Date(y, m, d).getDay())) {
+          cell.className += " is-booked";
+          cell.appendChild(el("span", "avail__state", bookedLabel));
+          cell.setAttribute("aria-label", MONTHS[m] + " " + d + " — " + bookedLabel);
+        } else {
+          cell.className += " is-open";
+          cell.appendChild(el("span", "avail__state", openLabel));
+          cell.setAttribute("aria-label", MONTHS[m] + " " + d + " — " + openLabel);
+        }
+        if (k === today) cell.className += " is-today";
+        grid.appendChild(cell);
+      }
+
+      month.appendChild(grid);
+      host.appendChild(month);
+    }
+  }
+
   function initHome() {
     var root = document.getElementById("about-root");
 
@@ -525,6 +619,8 @@
     root.querySelectorAll("[data-photo-count]").forEach(function (n) {
       if (PHOTOS.length) n.textContent = nPhotos(PHOTOS.length);
     });
+
+    buildAvailability(root);
 
     var reviews = root.querySelector("[data-reviews]");
     if (reviews) buildReviews(reviews.closest("section"), reviews);

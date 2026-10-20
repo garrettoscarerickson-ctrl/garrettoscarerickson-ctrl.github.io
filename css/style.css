@@ -1477,6 +1477,166 @@ a.service:hover .service__go { color: var(--ink); }
   .quote__fields { grid-template-columns: minmax(0, 1fr); }
 }
 
+/* ---------- availability calendar ---------- */
+
+/* Shares the padding and hairline of the other lower-page sections. */
+.avail {
+  padding: clamp(4.5rem, 12vh, 8rem) var(--pad);
+  border-bottom: 1px solid var(--hairline-soft);
+}
+
+.avail__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+
+.avail__lead {
+  max-width: 48ch;
+  color: var(--ink-dim);
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.avail__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.avail__key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.avail__key::before {
+  content: "";
+  width: 0.72rem;
+  height: 0.72rem;
+  border-radius: 3px;
+  flex: none;
+}
+
+.avail__key.is-open::before {
+  background: var(--ink);
+}
+
+.avail__key.is-booked::before {
+  background: transparent;
+  border: 1px solid var(--hairline);
+}
+
+.avail__note {
+  margin-top: 1.1rem;
+  color: var(--ink-dim);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  max-width: 42ch;
+}
+
+.avail__cta { margin-top: 1.75rem; }
+
+.avail__cal {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.avail__fallback { color: var(--ink-dim); }
+
+.avail__mname {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  margin: 0 0 0.9rem;
+}
+
+.avail__days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.avail__dow {
+  text-align: center;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-dim);
+  padding-bottom: 0.35rem;
+}
+
+.avail__pad { aspect-ratio: 1; }
+
+.avail__day {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline-soft);
+  font-size: 0.85rem;
+  line-height: 1;
+  overflow: hidden;
+}
+
+.avail__num { font-weight: 700; }
+
+/* The state reads out in full where there is room. Below that the colour
+   and the legend carry it, and the label stays in aria-label so a screen
+   reader still hears "October 24 — Booked". */
+.avail__state {
+  font-family: var(--font-ui);
+  font-size: 0.52rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.avail__day.is-open {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+.avail__day.is-booked {
+  background: transparent;
+  color: var(--ink-dim);
+}
+
+.avail__day.is-past {
+  border-color: transparent;
+  color: var(--ink-dim);
+  opacity: 0.3;
+}
+
+.avail__day.is-today {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+@media (max-width: 900px) {
+  .avail__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 420px) {
+  .avail__state { display: none; }
+  .avail__day { font-size: 0.78rem; }
+}
+
 /* ---------- lightbox rating ---------- */
 
 .lb-rate { display: inline-flex; align-items: center; gap: 0.1rem; }
