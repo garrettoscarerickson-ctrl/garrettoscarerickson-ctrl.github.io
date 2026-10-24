@@ -5,6 +5,630 @@
 
 window.PHOTOS = [
   {
+    "src": "images/fgr-01.jpg",
+    "title": "Varsity Football vs Gabriel Richard 01",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-02.jpg",
+    "title": "Varsity Football vs Gabriel Richard 02",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-03.jpg",
+    "title": "Varsity Football vs Gabriel Richard 03",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-04.jpg",
+    "title": "Varsity Football vs Gabriel Richard 04",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-05.jpg",
+    "title": "Varsity Football vs Gabriel Richard 05",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-06.jpg",
+    "title": "Varsity Football vs Gabriel Richard 06",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-07.jpg",
+    "title": "Varsity Football vs Gabriel Richard 07",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-08.jpg",
+    "title": "Varsity Football vs Gabriel Richard 08",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-09.jpg",
+    "title": "Varsity Football vs Gabriel Richard 09",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-10.jpg",
+    "title": "Varsity Football vs Gabriel Richard 10",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-11.jpg",
+    "title": "Varsity Football vs Gabriel Richard 11",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-12.jpg",
+    "title": "Varsity Football vs Gabriel Richard 12",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-13.jpg",
+    "title": "Varsity Football vs Gabriel Richard 13",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-14.jpg",
+    "title": "Varsity Football vs Gabriel Richard 14",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-15.jpg",
+    "title": "Varsity Football vs Gabriel Richard 15",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-16.jpg",
+    "title": "Varsity Football vs Gabriel Richard 16",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-17.jpg",
+    "title": "Varsity Football vs Gabriel Richard 17",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-18.jpg",
+    "title": "Varsity Football vs Gabriel Richard 18",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-19.jpg",
+    "title": "Varsity Football vs Gabriel Richard 19",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-20.jpg",
+    "title": "Varsity Football vs Gabriel Richard 20",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-21.jpg",
+    "title": "Varsity Football vs Gabriel Richard 21",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 2400,
+    "h": 1800,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-22.jpg",
+    "title": "Varsity Football vs Gabriel Richard 22",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-23.jpg",
+    "title": "Varsity Football vs Gabriel Richard 23",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-24.jpg",
+    "title": "Varsity Football vs Gabriel Richard 24",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-25.jpg",
+    "title": "Varsity Football vs Gabriel Richard 25",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-26.jpg",
+    "title": "Varsity Football vs Gabriel Richard 26",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-27.jpg",
+    "title": "Varsity Football vs Gabriel Richard 27",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-28.jpg",
+    "title": "Varsity Football vs Gabriel Richard 28",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-29.jpg",
+    "title": "Varsity Football vs Gabriel Richard 29",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-30.jpg",
+    "title": "Varsity Football vs Gabriel Richard 30",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-31.jpg",
+    "title": "Varsity Football vs Gabriel Richard 31",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-32.jpg",
+    "title": "Varsity Football vs Gabriel Richard 32",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-33.jpg",
+    "title": "Varsity Football vs Gabriel Richard 33",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-34.jpg",
+    "title": "Varsity Football vs Gabriel Richard 34",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-35.jpg",
+    "title": "Varsity Football vs Gabriel Richard 35",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-36.jpg",
+    "title": "Varsity Football vs Gabriel Richard 36",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-37.jpg",
+    "title": "Varsity Football vs Gabriel Richard 37",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-38.jpg",
+    "title": "Varsity Football vs Gabriel Richard 38",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
+    "src": "images/fgr-39.jpg",
+    "title": "Varsity Football vs Gabriel Richard 39",
+    "location": "Ann Arbor, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Father Gabriel Richard"
+  },
+  {
     "src": "images/cassking-01.jpg",
     "title": "Cass Tech vs King 01",
     "location": "Ford Field, Detroit, Michigan",

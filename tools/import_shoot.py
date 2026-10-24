@@ -75,6 +75,12 @@ FORD_FIELD = "Ford Field, Detroit, Michigan"
 FF = "CD,Denby,Cass,King FF Finals"
 
 GAMES = {
+    "DCDS VS FGR FINALS": {
+        "game": "DCDS Varsity Football vs Father Gabriel Richard",
+        "slug": "fgr", "title": "Varsity Football vs Gabriel Richard",
+        "tags": FOOTBALL, "location": "Ann Arbor, Michigan",
+        "date": "2026-10-23"},
+
     # one green folder, two PSL title games at Ford Field - a subfolder each
     FF + "/Cass Vs King": {
         "game": "Cass Tech vs King — PSL Championship at Ford Field",
