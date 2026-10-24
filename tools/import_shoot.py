@@ -75,6 +75,12 @@ FORD_FIELD = "Ford Field, Detroit, Michigan"
 FF = "CD,Denby,Cass,King FF Finals"
 
 GAMES = {
+    "Lawrenc Tech FInals": {
+        "game": "Lawrence Tech Football vs Saint Francis",
+        "slug": "ltu", "title": "Lawrence Tech vs Saint Francis",
+        "tags": FOOTBALL, "location": "Southfield, Michigan",
+        "date": "2026-10-24"},
+
     "DCDS VS FGR FINALS": {
         "game": "DCDS Varsity Football vs Father Gabriel Richard",
         "slug": "fgr", "title": "Varsity Football vs Gabriel Richard",
