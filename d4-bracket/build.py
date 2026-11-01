@@ -117,27 +117,12 @@ el('lbl',{left:'20px',top:(TOP-36)+'px'},'REGION 1');el('lbl',{left:'20px',top:(
 el('lbl',{right:'20px',top:(TOP-36)+'px'},'REGION 3');el('lbl',{right:'20px',top:(TOP+4*PAIR+18-36)+'px'},'REGION 4');
 el('foot',{},'FIRST ROUND FINAL &middot; DISTRICT FINALS NOV. 6 &middot; STATE FINAL AT FORD FIELD');
 // trophy (SVG, pixel-ish wooden Michigan plaque)
-document.getElementById('trophy').outerHTML=`<svg width="250" height="440" viewBox="0 0 300 528" style="left:675px;top:222px" shape-rendering="crispEdges">
- <defs><pattern id="wood" width="40" height="12" patternUnits="userSpaceOnUse"><rect width="40" height="12" fill="#a8652e"/><rect y="3" width="26" height="3" fill="#8f5222"/><rect x="18" y="9" width="22" height="2" fill="#bb7740"/></pattern></defs>
- <!-- plaque -->
- <polygon points="70,40 230,40 250,470 50,470" fill="#1a1a1a" stroke="#111" stroke-width="6"/>
- <!-- lower peninsula mitten -->
- <path d="M150,105 L172,96 L190,112 L196,140 L212,150 L226,188 L222,232 L212,262 L232,248 L244,270 L240,320 L226,372 L200,400 L120,404 L110,360 L96,318 L100,270 L110,232 L120,196 L130,160 L138,128 Z" fill="url(#wood)" stroke="#5a3010" stroke-width="5"/>
- <!-- upper peninsula -->
- <path d="M58,96 L96,74 L140,70 L170,58 L210,66 L196,82 L160,86 L128,96 L98,100 L76,114 Z" fill="url(#wood)" stroke="#5a3010" stroke-width="5"/>
- <text x="150" y="58" text-anchor="middle" font-family="Silk" font-size="22" fill="#ffd447">2026</text>
- <text x="150" y="210" text-anchor="middle" font-family="Silk" font-size="17" fill="#ffd447">CHAMPION</text>
- <!-- pixel football -->
- <g transform="translate(130,236)"><rect x="8" y="0" width="24" height="4" fill="#5b2c0d"/><rect x="2" y="4" width="36" height="4" fill="#6e3611"/><rect x="0" y="8" width="40" height="8" fill="#6e3611"/><rect x="2" y="16" width="36" height="4" fill="#6e3611"/><rect x="8" y="20" width="24" height="4" fill="#5b2c0d"/><rect x="10" y="11" width="20" height="2" fill="#fff"/><rect x="13" y="8" width="2" height="8" fill="#fff"/><rect x="19" y="8" width="2" height="8" fill="#fff"/><rect x="25" y="8" width="2" height="8" fill="#fff"/></g>
- <text x="150" y="300" text-anchor="middle" font-family="Silk" font-size="15" fill="#3b1c06">MHSAA</text>
- <text x="150" y="430" text-anchor="middle" font-family="Pix" font-size="44" fill="#ffd447">Football</text>
- <text x="150" y="456" text-anchor="middle" font-family="Silk" font-size="13" fill="#fff">DIVISION 4</text>
- <!-- base -->
- <rect x="30" y="470" width="240" height="26" fill="#b5733a" stroke="#111" stroke-width="5"/>
- <rect x="10" y="494" width="280" height="30" fill="#8f5222" stroke="#111" stroke-width="5"/>
-</svg>`;
+document.getElementById('trophy').outerHTML=`<div style="position:absolute;left:656px;top:250px;width:288px;height:376px">
+ <img src="data:image/png;base64,__TROPHY__" width="288" height="376" style="image-rendering:pixelated;display:block">
+ <div style="position:absolute;left:0;right:0;top:311px;text-align:center;font:400 11px/1 Silk;color:#fff">DIVISION 4</div></div>`;
 </script></body></html>"""
-html = (html.replace("__SILK__", silk).replace("__PIX__", pix)
+trophy = base64.b64encode(open("trophy_px.png", "rb").read()).decode()
+html = (html.replace("__TROPHY__", trophy).replace("__SILK__", silk).replace("__PIX__", pix)
         .replace("__LEFT__", json.dumps(LEFT)).replace("__RIGHT__", json.dumps(RIGHT)))
 (OUT / "division4-bracket.html").write_text(html)
 
