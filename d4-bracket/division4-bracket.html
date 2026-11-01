@@ -14,13 +14,18 @@ html,body{margin:0;background:#111}
 .title h2{margin:14px 0 0;font:400 24px/1 Silk;letter-spacing:0;color:#111}
 svg{position:absolute;left:0;top:0}
 .card{position:absolute;display:flex;align-items:center;border:4px solid #111;box-sizing:border-box;
-  font:400 35px/1 Pix;letter-spacing:.5px;text-shadow:2px 2px 0 rgba(0,0,0,.35);white-space:nowrap;overflow:hidden}
+  font:400 33px/1 Pix;letter-spacing:0;text-shadow:2px 2px 0 rgba(0,0,0,.35);white-space:nowrap;overflow:hidden}
 .card.light{text-shadow:none}
 .card .logo{flex:none;width:58px;height:100%;display:flex;align-items:center;justify-content:center;
   font:400 15px/1 Silk;border-right:4px solid #111;box-sizing:border-box}
-.card .nm{padding:0 12px;flex:1}
+.card .nm{padding:0 10px;flex:1;overflow:hidden}
 .right .logo{order:2;border-right:none;border-left:4px solid #111}
 .right .nm{text-align:right}
+.card .sc{flex:none;width:58px;height:100%;display:flex;align-items:center;justify-content:center;background:#111;color:#fff;font:400 18px/1 Silk;text-shadow:none}
+.right .sc{order:-1}
+.card.lost{filter:grayscale(.85) brightness(.62)}
+.card.lost .nm{text-decoration:line-through;text-decoration-thickness:3px}
+.q.win{font:400 15px/42px Silk;text-shadow:none;box-shadow:inset 0 -6px 0 rgba(0,0,0,.25), inset 0 4px 0 rgba(255,255,255,.25)}
 .q{position:absolute;width:58px;height:50px;background:#7d8494;border:4px solid #111;box-sizing:border-box;
   box-shadow:inset 0 -6px 0 #5d6372, inset 0 4px 0 #a2a9b8;color:#fff;font:400 24px/42px Silk;text-align:center;
   text-shadow:3px 3px 0 #333}
@@ -35,9 +40,9 @@ svg{position:absolute;left:0;top:0}
 <div id="trophy"></div>
 </div>
 <script>
-const LEFT=[{"n": "KENOWA HILLS", "m": "KH", "bg": "#4b2a83", "fg": "#ffd447"}, {"n": "GR CHRISTIAN", "m": "GC", "bg": "#7a1f2b", "fg": "#fff"}, {"n": "TBD", "m": "?", "bg": "#8a8f99", "fg": "#fff"}, {"n": "TBD", "m": "?", "bg": "#8a8f99", "fg": "#fff"}, {"n": "FH EASTERN", "m": "FE", "bg": "#1b1b1f", "fg": "#ff4b4b"}, {"n": "BIG RAPIDS", "m": "BR", "bg": "#c8102e", "fg": "#fff"}, {"n": "UNITY CHRISTIAN", "m": "UC", "bg": "#13294b", "fg": "#fff"}, {"n": "SPRING LAKE", "m": "SL", "bg": "#f4f6fa", "fg": "#1d3c8f"}, {"n": "EDWARDSBURG", "m": "E", "bg": "#f47b20", "fg": "#111"}, {"n": "VICKSBURG", "m": "V", "bg": "#b3121b", "fg": "#fff"}, {"n": "PORTLAND", "m": "P", "bg": "#f4f6fa", "fg": "#c8102e"}, {"n": "PAW PAW", "m": "PP", "bg": "#9b1b1f", "fg": "#fff"}, {"n": "SOUTH CHRISTIAN", "m": "SC", "bg": "#1d4f9c", "fg": "#fff"}, {"n": "MARSHALL", "m": "M", "bg": "#c8102e", "fg": "#fff"}, {"n": "HASTINGS", "m": "H", "bg": "#003a8c", "fg": "#ffd447"}, {"n": "LAKESHORE", "m": "L", "bg": "#f4f6fa", "fg": "#13294b"}], RIGHT=[{"n": "GOODRICH", "m": "G", "bg": "#0f6b37", "fg": "#fff"}, {"n": "WILLIAMSTON", "m": "W", "bg": "#f47b20", "fg": "#111"}, {"n": "ST. JOHNS", "m": "SJ", "bg": "#f4f6fa", "fg": "#c8102e"}, {"n": "BRANDON", "m": "B", "bg": "#1b1b1f", "fg": "#ff4b4b"}, {"n": "DIVINE CHILD", "m": "DC", "bg": "#003a8c", "fg": "#ffd447"}, {"n": "LANSING SEXTON", "m": "S", "bg": "#b3121b", "fg": "#fff"}, {"n": "TBD", "m": "?", "bg": "#8a8f99", "fg": "#fff"}, {"n": "TBD", "m": "?", "bg": "#8a8f99", "fg": "#fff"}, {"n": "EAST ENGLISH", "m": "EE", "bg": "#1d3c8f", "fg": "#ffd447"}, {"n": "LUTHERAN NORTH", "m": "LN", "bg": "#f4f6fa", "fg": "#13294b"}, {"n": "MARYSVILLE", "m": "MV", "bg": "#4b2a83", "fg": "#fff"}, {"n": "SOUTHEASTERN", "m": "SE", "bg": "#f47b20", "fg": "#111"}, {"n": "DETROIT CODY", "m": "C", "bg": "#7a1f2b", "fg": "#ffd447"}, {"n": "ST. CLAIR", "m": "SC", "bg": "#f4f6fa", "fg": "#13294b"}, {"n": "COUNTRY DAY", "m": "CD", "bg": "#ffd200", "fg": "#111"}, {"n": "LAMPHERE", "m": "L", "bg": "#1d4f9c", "fg": "#fff"}];
+const LEFT=[{"n": "KENOWA HILLS", "m": "KH", "bg": "#4b2a83", "fg": "#ffd447", "s": 49}, {"n": "GR CHRISTIAN", "m": "GC", "bg": "#7a1f2b", "fg": "#fff", "s": 35}, {"n": "LUDINGTON", "m": "LU", "bg": "#f47b20", "fg": "#111", "s": 19}, {"n": "FRUITPORT", "m": "F", "bg": "#13294b", "fg": "#ff4b4b", "s": 15}, {"n": "FH EASTERN", "m": "FE", "bg": "#1b1b1f", "fg": "#ff4b4b", "s": 33}, {"n": "BIG RAPIDS", "m": "BR", "bg": "#c8102e", "fg": "#fff", "s": 12}, {"n": "UNITY CHRISTIAN", "m": "UC", "bg": "#13294b", "fg": "#fff", "s": 46}, {"n": "SPRING LAKE", "m": "SL", "bg": "#f4f6fa", "fg": "#1d3c8f", "s": 18}, {"n": "EDWARDSBURG", "m": "E", "bg": "#f47b20", "fg": "#111", "s": 27}, {"n": "VICKSBURG", "m": "V", "bg": "#b3121b", "fg": "#fff", "s": 14}, {"n": "PORTLAND", "m": "P", "bg": "#f4f6fa", "fg": "#c8102e", "s": 22}, {"n": "PAW PAW", "m": "PP", "bg": "#9b1b1f", "fg": "#fff", "s": 13}, {"n": "SOUTH CHRISTIAN", "m": "SC", "bg": "#1d4f9c", "fg": "#fff", "s": 63}, {"n": "MARSHALL", "m": "M", "bg": "#c8102e", "fg": "#fff", "s": 27}, {"n": "LAKESHORE", "m": "L", "bg": "#f4f6fa", "fg": "#13294b", "s": 49}, {"n": "HASTINGS", "m": "H", "bg": "#003a8c", "fg": "#ffd447", "s": 44}], RIGHT=[{"n": "GOODRICH", "m": "G", "bg": "#0f6b37", "fg": "#fff", "s": 45}, {"n": "WILLIAMSTON", "m": "W", "bg": "#f47b20", "fg": "#111", "s": 6}, {"n": "ST. JOHNS", "m": "SJ", "bg": "#f4f6fa", "fg": "#c8102e", "s": 49}, {"n": "BRANDON", "m": "B", "bg": "#1b1b1f", "fg": "#ff4b4b", "s": 21}, {"n": "DIVINE CHILD", "m": "DC", "bg": "#003a8c", "fg": "#ffd447", "s": 45}, {"n": "LANSING SEXTON", "m": "S", "bg": "#b3121b", "fg": "#fff", "s": 27}, {"n": "ADRIAN", "m": "A", "bg": "#6d1a36", "fg": "#ffd447", "s": 65}, {"n": "TECUMSEH", "m": "T", "bg": "#1b1b1f", "fg": "#ff4b4b", "s": 27}, {"n": "EAST ENGLISH", "m": "EE", "bg": "#1d3c8f", "fg": "#ffd447", "s": 22}, {"n": "LUTHERAN NORTH", "m": "LN", "bg": "#f4f6fa", "fg": "#13294b", "s": 36}, {"n": "MARYSVILLE", "m": "MV", "bg": "#4b2a83", "fg": "#fff", "s": 44}, {"n": "SOUTHEASTERN", "m": "SE", "bg": "#f47b20", "fg": "#111", "s": 24}, {"n": "DETROIT CODY", "m": "C", "bg": "#7a1f2b", "fg": "#ffd447", "s": 16}, {"n": "ST. CLAIR", "m": "SC", "bg": "#f4f6fa", "fg": "#13294b", "s": 41}, {"n": "COUNTRY DAY", "m": "CD", "bg": "#ffd200", "fg": "#111", "s": 24}, {"n": "LAMPHERE", "m": "L", "bg": "#1d4f9c", "fg": "#fff", "s": 0}];
 const C=document.getElementById('c'), S=document.getElementById('lines');
-const W=1600, TOP=205, PAIR=128, CARD_H=50, CARD_W=300, BOX_W=58, BOX_H=50;
+const W=1600, TOP=205, PAIR=128, CARD_H=50, CARD_W=332, BOX_W=58, BOX_H=50;
 const LINE='#d9ecff', EDGE='#0b2a66';
 function el(cls,css,html){const d=document.createElement('div');d.className=cls;Object.assign(d.style,css);if(html!=null)d.innerHTML=html;C.appendChild(d);return d}
 function seg(x1,y1,x2,y2){for(const [c,w] of [[EDGE,10],[LINE,5]]){const l=document.createElementNS('http://www.w3.org/2000/svg','line');
@@ -50,17 +55,17 @@ function side(teams,dir){
   const right=dir<0, x0=right?W-20-CARD_W:20;
   const edge=right?x0:x0+CARD_W;
   // round x centers
-  const rx=[1,2,3,4].map(i=>right? edge-28-i*82+BOX_W/2 - 0 : edge+28+i*82-BOX_W/2);
+  const rx=[1,2,3,4].map(i=>right? edge-28-i*74+BOX_W/2 - 0 : edge+28+i*74-BOX_W/2);
   let ys=[];
   for(let p=0;p<8;p++){
     const y=TOP+p*PAIR + (p>=4?18:0);
-    const pairYs=[];
+    const pairYs=[];const a=teams[p*2],b=teams[p*2+1];const w=a.s>b.s?a:b;
     for(let k=0;k<2;k++){const t=teams[p*2+k];const light=t.bg=='#f4f6fa'||t.bg=='#ffd200'||t.bg=='#f47b20';
       const cy=y+k*(CARD_H+4);
-      const d=el('card'+(right?' right':'')+(light?' light':''),{left:x0+'px',top:cy+'px',width:CARD_W+'px',height:CARD_H+'px',background:t.bg,color:t.fg},
-        `<span class="logo" style="background:${t.fg};color:${t.bg}">${t.m}</span><span class="nm">${t.n}</span>`);
+      const d=el('card'+(right?' right':'')+(light?' light':'')+(t===w?'':' lost'),{left:x0+'px',top:cy+'px',width:CARD_W+'px',height:CARD_H+'px',background:t.bg,color:t.fg},
+        `<span class="logo" style="background:${t.fg};color:${t.bg}">${t.m}</span><span class="nm">${t.n}</span><span class="sc">${t.s}</span>`);
       pairYs.push(cy+CARD_H/2);}
-    const py=(pairYs[0]+pairYs[1])/2; join(edge,pairYs,rx[0]-dir*BOX_W/2,py,dir); box(rx[0],py); ys.push(py);
+    const py=(pairYs[0]+pairYs[1])/2; join(edge,pairYs,rx[0]-dir*BOX_W/2,py,dir); const wb=box(rx[0],py); wb.classList.add('win'); wb.textContent=w.m; wb.style.background=w.bg; wb.style.color=w.fg; ys.push(py);
   }
   for(let r=1;r<4;r++){const nys=[];for(let i=0;i<ys.length;i+=2){const py=(ys[i]+ys[i+1])/2;
     join(rx[r-1]+dir*BOX_W/2,[ys[i],ys[i+1]],rx[r]-dir*BOX_W/2,py,dir);box(rx[r],py);nys.push(py)}ys=nys}
@@ -77,7 +82,7 @@ seg(R.x,R.y,cx+110,R.y); seg(cx+110,cy2,cx+110,R.y); seg(cx+110,cy2,cx+66,cy2);
 el('champ',{top:'1050px'},'STATE<br>CHAMPIONSHIP');
 el('lbl',{left:'20px',top:(TOP-36)+'px'},'REGION 1');el('lbl',{left:'20px',top:(TOP+4*PAIR+18-36)+'px'},'REGION 2');
 el('lbl',{right:'20px',top:(TOP-36)+'px'},'REGION 3');el('lbl',{right:'20px',top:(TOP+4*PAIR+18-36)+'px'},'REGION 4');
-el('foot',{},'FORD FIELD &middot; DIVISION 4 FINAL &middot; 2026');
+el('foot',{},'FIRST ROUND FINAL &middot; DISTRICT FINALS NOV. 6 &middot; STATE FINAL AT FORD FIELD');
 // trophy (SVG, pixel-ish wooden Michigan plaque)
 document.getElementById('trophy').outerHTML=`<svg width="250" height="440" viewBox="0 0 300 528" style="left:675px;top:222px" shape-rendering="crispEdges">
  <defs><pattern id="wood" width="40" height="12" patternUnits="userSpaceOnUse"><rect width="40" height="12" fill="#a8652e"/><rect y="3" width="26" height="3" fill="#8f5222"/><rect x="18" y="9" width="22" height="2" fill="#bb7740"/></pattern></defs>

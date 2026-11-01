@@ -5,30 +5,30 @@ silk = base64.b64encode(open("/tmp/ps2p.ttf", "rb").read()).decode()
 pix = base64.b64encode(open("/tmp/jersey.ttf", "rb").read()).decode()
 
 # (name, monogram, bg, fg) -- bg = card color, fg = text color
-T = lambda n, m, bg, fg="#fff": dict(n=n, m=m, bg=bg, fg=fg)
+T = lambda n, m, bg, fg="#fff", s=None: dict(n=n, m=m, bg=bg, fg=fg, s=s)
 TBD = T("TBD", "?", "#8a8f99", "#fff")
 
 # Bracket order: each group of 4 = one district (pairs feed a district final),
 # each group of 8 = one region.
-LEFT = [  # Regions 1 & 2
-    T("KENOWA HILLS", "KH", "#4b2a83", "#ffd447"), T("GR CHRISTIAN", "GC", "#7a1f2b"),
-    TBD, TBD,
-    T("FH EASTERN", "FE", "#1b1b1f", "#ff4b4b"), T("BIG RAPIDS", "BR", "#c8102e"),
-    T("UNITY CHRISTIAN", "UC", "#13294b"), T("SPRING LAKE", "SL", "#f4f6fa", "#1d3c8f"),
-    T("EDWARDSBURG", "E", "#f47b20", "#111"), T("VICKSBURG", "V", "#b3121b"),
-    T("PORTLAND", "P", "#f4f6fa", "#c8102e"), T("PAW PAW", "PP", "#9b1b1f"),
-    T("SOUTH CHRISTIAN", "SC", "#1d4f9c"), T("MARSHALL", "M", "#c8102e"),
-    T("HASTINGS", "H", "#003a8c", "#ffd447"), T("LAKESHORE", "L", "#f4f6fa", "#13294b"),
+LEFT = [  # Regions 1 & 2  (s = first-round score)
+    T("KENOWA HILLS", "KH", "#4b2a83", "#ffd447", 49), T("GR CHRISTIAN", "GC", "#7a1f2b", s=35),
+    T("LUDINGTON", "LU", "#f47b20", "#111", 19), T("FRUITPORT", "F", "#13294b", "#ff4b4b", 15),
+    T("FH EASTERN", "FE", "#1b1b1f", "#ff4b4b", 33), T("BIG RAPIDS", "BR", "#c8102e", s=12),
+    T("UNITY CHRISTIAN", "UC", "#13294b", s=46), T("SPRING LAKE", "SL", "#f4f6fa", "#1d3c8f", 18),
+    T("EDWARDSBURG", "E", "#f47b20", "#111", 27), T("VICKSBURG", "V", "#b3121b", s=14),
+    T("PORTLAND", "P", "#f4f6fa", "#c8102e", 22), T("PAW PAW", "PP", "#9b1b1f", s=13),
+    T("SOUTH CHRISTIAN", "SC", "#1d4f9c", s=63), T("MARSHALL", "M", "#c8102e", s=27),
+    T("LAKESHORE", "L", "#f4f6fa", "#13294b", 49), T("HASTINGS", "H", "#003a8c", "#ffd447", 44),
 ]
 RIGHT = [  # Regions 3 & 4
-    T("GOODRICH", "G", "#0f6b37"), T("WILLIAMSTON", "W", "#f47b20", "#111"),
-    T("ST. JOHNS", "SJ", "#f4f6fa", "#c8102e"), T("BRANDON", "B", "#1b1b1f", "#ff4b4b"),
-    T("DIVINE CHILD", "DC", "#003a8c", "#ffd447"), T("LANSING SEXTON", "S", "#b3121b"),
-    TBD, TBD,
-    T("EAST ENGLISH", "EE", "#1d3c8f", "#ffd447"), T("LUTHERAN NORTH", "LN", "#f4f6fa", "#13294b"),
-    T("MARYSVILLE", "MV", "#4b2a83"), T("SOUTHEASTERN", "SE", "#f47b20", "#111"),
-    T("DETROIT CODY", "C", "#7a1f2b", "#ffd447"), T("ST. CLAIR", "SC", "#f4f6fa", "#13294b"),
-    T("COUNTRY DAY", "CD", "#ffd200", "#111"), T("LAMPHERE", "L", "#1d4f9c"),
+    T("GOODRICH", "G", "#0f6b37", s=45), T("WILLIAMSTON", "W", "#f47b20", "#111", 6),
+    T("ST. JOHNS", "SJ", "#f4f6fa", "#c8102e", 49), T("BRANDON", "B", "#1b1b1f", "#ff4b4b", 21),
+    T("DIVINE CHILD", "DC", "#003a8c", "#ffd447", 45), T("LANSING SEXTON", "S", "#b3121b", s=27),
+    T("ADRIAN", "A", "#6d1a36", "#ffd447", 65), T("TECUMSEH", "T", "#1b1b1f", "#ff4b4b", 27),
+    T("EAST ENGLISH", "EE", "#1d3c8f", "#ffd447", 22), T("LUTHERAN NORTH", "LN", "#f4f6fa", "#13294b", 36),
+    T("MARYSVILLE", "MV", "#4b2a83", s=44), T("SOUTHEASTERN", "SE", "#f47b20", "#111", 24),
+    T("DETROIT CODY", "C", "#7a1f2b", "#ffd447", 16), T("ST. CLAIR", "SC", "#f4f6fa", "#13294b", 41),
+    T("COUNTRY DAY", "CD", "#ffd200", "#111", 24), T("LAMPHERE", "L", "#1d4f9c", s=0),
 ]
 
 html = r"""<!DOCTYPE html>
@@ -47,13 +47,18 @@ html,body{margin:0;background:#111}
 .title h2{margin:14px 0 0;font:400 24px/1 Silk;letter-spacing:0;color:#111}
 svg{position:absolute;left:0;top:0}
 .card{position:absolute;display:flex;align-items:center;border:4px solid #111;box-sizing:border-box;
-  font:400 35px/1 Pix;letter-spacing:.5px;text-shadow:2px 2px 0 rgba(0,0,0,.35);white-space:nowrap;overflow:hidden}
+  font:400 33px/1 Pix;letter-spacing:0;text-shadow:2px 2px 0 rgba(0,0,0,.35);white-space:nowrap;overflow:hidden}
 .card.light{text-shadow:none}
 .card .logo{flex:none;width:58px;height:100%;display:flex;align-items:center;justify-content:center;
   font:400 15px/1 Silk;border-right:4px solid #111;box-sizing:border-box}
-.card .nm{padding:0 12px;flex:1}
+.card .nm{padding:0 10px;flex:1;overflow:hidden}
 .right .logo{order:2;border-right:none;border-left:4px solid #111}
 .right .nm{text-align:right}
+.card .sc{flex:none;width:58px;height:100%;display:flex;align-items:center;justify-content:center;background:#111;color:#fff;font:400 18px/1 Silk;text-shadow:none}
+.right .sc{order:-1}
+.card.lost{filter:grayscale(.85) brightness(.62)}
+.card.lost .nm{text-decoration:line-through;text-decoration-thickness:3px}
+.q.win{font:400 15px/42px Silk;text-shadow:none;box-shadow:inset 0 -6px 0 rgba(0,0,0,.25), inset 0 4px 0 rgba(255,255,255,.25)}
 .q{position:absolute;width:58px;height:50px;background:#7d8494;border:4px solid #111;box-sizing:border-box;
   box-shadow:inset 0 -6px 0 #5d6372, inset 0 4px 0 #a2a9b8;color:#fff;font:400 24px/42px Silk;text-align:center;
   text-shadow:3px 3px 0 #333}
@@ -70,7 +75,7 @@ svg{position:absolute;left:0;top:0}
 <script>
 const LEFT=__LEFT__, RIGHT=__RIGHT__;
 const C=document.getElementById('c'), S=document.getElementById('lines');
-const W=1600, TOP=205, PAIR=128, CARD_H=50, CARD_W=300, BOX_W=58, BOX_H=50;
+const W=1600, TOP=205, PAIR=128, CARD_H=50, CARD_W=332, BOX_W=58, BOX_H=50;
 const LINE='#d9ecff', EDGE='#0b2a66';
 function el(cls,css,html){const d=document.createElement('div');d.className=cls;Object.assign(d.style,css);if(html!=null)d.innerHTML=html;C.appendChild(d);return d}
 function seg(x1,y1,x2,y2){for(const [c,w] of [[EDGE,10],[LINE,5]]){const l=document.createElementNS('http://www.w3.org/2000/svg','line');
@@ -83,17 +88,17 @@ function side(teams,dir){
   const right=dir<0, x0=right?W-20-CARD_W:20;
   const edge=right?x0:x0+CARD_W;
   // round x centers
-  const rx=[1,2,3,4].map(i=>right? edge-28-i*82+BOX_W/2 - 0 : edge+28+i*82-BOX_W/2);
+  const rx=[1,2,3,4].map(i=>right? edge-28-i*74+BOX_W/2 - 0 : edge+28+i*74-BOX_W/2);
   let ys=[];
   for(let p=0;p<8;p++){
     const y=TOP+p*PAIR + (p>=4?18:0);
-    const pairYs=[];
+    const pairYs=[];const a=teams[p*2],b=teams[p*2+1];const w=a.s>b.s?a:b;
     for(let k=0;k<2;k++){const t=teams[p*2+k];const light=t.bg=='#f4f6fa'||t.bg=='#ffd200'||t.bg=='#f47b20';
       const cy=y+k*(CARD_H+4);
-      const d=el('card'+(right?' right':'')+(light?' light':''),{left:x0+'px',top:cy+'px',width:CARD_W+'px',height:CARD_H+'px',background:t.bg,color:t.fg},
-        `<span class="logo" style="background:${t.fg};color:${t.bg}">${t.m}</span><span class="nm">${t.n}</span>`);
+      const d=el('card'+(right?' right':'')+(light?' light':'')+(t===w?'':' lost'),{left:x0+'px',top:cy+'px',width:CARD_W+'px',height:CARD_H+'px',background:t.bg,color:t.fg},
+        `<span class="logo" style="background:${t.fg};color:${t.bg}">${t.m}</span><span class="nm">${t.n}</span><span class="sc">${t.s}</span>`);
       pairYs.push(cy+CARD_H/2);}
-    const py=(pairYs[0]+pairYs[1])/2; join(edge,pairYs,rx[0]-dir*BOX_W/2,py,dir); box(rx[0],py); ys.push(py);
+    const py=(pairYs[0]+pairYs[1])/2; join(edge,pairYs,rx[0]-dir*BOX_W/2,py,dir); const wb=box(rx[0],py); wb.classList.add('win'); wb.textContent=w.m; wb.style.background=w.bg; wb.style.color=w.fg; ys.push(py);
   }
   for(let r=1;r<4;r++){const nys=[];for(let i=0;i<ys.length;i+=2){const py=(ys[i]+ys[i+1])/2;
     join(rx[r-1]+dir*BOX_W/2,[ys[i],ys[i+1]],rx[r]-dir*BOX_W/2,py,dir);box(rx[r],py);nys.push(py)}ys=nys}
@@ -110,7 +115,7 @@ seg(R.x,R.y,cx+110,R.y); seg(cx+110,cy2,cx+110,R.y); seg(cx+110,cy2,cx+66,cy2);
 el('champ',{top:'1050px'},'STATE<br>CHAMPIONSHIP');
 el('lbl',{left:'20px',top:(TOP-36)+'px'},'REGION 1');el('lbl',{left:'20px',top:(TOP+4*PAIR+18-36)+'px'},'REGION 2');
 el('lbl',{right:'20px',top:(TOP-36)+'px'},'REGION 3');el('lbl',{right:'20px',top:(TOP+4*PAIR+18-36)+'px'},'REGION 4');
-el('foot',{},'FORD FIELD &middot; DIVISION 4 FINAL &middot; 2026');
+el('foot',{},'FIRST ROUND FINAL &middot; DISTRICT FINALS NOV. 6 &middot; STATE FINAL AT FORD FIELD');
 // trophy (SVG, pixel-ish wooden Michigan plaque)
 document.getElementById('trophy').outerHTML=`<svg width="250" height="440" viewBox="0 0 300 528" style="left:675px;top:222px" shape-rendering="crispEdges">
  <defs><pattern id="wood" width="40" height="12" patternUnits="userSpaceOnUse"><rect width="40" height="12" fill="#a8652e"/><rect y="3" width="26" height="3" fill="#8f5222"/><rect x="18" y="9" width="22" height="2" fill="#bb7740"/></pattern></defs>
