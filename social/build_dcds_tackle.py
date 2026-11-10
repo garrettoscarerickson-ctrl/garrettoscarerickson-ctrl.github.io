@@ -75,14 +75,11 @@ def runner_layer():
 
 
 def tackler_layer():
-    """Grayscale, squeezed into the light end of the range, faintly cool
-    so it sits in the background colour: the 'ghost' player."""
-    a = np.asarray(Image.open(rel("cutouts/dcds-tackle-tackler.png")).convert("RGBA")).astype(float)
-    y = a[..., 0] * .299 + a[..., 1] * .587 + a[..., 2] * .114
-    y = 255 * (y / 255) ** 0.72                              # open the shadows
-    g = 142 + y * (251 - 142) / 255
-    a[..., 0], a[..., 1], a[..., 2] = g * .985, g * .99, g
-    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGBA")
+    """Solid white, like a mannequin: one flat colour, so no numbers,
+    lettering or gray shading show. Only the outline is kept."""
+    a = np.asarray(Image.open(rel("cutouts/dcds-tackle-tackler.png")).convert("RGBA")).copy()
+    a[..., 0], a[..., 1], a[..., 2] = 252, 252, 253
+    return Image.fromarray(a, "RGBA")
 
 
 def grain_tile(n=320, seed=7):
@@ -134,7 +131,7 @@ html,body{background:%(bg)s}
   background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%%,rgba(0,0,0,.10))}
 
 .layer{position:absolute;left:%(left).1fpx;top:%(top)dpx;width:%(lw).1fpx;height:%(lh).1fpx}
-.tackler{filter:drop-shadow(0 6px 14px rgba(40,44,60,.10))}
+.tackler{filter:drop-shadow(0 6px 16px rgba(40,44,60,.16))}
 .runner{filter:drop-shadow(0 10px 22px rgba(10,16,32,.28))}
 
 .logo{position:absolute;left:50%%;bottom:92px;width:62px;transform:translateX(-50%%)}
