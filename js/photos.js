@@ -5,6 +5,3382 @@
 
 window.PHOTOS = [
   {
+    "src": "images/dexter-01.jpg",
+    "title": "Varsity Hockey vs Dexter 01",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-02.jpg",
+    "title": "Varsity Hockey vs Dexter 02",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-03.jpg",
+    "title": "Varsity Hockey vs Dexter 03",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-04.jpg",
+    "title": "Varsity Hockey vs Dexter 04",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-05.jpg",
+    "title": "Varsity Hockey vs Dexter 05",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-06.jpg",
+    "title": "Varsity Hockey vs Dexter 06",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-07.jpg",
+    "title": "Varsity Hockey vs Dexter 07",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 2400,
+    "h": 1600,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-08.jpg",
+    "title": "Varsity Hockey vs Dexter 08",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-09.jpg",
+    "title": "Varsity Hockey vs Dexter 09",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-10.jpg",
+    "title": "Varsity Hockey vs Dexter 10",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-11.jpg",
+    "title": "Varsity Hockey vs Dexter 11",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-12.jpg",
+    "title": "Varsity Hockey vs Dexter 12",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-13.jpg",
+    "title": "Varsity Hockey vs Dexter 13",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-14.jpg",
+    "title": "Varsity Hockey vs Dexter 14",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-15.jpg",
+    "title": "Varsity Hockey vs Dexter 15",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-16.jpg",
+    "title": "Varsity Hockey vs Dexter 16",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-17.jpg",
+    "title": "Varsity Hockey vs Dexter 17",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-18.jpg",
+    "title": "Varsity Hockey vs Dexter 18",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-19.jpg",
+    "title": "Varsity Hockey vs Dexter 19",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-20.jpg",
+    "title": "Varsity Hockey vs Dexter 20",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 2400,
+    "h": 1600,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-21.jpg",
+    "title": "Varsity Hockey vs Dexter 21",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-22.jpg",
+    "title": "Varsity Hockey vs Dexter 22",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-23.jpg",
+    "title": "Varsity Hockey vs Dexter 23",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-24.jpg",
+    "title": "Varsity Hockey vs Dexter 24",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-25.jpg",
+    "title": "Varsity Hockey vs Dexter 25",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-26.jpg",
+    "title": "Varsity Hockey vs Dexter 26",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-27.jpg",
+    "title": "Varsity Hockey vs Dexter 27",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-28.jpg",
+    "title": "Varsity Hockey vs Dexter 28",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-29.jpg",
+    "title": "Varsity Hockey vs Dexter 29",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-30.jpg",
+    "title": "Varsity Hockey vs Dexter 30",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-31.jpg",
+    "title": "Varsity Hockey vs Dexter 31",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-32.jpg",
+    "title": "Varsity Hockey vs Dexter 32",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-33.jpg",
+    "title": "Varsity Hockey vs Dexter 33",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-34.jpg",
+    "title": "Varsity Hockey vs Dexter 34",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-35.jpg",
+    "title": "Varsity Hockey vs Dexter 35",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-36.jpg",
+    "title": "Varsity Hockey vs Dexter 36",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-37.jpg",
+    "title": "Varsity Hockey vs Dexter 37",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-38.jpg",
+    "title": "Varsity Hockey vs Dexter 38",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-39.jpg",
+    "title": "Varsity Hockey vs Dexter 39",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-40.jpg",
+    "title": "Varsity Hockey vs Dexter 40",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-41.jpg",
+    "title": "Varsity Hockey vs Dexter 41",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-42.jpg",
+    "title": "Varsity Hockey vs Dexter 42",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-43.jpg",
+    "title": "Varsity Hockey vs Dexter 43",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-44.jpg",
+    "title": "Varsity Hockey vs Dexter 44",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-45.jpg",
+    "title": "Varsity Hockey vs Dexter 45",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-46.jpg",
+    "title": "Varsity Hockey vs Dexter 46",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-47.jpg",
+    "title": "Varsity Hockey vs Dexter 47",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-48.jpg",
+    "title": "Varsity Hockey vs Dexter 48",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-49.jpg",
+    "title": "Varsity Hockey vs Dexter 49",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-50.jpg",
+    "title": "Varsity Hockey vs Dexter 50",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-51.jpg",
+    "title": "Varsity Hockey vs Dexter 51",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-52.jpg",
+    "title": "Varsity Hockey vs Dexter 52",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-53.jpg",
+    "title": "Varsity Hockey vs Dexter 53",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-54.jpg",
+    "title": "Varsity Hockey vs Dexter 54",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-55.jpg",
+    "title": "Varsity Hockey vs Dexter 55",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-56.jpg",
+    "title": "Varsity Hockey vs Dexter 56",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-57.jpg",
+    "title": "Varsity Hockey vs Dexter 57",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-58.jpg",
+    "title": "Varsity Hockey vs Dexter 58",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-59.jpg",
+    "title": "Varsity Hockey vs Dexter 59",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-60.jpg",
+    "title": "Varsity Hockey vs Dexter 60",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-61.jpg",
+    "title": "Varsity Hockey vs Dexter 61",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-62.jpg",
+    "title": "Varsity Hockey vs Dexter 62",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-63.jpg",
+    "title": "Varsity Hockey vs Dexter 63",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-64.jpg",
+    "title": "Varsity Hockey vs Dexter 64",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-65.jpg",
+    "title": "Varsity Hockey vs Dexter 65",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-66.jpg",
+    "title": "Varsity Hockey vs Dexter 66",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-67.jpg",
+    "title": "Varsity Hockey vs Dexter 67",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-68.jpg",
+    "title": "Varsity Hockey vs Dexter 68",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-69.jpg",
+    "title": "Varsity Hockey vs Dexter 69",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-70.jpg",
+    "title": "Varsity Hockey vs Dexter 70",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-71.jpg",
+    "title": "Varsity Hockey vs Dexter 71",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-72.jpg",
+    "title": "Varsity Hockey vs Dexter 72",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-73.jpg",
+    "title": "Varsity Hockey vs Dexter 73",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-74.jpg",
+    "title": "Varsity Hockey vs Dexter 74",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 2400,
+    "h": 1600,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-75.jpg",
+    "title": "Varsity Hockey vs Dexter 75",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-76.jpg",
+    "title": "Varsity Hockey vs Dexter 76",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 2400,
+    "h": 1600,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-77.jpg",
+    "title": "Varsity Hockey vs Dexter 77",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-78.jpg",
+    "title": "Varsity Hockey vs Dexter 78",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-79.jpg",
+    "title": "Varsity Hockey vs Dexter 79",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-80.jpg",
+    "title": "Varsity Hockey vs Dexter 80",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-81.jpg",
+    "title": "Varsity Hockey vs Dexter 81",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-82.jpg",
+    "title": "Varsity Hockey vs Dexter 82",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-83.jpg",
+    "title": "Varsity Hockey vs Dexter 83",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-84.jpg",
+    "title": "Varsity Hockey vs Dexter 84",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-85.jpg",
+    "title": "Varsity Hockey vs Dexter 85",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-86.jpg",
+    "title": "Varsity Hockey vs Dexter 86",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-87.jpg",
+    "title": "Varsity Hockey vs Dexter 87",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-88.jpg",
+    "title": "Varsity Hockey vs Dexter 88",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-89.jpg",
+    "title": "Varsity Hockey vs Dexter 89",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-90.jpg",
+    "title": "Varsity Hockey vs Dexter 90",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-91.jpg",
+    "title": "Varsity Hockey vs Dexter 91",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-92.jpg",
+    "title": "Varsity Hockey vs Dexter 92",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-93.jpg",
+    "title": "Varsity Hockey vs Dexter 93",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-94.jpg",
+    "title": "Varsity Hockey vs Dexter 94",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-95.jpg",
+    "title": "Varsity Hockey vs Dexter 95",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-96.jpg",
+    "title": "Varsity Hockey vs Dexter 96",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-97.jpg",
+    "title": "Varsity Hockey vs Dexter 97",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-98.jpg",
+    "title": "Varsity Hockey vs Dexter 98",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-99.jpg",
+    "title": "Varsity Hockey vs Dexter 99",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-100.jpg",
+    "title": "Varsity Hockey vs Dexter 100",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-101.jpg",
+    "title": "Varsity Hockey vs Dexter 101",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-102.jpg",
+    "title": "Varsity Hockey vs Dexter 102",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-103.jpg",
+    "title": "Varsity Hockey vs Dexter 103",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-104.jpg",
+    "title": "Varsity Hockey vs Dexter 104",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-105.jpg",
+    "title": "Varsity Hockey vs Dexter 105",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-106.jpg",
+    "title": "Varsity Hockey vs Dexter 106",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-107.jpg",
+    "title": "Varsity Hockey vs Dexter 107",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/dexter-108.jpg",
+    "title": "Varsity Hockey vs Dexter 108",
+    "location": "Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "hockey",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Hockey vs Dexter"
+  },
+  {
+    "src": "images/lnhs-01.jpg",
+    "title": "Varsity Football vs Lutheran North 01",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-02.jpg",
+    "title": "Varsity Football vs Lutheran North 02",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-03.jpg",
+    "title": "Varsity Football vs Lutheran North 03",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-04.jpg",
+    "title": "Varsity Football vs Lutheran North 04",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-05.jpg",
+    "title": "Varsity Football vs Lutheran North 05",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-06.jpg",
+    "title": "Varsity Football vs Lutheran North 06",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-07.jpg",
+    "title": "Varsity Football vs Lutheran North 07",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-08.jpg",
+    "title": "Varsity Football vs Lutheran North 08",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-09.jpg",
+    "title": "Varsity Football vs Lutheran North 09",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-10.jpg",
+    "title": "Varsity Football vs Lutheran North 10",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-11.jpg",
+    "title": "Varsity Football vs Lutheran North 11",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-12.jpg",
+    "title": "Varsity Football vs Lutheran North 12",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-13.jpg",
+    "title": "Varsity Football vs Lutheran North 13",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-14.jpg",
+    "title": "Varsity Football vs Lutheran North 14",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-15.jpg",
+    "title": "Varsity Football vs Lutheran North 15",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-16.jpg",
+    "title": "Varsity Football vs Lutheran North 16",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-17.jpg",
+    "title": "Varsity Football vs Lutheran North 17",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-18.jpg",
+    "title": "Varsity Football vs Lutheran North 18",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-19.jpg",
+    "title": "Varsity Football vs Lutheran North 19",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-20.jpg",
+    "title": "Varsity Football vs Lutheran North 20",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-21.jpg",
+    "title": "Varsity Football vs Lutheran North 21",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-22.jpg",
+    "title": "Varsity Football vs Lutheran North 22",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-23.jpg",
+    "title": "Varsity Football vs Lutheran North 23",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-24.jpg",
+    "title": "Varsity Football vs Lutheran North 24",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-25.jpg",
+    "title": "Varsity Football vs Lutheran North 25",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-26.jpg",
+    "title": "Varsity Football vs Lutheran North 26",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-27.jpg",
+    "title": "Varsity Football vs Lutheran North 27",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-28.jpg",
+    "title": "Varsity Football vs Lutheran North 28",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-29.jpg",
+    "title": "Varsity Football vs Lutheran North 29",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-30.jpg",
+    "title": "Varsity Football vs Lutheran North 30",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-31.jpg",
+    "title": "Varsity Football vs Lutheran North 31",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-32.jpg",
+    "title": "Varsity Football vs Lutheran North 32",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-33.jpg",
+    "title": "Varsity Football vs Lutheran North 33",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-34.jpg",
+    "title": "Varsity Football vs Lutheran North 34",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-35.jpg",
+    "title": "Varsity Football vs Lutheran North 35",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-36.jpg",
+    "title": "Varsity Football vs Lutheran North 36",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-37.jpg",
+    "title": "Varsity Football vs Lutheran North 37",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-38.jpg",
+    "title": "Varsity Football vs Lutheran North 38",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-39.jpg",
+    "title": "Varsity Football vs Lutheran North 39",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-40.jpg",
+    "title": "Varsity Football vs Lutheran North 40",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-41.jpg",
+    "title": "Varsity Football vs Lutheran North 41",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-42.jpg",
+    "title": "Varsity Football vs Lutheran North 42",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-43.jpg",
+    "title": "Varsity Football vs Lutheran North 43",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-44.jpg",
+    "title": "Varsity Football vs Lutheran North 44",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-45.jpg",
+    "title": "Varsity Football vs Lutheran North 45",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-46.jpg",
+    "title": "Varsity Football vs Lutheran North 46",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-47.jpg",
+    "title": "Varsity Football vs Lutheran North 47",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-48.jpg",
+    "title": "Varsity Football vs Lutheran North 48",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-49.jpg",
+    "title": "Varsity Football vs Lutheran North 49",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-50.jpg",
+    "title": "Varsity Football vs Lutheran North 50",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-51.jpg",
+    "title": "Varsity Football vs Lutheran North 51",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-52.jpg",
+    "title": "Varsity Football vs Lutheran North 52",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-53.jpg",
+    "title": "Varsity Football vs Lutheran North 53",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-54.jpg",
+    "title": "Varsity Football vs Lutheran North 54",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-55.jpg",
+    "title": "Varsity Football vs Lutheran North 55",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-56.jpg",
+    "title": "Varsity Football vs Lutheran North 56",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-57.jpg",
+    "title": "Varsity Football vs Lutheran North 57",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-58.jpg",
+    "title": "Varsity Football vs Lutheran North 58",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-59.jpg",
+    "title": "Varsity Football vs Lutheran North 59",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-60.jpg",
+    "title": "Varsity Football vs Lutheran North 60",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-61.jpg",
+    "title": "Varsity Football vs Lutheran North 61",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-62.jpg",
+    "title": "Varsity Football vs Lutheran North 62",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-63.jpg",
+    "title": "Varsity Football vs Lutheran North 63",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-64.jpg",
+    "title": "Varsity Football vs Lutheran North 64",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-65.jpg",
+    "title": "Varsity Football vs Lutheran North 65",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-66.jpg",
+    "title": "Varsity Football vs Lutheran North 66",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-67.jpg",
+    "title": "Varsity Football vs Lutheran North 67",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-68.jpg",
+    "title": "Varsity Football vs Lutheran North 68",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-69.jpg",
+    "title": "Varsity Football vs Lutheran North 69",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-70.jpg",
+    "title": "Varsity Football vs Lutheran North 70",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-71.jpg",
+    "title": "Varsity Football vs Lutheran North 71",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-72.jpg",
+    "title": "Varsity Football vs Lutheran North 72",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-73.jpg",
+    "title": "Varsity Football vs Lutheran North 73",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-74.jpg",
+    "title": "Varsity Football vs Lutheran North 74",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-75.jpg",
+    "title": "Varsity Football vs Lutheran North 75",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-76.jpg",
+    "title": "Varsity Football vs Lutheran North 76",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-77.jpg",
+    "title": "Varsity Football vs Lutheran North 77",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-78.jpg",
+    "title": "Varsity Football vs Lutheran North 78",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 2400,
+    "h": 1600,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-79.jpg",
+    "title": "Varsity Football vs Lutheran North 79",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-80.jpg",
+    "title": "Varsity Football vs Lutheran North 80",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-81.jpg",
+    "title": "Varsity Football vs Lutheran North 81",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-82.jpg",
+    "title": "Varsity Football vs Lutheran North 82",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-83.jpg",
+    "title": "Varsity Football vs Lutheran North 83",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-84.jpg",
+    "title": "Varsity Football vs Lutheran North 84",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-85.jpg",
+    "title": "Varsity Football vs Lutheran North 85",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-86.jpg",
+    "title": "Varsity Football vs Lutheran North 86",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-87.jpg",
+    "title": "Varsity Football vs Lutheran North 87",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-88.jpg",
+    "title": "Varsity Football vs Lutheran North 88",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-89.jpg",
+    "title": "Varsity Football vs Lutheran North 89",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-90.jpg",
+    "title": "Varsity Football vs Lutheran North 90",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-91.jpg",
+    "title": "Varsity Football vs Lutheran North 91",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-92.jpg",
+    "title": "Varsity Football vs Lutheran North 92",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-93.jpg",
+    "title": "Varsity Football vs Lutheran North 93",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-94.jpg",
+    "title": "Varsity Football vs Lutheran North 94",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-95.jpg",
+    "title": "Varsity Football vs Lutheran North 95",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-96.jpg",
+    "title": "Varsity Football vs Lutheran North 96",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-97.jpg",
+    "title": "Varsity Football vs Lutheran North 97",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-98.jpg",
+    "title": "Varsity Football vs Lutheran North 98",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-99.jpg",
+    "title": "Varsity Football vs Lutheran North 99",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "landscape",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 2400,
+    "h": 1600,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-100.jpg",
+    "title": "Varsity Football vs Lutheran North 100",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-101.jpg",
+    "title": "Varsity Football vs Lutheran North 101",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-102.jpg",
+    "title": "Varsity Football vs Lutheran North 102",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
+    "src": "images/lnhs-103.jpg",
+    "title": "Varsity Football vs Lutheran North 103",
+    "location": "Macomb, Michigan",
+    "year": 2026,
+    "orientation": "portrait",
+    "tags": [
+      "football",
+      "people",
+      "sports"
+    ],
+    "w": 1600,
+    "h": 2400,
+    "archiveOnly": true,
+    "game": "DCDS Varsity Football vs Lutheran North"
+  },
+  {
     "src": "images/ltu-01.jpg",
     "title": "Lawrence Tech vs Saint Francis 01",
     "location": "Southfield, Michigan",

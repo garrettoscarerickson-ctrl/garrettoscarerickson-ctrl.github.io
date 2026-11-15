@@ -75,6 +75,18 @@ FORD_FIELD = "Ford Field, Detroit, Michigan"
 FF = "CD,Denby,Cass,King FF Finals"
 
 GAMES = {
+    # R7 clock runs ~17h behind: EXIF says 11/13 23:43, puck drop was 11/14
+    "DCDS VS DEXTER HOCKEY FINALS": {
+        "game": "DCDS Varsity Hockey vs Dexter",
+        "slug": "dexter", "title": "Varsity Hockey vs Dexter",
+        "tags": HOCKEY, "location": MI, "date": "2026-11-14"},
+
+    "DCDS VS LNHS FINALS": {
+        "game": "DCDS Varsity Football vs Lutheran North",
+        "slug": "lnhs", "title": "Varsity Football vs Lutheran North",
+        "tags": FOOTBALL, "location": "Macomb, Michigan",
+        "date": "2026-11-13"},
+
     "Lawrenc Tech FInals": {
         "game": "Lawrence Tech Football vs Saint Francis",
         "slug": "ltu", "title": "Lawrence Tech vs Saint Francis",
@@ -199,7 +211,11 @@ def green_photos():
 
     def walk(path, inherited):
         try:
-            names = sorted(os.listdir(path))
+            # Lightroom names a re-export "-001-2.jpg" when the folder
+            # already holds "-001.jpg". Those go last, so when one is a
+            # copy it's the copy that gets dropped, not the original.
+            names = sorted(os.listdir(path),
+                           key=lambda n: (bool(re.search(r"-\d+-\d+\.jpe?g$", n, re.I)), n))
         except OSError:
             return
         for name in names:
