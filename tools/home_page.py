@@ -20,6 +20,8 @@ import os
 import re
 from string import Template
 
+import revamp_home
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HOME = os.path.join(ROOT, "data", "home.json")
 AVAIL = os.path.join(ROOT, "data", "availability.json")
@@ -806,8 +808,13 @@ def build(photos, home=None):
     """Write index.html and css/theme.css. Returns the cleaned home."""
     home = clean(home if home is not None else load(photos), photos)
     save(home)
+    page = render(home, photos)
+    # the scroll-film design takes over once its frames exist; it reuses this
+    # page's SEO tags, dates and quote options (tools/revamp_home.py)
+    if revamp_home.ready():
+        page = revamp_home.page(page, photos, home)
     with open(INDEX, "w", encoding="utf-8") as f:
-        f.write(render(home, photos))
+        f.write(page)
     with open(THEME_CSS, "w", encoding="utf-8") as f:
         f.write(theme_css(home["theme"]))
     return home
