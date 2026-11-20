@@ -213,14 +213,16 @@
     skipBtn.style.opacity = (eo(seg(t, .6, 1.1)) * (1 - seg(t, T(32), T(33))) * .9).toFixed(3);
   }
 
-  /* ---------- sound: the intro mix, then the song carries on quieter ---------- */
-  var ac = null, master = null, introBuf = null, tailBuf = null, introSrc = null, tailSrc = null, startAt = 0;
+  /* ---------- sound: the intro mix, then ~9 s of the crowd settling (and the
+     song carrying on quieter when MUSIC is on) so nothing stops dead ---------- */
+  var ac = null, master = null, introBuf = null, tailBufs = [], introSrc = null, tailSrcs = [], startAt = 0;
   var soundOn = false;
   function fetchBuf(url) { return fetch(url).then(function (r) { return r.arrayBuffer(); }); }
   var audioFiles = Promise.all([
     fetchBuf(MUSIC ? "revamp/intro/audio/intro.mp3" : "revamp/intro/audio/intro-fx.mp3"),
+    fetchBuf("revamp/intro/audio/fx-tail.mp3"),
     MUSIC ? fetchBuf("revamp/intro/audio/tail.mp3") : Promise.resolve(null),
-  ]).catch(function () { return [null, null]; });
+  ]).catch(function () { return [null, null, null]; });
 
   function setSound(on) {
     soundOn = on;
@@ -228,17 +230,23 @@
     if (soundBtn) { soundBtn.setAttribute("aria-pressed", on ? "true" : "false"); soundBtn.classList.toggle("is-on", on); }
   }
   function startTail(when) {
-    if (!ac || !tailBuf || tailSrc) return;
-    tailSrc = ac.createBufferSource(); tailSrc.buffer = tailBuf; tailSrc.connect(master); tailSrc.start(when);
+    if (!ac || !tailBufs.length || tailSrcs.length) return;
+    tailSrcs = tailBufs.map(function (buf) {
+      var src = ac.createBufferSource(); src.buffer = buf; src.connect(master); src.start(when); return src;
+    });
+  }
+  function stopTail() {
+    tailSrcs.forEach(function (src) { try { src.stop(); } catch (e) {} });
+    tailSrcs = [];
   }
   function startAudio(files) {
     var AC = window.AudioContext || window.webkitAudioContext;
     if (!AC || !files[0]) return Promise.resolve(false);
     ac = new AC(); master = ac.createGain(); master.connect(ac.destination);
     return ac.resume().then(function () {
-      return Promise.all([ac.decodeAudioData(files[0]), files[1] ? ac.decodeAudioData(files[1]) : null]);
+      return Promise.all(files.map(function (f) { return f ? ac.decodeAudioData(f) : null; }));
     }).then(function (b) {
-      introBuf = b[0]; tailBuf = b[1];
+      introBuf = b[0]; tailBufs = b.slice(1).filter(Boolean);
       startAt = ac.currentTime + .08;
       introSrc = ac.createBufferSource(); introSrc.buffer = introBuf; introSrc.connect(master); introSrc.start(startAt);
       startTail(startAt + introBuf.duration);
@@ -268,7 +276,7 @@
   function skip() {
     if (done) return;
     if (introSrc) { try { introSrc.stop(); } catch (e) {} }
-    if (tailSrc) { try { tailSrc.stop(); } catch (e) {} tailSrc = null; }
+    stopTail();
     if (ac) startTail(ac.currentTime + .02);
     finish();
   }
@@ -346,9 +354,9 @@
     if (!ac) {     /* entered muted: sound now starts the song from here */
       audioFiles.then(function (f) {
         var AC = window.AudioContext || window.webkitAudioContext;
-        if (!AC || !f[1]) return;
+        if (!AC || !f[2]) return;
         ac = new AC(); master = ac.createGain(); master.connect(ac.destination);
-        ac.resume().then(function () { return ac.decodeAudioData(f[1].slice(0)); }).then(function (b) { tailBuf = b; startTail(ac.currentTime + .02); setSound(true); });
+        ac.resume().then(function () { return ac.decodeAudioData(f[2].slice(0)); }).then(function (b) { tailBufs = [b]; startTail(ac.currentTime + .02); setSound(true); });
       });
       return;
     }
@@ -377,7 +385,7 @@
       b.addEventListener("click", function () {
         loader.classList.remove("is-ready");
         if (b.dataset.enter === "sound") {
-          audioFiles.then(function (f) { return startAudio([f[0] && f[0].slice(0), f[1] && f[1].slice(0)]); })
+          audioFiles.then(function (f) { return startAudio(f.map(function (x) { return x && x.slice(0); })); })
             .then(function (ok) { play(0); if (!ok) ac = null; });
         } else play(0);
       }, { once: true });
