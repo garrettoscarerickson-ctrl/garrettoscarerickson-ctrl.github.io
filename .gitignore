@@ -18,3 +18,7 @@ __pycache__/
 # they carry the old prices, so they stay off the site
 social/rates-a.html
 social/rates-b.html
+
+# the intro song: local only until it is cleared for use on the web
+revamp/intro/audio/intro.mp3
+revamp/intro/audio/tail.mp3

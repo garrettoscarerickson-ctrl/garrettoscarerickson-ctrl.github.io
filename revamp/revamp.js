@@ -245,6 +245,29 @@
     paint();
   }
 
+  /* pod shelves: drag with a mouse; touch and trackpads scroll natively */
+  function initPods() {
+    document.querySelectorAll("[data-pods]").forEach(function (row) {
+      var down = false, moved = false, x0 = 0, s0 = 0;
+      row.addEventListener("pointerdown", function (e) {
+        if (e.pointerType !== "mouse" || e.button !== 0) return;
+        down = true; moved = false; x0 = e.clientX; s0 = row.scrollLeft;
+      });
+      window.addEventListener("pointermove", function (e) {
+        if (!down) return;
+        var dx = e.clientX - x0;
+        if (Math.abs(dx) > 6) { moved = true; row.classList.add("is-dragging"); }
+        if (moved) row.scrollLeft = s0 - dx;
+      });
+      window.addEventListener("pointerup", function () {
+        if (!down) return;
+        down = false;
+        setTimeout(function () { row.classList.remove("is-dragging"); }, 0);
+      });
+      row.addEventListener("click", function (e) { if (moved) { e.preventDefault(); moved = false; } }, true);
+    });
+  }
+
   function initNav() {
     var nav = document.querySelector("[data-nav]");
     if (!nav) return;
@@ -361,6 +384,7 @@
   initFilm();
   initReveals();
   initParallax();
+  initPods();
   initNav();
   initAvailability();
   initQuote();
